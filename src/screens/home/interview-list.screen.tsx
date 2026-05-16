@@ -42,10 +42,16 @@ export function InterviewListScreen({ route }: Props): ReactElement {
   const rows = scaffold || !apiOn ? fixtureRows : remoteRows;
 
   const subtitle = scaffold
-    ? 'Fixture interviews · scaffold bypass.'
+    ? 'Sample appointments for preview.'
     : apiOn
-      ? 'Backed by GET /interviews (+ cached applications for company labels).'
-      : 'Missing API URL · showing fixtures fallback.';
+      ? 'Interview details stay in sync with your account.'
+      : 'Showing sample interviews until your account connects.';
+
+  const filterHint = linked
+    ? lookup[linked]
+      ? `Filtered to interviews for ${lookup[linked]?.companyName ?? 'this role'}.`
+      : 'Filtered to interviews for one application.'
+    : 'All interviews';
 
   const refresh = (
     <RefreshControl
@@ -77,7 +83,7 @@ export function InterviewListScreen({ route }: Props): ReactElement {
         color={linked ? theme.colors.accent : theme.colors.textMuted}
         style={{ marginTop: theme.space.sm }}
       >
-        {linked ? `Filtered to application id · ${linked}` : 'All interviews'}
+        {filterHint}
       </Typography>
 
       {apiOn && interviews.isError ? (
@@ -92,9 +98,7 @@ export function InterviewListScreen({ route }: Props): ReactElement {
             icon={CalendarDays}
             title="No interviews scheduled"
             description={
-              linked
-                ? 'Nothing linked to this application yet.'
-                : 'Create interviews in the workspace or scaffold fixtures offline.'
+              linked ? 'Nothing linked to this role yet.' : 'Scheduled interviews appear here after you add them.'
             }
           />
         ) : (

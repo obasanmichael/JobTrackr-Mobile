@@ -50,7 +50,7 @@ export function QuickAddApplicationScreen(props: Props): ReactElement {
           const normalized = parseAxiosApiError(error);
           Alert.alert(
             'Could not save application',
-            normalized?.message ?? 'Unexpected error while contacting the backend.',
+            normalized?.message ?? 'Something went wrong. Please try again.',
           );
         },
       },
@@ -59,13 +59,13 @@ export function QuickAddApplicationScreen(props: Props): ReactElement {
 
   return (
     <Screen scroll>
-      <Typography variant="hero">Quick add</Typography>
+      <Typography variant="hero">Add application</Typography>
       <Typography variant="subtitle" muted style={{ marginTop: theme.space.sm }}>
-        Captures essentials and POST /applications after login.
+        Capture the essentials on the go. Open JobTrackr on the web anytime to edit status, salary, location, and the rest.
       </Typography>
 
       <Card style={{ marginTop: theme.space.xl, gap: theme.space.lg }}>
-        <TextField label="Role title" placeholder="Senior Engineer" value={role} onChangeText={setRole} />
+        <TextField label="Job title" placeholder="Senior Engineer" value={role} onChangeText={setRole} />
         <TextField label="Company" placeholder="Acme Labs" value={company} onChangeText={setCompany} />
         <TextField
           label="Posting URL (optional)"
@@ -86,9 +86,6 @@ export function QuickAddApplicationScreen(props: Props): ReactElement {
         onPress={() => save()}
       />
 
-      <Typography variant="caption" muted style={{ marginTop: theme.space.lg }}>
-        Need remote work mode or salary rails? Extend this flow once those inputs feel necessary.
-      </Typography>
     </Screen>
   );
 }

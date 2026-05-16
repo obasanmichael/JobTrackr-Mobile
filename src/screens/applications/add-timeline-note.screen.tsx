@@ -24,11 +24,12 @@ export function AddTimelineNoteScreen({ navigation, route }: Props): ReactElemen
 
   const [body, setBody] = useState('');
   const applicationId = route.params.applicationId;
+  const headline = route.params.headline;
   const mutate = useCreateTimelineEventMutation(applicationId);
 
   const save = (): void => {
     if (scaffold || !apiOn) {
-      Alert.alert('Read-only scaffold', 'Authenticate against the Nest API without scaffold mode to POST notes.');
+      Alert.alert('Not signed in', 'Connect your account (and turn off offline UI preview mode) to save notes.');
       return;
     }
     const trimmed = body.trim();
@@ -61,19 +62,18 @@ export function AddTimelineNoteScreen({ navigation, route }: Props): ReactElemen
   return (
     <Screen scroll>
       <Typography variant="hero">Add note</Typography>
-      <Typography variant="bodySmall" muted style={{ marginTop: theme.space.sm }}>
-        Sends NOTE events to POST /applications/:id/events.
-      </Typography>
-      <Typography variant="caption" muted style={{ marginTop: theme.space.md }}>
-        The server stores up to 120 characters as the headline and keeps the remainder as optional description text.
+      <Typography variant="subtitle" muted style={{ marginTop: theme.space.sm }}>
+        Notes appear on this application&apos;s timeline. The first line is shown as the summary; anything after that stays as extra detail.
       </Typography>
 
-      <Typography variant="bodySmall" muted style={{ marginTop: theme.space.sm }}>
-        Application · {applicationId}
-      </Typography>
+      {headline ? (
+        <Typography variant="bodySmall" style={{ marginTop: theme.space.lg, fontWeight: '600' }}>
+          {headline}
+        </Typography>
+      ) : null}
 
       <TextField
-        label="Timeline note"
+        label="Note"
         placeholder="What happened on the call?"
         value={body}
         onChangeText={setBody}
@@ -84,7 +84,7 @@ export function AddTimelineNoteScreen({ navigation, route }: Props): ReactElemen
       />
 
       <Button
-        label={mutate.isPending ? 'Posting…' : 'Save note'}
+        label={mutate.isPending ? 'Saving…' : 'Save note'}
         variant="primary"
         block
         disabled={mutate.isPending || !apiOn || scaffold}
@@ -92,9 +92,9 @@ export function AddTimelineNoteScreen({ navigation, route }: Props): ReactElemen
         onPress={() => save()}
       />
 
-      {(scaffold || !apiOn) ? (
+      {scaffold || !apiOn ? (
         <Typography variant="caption" muted style={{ marginTop: theme.space.md }}>
-          This surface unlocks automatically once scaffold mode is disabled and JWT calls succeed.
+          Save is available when you&apos;re signed in with a linked JobTrackr account.
         </Typography>
       ) : null}
     </Screen>

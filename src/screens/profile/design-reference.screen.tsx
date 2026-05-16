@@ -22,7 +22,7 @@ export function DesignReferenceScreen(_props: Props): ReactElement {
     <Screen scroll>
       <Typography variant="hero">Design reference</Typography>
       <Typography variant="subtitle" muted style={{ marginTop: theme.space.sm }}>
-        Internal QA surface — enabled only in development builds.
+        This screen is only available in internal development builds.
       </Typography>
     </Screen>
   );

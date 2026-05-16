@@ -103,11 +103,7 @@ export function ApplicationDetailScreen({ navigation, route }: Props): ReactElem
     }));
   }, [apiOn, scaffold, timelineQuery.data]);
 
-  const subtitle = scaffold
-    ? 'Fixture-backed detail drill'
-    : apiOn
-      ? 'Hydrated via GET /applications and supporting collections.'
-      : 'Need EXPO_PUBLIC_API_URL configured to hydrate this drill from Nest.';
+  const subtitle = scaffold ? 'Showing sample application data.' : apiOn ? '' : 'Sign in after connecting JobTrackr to load live details.';
 
   const openInterviewContext = (): void => {
     navigation.navigate('Home', {
@@ -173,8 +169,8 @@ export function ApplicationDetailScreen({ navigation, route }: Props): ReactElem
           title="Application not found"
           message={
             scaffold
-              ? 'This id is absent from scaffold fixtures.'
-              : (detailQuery.error as Error)?.message ?? 'Nothing returned for this id.'
+              ? 'This application isn’t in the sample dataset.'
+              : (detailQuery.error as Error)?.message ?? 'Nothing returned for this application.'
           }
           retryLabel={scaffold ? 'Go back' : 'Retry'}
           onRetry={
@@ -198,9 +194,11 @@ export function ApplicationDetailScreen({ navigation, route }: Props): ReactElem
       <Typography variant="subtitle" muted style={{ marginBottom: theme.space.xs }}>
         Application
       </Typography>
-      <Typography variant="bodySmall" muted>
-        {subtitle}
-      </Typography>
+      {subtitle ? (
+        <Typography variant="bodySmall" muted>
+          {subtitle}
+        </Typography>
+      ) : null}
 
       <View
         style={{
@@ -292,9 +290,14 @@ export function ApplicationDetailScreen({ navigation, route }: Props): ReactElem
           label="Add timeline note"
           variant="secondary"
           block
-          onPress={() => navigation.navigate('AddTimelineNote', { applicationId })}
+          onPress={() =>
+            navigation.navigate('AddTimelineNote', {
+              applicationId,
+              headline: `${application.companyName} · ${application.jobTitle}`,
+            })
+          }
         />
-        <Button label="Interview context (Home tab)" variant="outline" block onPress={openInterviewContext} />
+        <Button label="View interviews" variant="outline" block onPress={openInterviewContext} />
         {apiOn ? (
           <Button
             label={removeApplication.isPending ? 'Deleting…' : 'Delete application'}

@@ -39,40 +39,44 @@ function buildTypography(colors: Theme['colors']): Theme['typography'] {
   };
 }
 
+/**
+ * Aligned with job-trackr-frontend/globals.css (--primary ~ indigo/violet hsl(243deg), surfaces, borders).
+ * Mobile uses hex equivalents for React Native compatibility.
+ */
 const lightColors: Theme['colors'] = {
-  background: '#F4F6F8',
+  background: '#FFFFFF',
   surface: '#FFFFFF',
-  surfaceElevated: '#FFFFFF',
-  border: '#E4E9EF',
-  borderMuted: '#EEF2F6',
-  textPrimary: '#0F172A',
+  surfaceElevated: '#F8FAFC',
+  border: '#E2E8F0',
+  borderMuted: '#F1F5F9',
+  textPrimary: '#020617',
   textSecondary: '#475569',
-  textMuted: '#94A3B8',
-  accent: '#0D9488',
-  accentMuted: '#CCFBF1',
+  textMuted: '#64748B',
+  accent: '#6366F1',
+  accentMuted: '#EEF2FF',
   onAccent: '#FFFFFF',
-  success: '#059669',
+  success: '#16A34A',
   warning: '#D97706',
   danger: '#DC2626',
-  overlay: 'rgba(15, 23, 42, 0.45)',
+  overlay: 'rgba(2, 6, 23, 0.45)',
 };
 
 const darkColors: Theme['colors'] = {
-  background: '#0B1120',
-  surface: '#111827',
+  background: '#020617',
+  surface: '#0F172A',
   surfaceElevated: '#1E293B',
-  border: '#334155',
+  border: '#273449',
   borderMuted: '#1E293B',
   textPrimary: '#F8FAFC',
-  textSecondary: '#CBD5E1',
-  textMuted: '#64748B',
-  accent: '#2DD4BF',
-  accentMuted: '#134E4A',
-  onAccent: '#042F2E',
-  success: '#34D399',
+  textSecondary: '#CBD5F5',
+  textMuted: '#94A3B8',
+  accent: '#818CF8',
+  accentMuted: 'rgba(99, 102, 241, 0.22)',
+  onAccent: '#FFFFFF',
+  success: '#4ADE80',
   warning: '#FBBF24',
   danger: '#F87171',
-  overlay: 'rgba(2, 6, 23, 0.65)',
+  overlay: 'rgba(2, 6, 23, 0.72)',
 };
 
 export const lightTheme: Theme = {

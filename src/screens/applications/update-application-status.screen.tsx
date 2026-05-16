@@ -39,14 +39,14 @@ export function UpdateApplicationStatusScreen({ navigation, route }: Props): Rea
   }, [applicationId, mock?.status, remote.data?.status, scaffold]);
 
   const subtitle = scaffold
-    ? `Fixture palette · navigation id ${applicationId}`
+    ? 'Sample data · status changes aren’t saved.'
     : apiOn
-      ? `PATCH /applications/:id sends uppercase enums exactly like Nest validates.`
-      : 'Authenticate with EXPO_PUBLIC_API_URL configured to persist status.';
+      ? 'Choose where this application sits in your pipeline.'
+      : 'Sign in after connecting JobTrackr to save status changes.';
 
   const persist = (): void => {
     if (!apiOn || scaffold) {
-      Alert.alert('Read-only scaffold', 'Turn off scaffold and sign in against the API to save changes.');
+      Alert.alert('Not signed in', 'Connect your account (and turn off offline UI preview mode) to save status.');
       return;
     }
     patch.mutate(
@@ -57,7 +57,7 @@ export function UpdateApplicationStatusScreen({ navigation, route }: Props): Rea
           const normalized = parseAxiosApiError(error);
           Alert.alert(
             'Status did not persist',
-            normalized?.message ?? 'Unexpected backend error while updating.',
+            normalized?.message ?? 'Something went wrong. Please try again.',
           );
         },
       },
@@ -87,10 +87,6 @@ export function UpdateApplicationStatusScreen({ navigation, route }: Props): Rea
         </Typography>
       ) : null}
 
-      <Typography variant="caption" muted style={{ marginTop: theme.space.md }}>
-        Tap a pill to preview the PATCH payload preview below.
-      </Typography>
-
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: theme.space.sm, marginTop: theme.space.xl }}>
         {APPLICATION_STATUSES.map((status) => {
           const active = selected === status;
@@ -117,15 +113,10 @@ export function UpdateApplicationStatusScreen({ navigation, route }: Props): Rea
         })}
       </View>
 
-      <Typography variant="label" style={{ marginTop: theme.space.xl }}>
-        Payload preview
-      </Typography>
-      <Typography variant="body" color={theme.colors.accent} style={{ marginTop: theme.space.sm }}>
-        {JSON.stringify({ status: selected })}
-      </Typography>
-
       <Button
-        label={patch.isPending ? 'Saving status…' : apiOn && !scaffold ? 'Save status' : 'Save (requires API session)'}
+        label={
+          patch.isPending ? 'Saving…' : apiOn && !scaffold ? 'Save status' : 'Save status (sign in required)'
+        }
         variant="primary"
         block
         style={{ marginTop: theme.space.xl }}
@@ -133,7 +124,7 @@ export function UpdateApplicationStatusScreen({ navigation, route }: Props): Rea
         onPress={() => persist()}
       />
       <Typography variant="caption" muted style={{ marginTop: theme.space.sm }}>
-        Status changes mint a Nest timeline entry automatically (`STATUS_CHANGE`).
+        Updates appear on this application&apos;s timeline.
       </Typography>
     </Screen>
   );

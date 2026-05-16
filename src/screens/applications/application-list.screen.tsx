@@ -47,10 +47,10 @@ export function ApplicationListScreen({ navigation }: Props): ReactElement {
   const rows = scaffold || !apiOn ? filteredMocks : listFromApi;
 
   const subtitle = scaffold
-    ? 'Showing design fixtures.'
+    ? 'Sample listings for preview.'
     : apiOn
-      ? 'Search calls GET /applications?search with a short debounce.'
-      : 'Configure EXPO_PUBLIC_API_URL — showing empty list locally.';
+      ? 'Tap a row to open the full workspace.'
+      : 'Showing local preview until your account connects.';
 
   const refresh = (
     <RefreshControl
@@ -84,7 +84,7 @@ export function ApplicationListScreen({ navigation }: Props): ReactElement {
 
       <View style={{ marginTop: theme.space.lg }}>
         <TextField
-          label={scaffold ? 'Search (fixtures)' : apiOn ? 'Search (backend)' : 'Search (offline)'}
+          label="Search"
           placeholder="Role, company, status…"
           value={query}
           onChangeText={setQuery}

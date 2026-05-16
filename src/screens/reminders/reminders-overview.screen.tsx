@@ -64,10 +64,10 @@ export function RemindersOverviewScreen(_props: Props): ReactElement {
   const closedItems = rows.filter((r) => r.completed);
 
   const subtitle = scaffold
-    ? 'Fixture reminders · taps flip rows locally.'
+    ? 'Tap to try completing reminders locally.'
     : apiOn
-      ? 'GET /reminders • PATCH completes sync to the Nest API.'
-      : 'Missing API URL • showing scaffold fixtures offline.';
+      ? 'Synced with reminders on your JobTrackr account.'
+      : 'Showing local preview reminders until your account connects.';
 
   const refresh = (
     <RefreshControl

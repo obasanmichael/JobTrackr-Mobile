@@ -21,7 +21,7 @@ export type ApplicationsStackParamList = {
   ApplicationList: undefined;
   ApplicationDetail: { applicationId: string };
   UpdateApplicationStatus: { applicationId: string };
-  AddTimelineNote: { applicationId: string };
+  AddTimelineNote: { applicationId: string; headline?: string };
 };
 
 export type QuickAddStackParamList = {

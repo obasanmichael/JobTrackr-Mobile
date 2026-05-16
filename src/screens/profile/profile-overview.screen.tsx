@@ -18,7 +18,7 @@ export function ProfileOverviewScreen({ navigation }: Props): ReactElement {
     <Screen scroll>
       <Typography variant="hero">Profile</Typography>
       <Typography variant="subtitle" muted style={{ marginTop: theme.space.sm }}>
-        Signed-in account from `GET /auth/me` after session restore.
+        Signed-in profile for this device.
       </Typography>
 
       {user ? (
@@ -27,13 +27,15 @@ export function ProfileOverviewScreen({ navigation }: Props): ReactElement {
           <Typography variant="bodySmall" muted>
             {user.email}
           </Typography>
-          <Typography variant="caption" muted>
-            User id · {user.id}
-          </Typography>
+          {__DEV__ ? (
+            <Typography variant="caption" muted>
+              Internal id · {user.id}
+            </Typography>
+          ) : null}
         </Card>
       ) : UI_SCAFFOLD_BYPASS_AUTHENTICATION ? (
         <Typography variant="bodySmall" muted style={{ marginTop: theme.space.lg }}>
-          Scaffold mode skips JWT flows; authenticated sessions hydrate profile from /auth/me.
+          You’re viewing the app with offline UI preview. Sign in normally to sync your profile.
         </Typography>
       ) : null}
 
@@ -43,7 +45,12 @@ export function ProfileOverviewScreen({ navigation }: Props): ReactElement {
 
       {__DEV__ && (
         <View style={{ marginTop: theme.space.xl }}>
-          <Button label="Design kit / primitives QA" variant="secondary" block onPress={() => navigation.navigate('DesignReference')} />
+          <Button
+            label="UI components preview"
+            variant="secondary"
+            block
+            onPress={() => navigation.navigate('DesignReference')}
+          />
         </View>
       )}
     </Screen>

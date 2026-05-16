@@ -3,7 +3,6 @@ import { View, Pressable, ScrollView } from 'react-native';
 import { StatusBadge } from '../../components/applications/status-badge';
 import { Button, Card, EmptyState, LoadingState, TextField, Typography } from '../../components/ui';
 import { APPLICATION_STATUSES } from '../../constants/application-status';
-import { useResponsive } from '../../layout';
 import { useAppTheme } from '../../theme';
 import type { ThemePreference } from '../../theme';
 
@@ -19,26 +18,17 @@ const preferenceOptions: { key: ThemePreference; label: string }[] = [
  */
 export function DesignKitPanel(): ReactElement {
   const { theme, preference, setPreference } = useAppTheme();
-  const responsive = useResponsive();
 
   return (
     <View style={{ gap: theme.space.lg }}>
       <View style={{ marginBottom: theme.space.sm }}>
         <Typography variant="label" style={{ marginBottom: theme.space.sm }}>
-          Design kit
+          Components
         </Typography>
-        <Typography variant="hero">Tokens & primitives</Typography>
+        <Typography variant="hero">Style reference</Typography>
         <Typography variant="subtitle" muted>
-          Baseline typography, surfaces, buttons, inputs — QA light/dark and breakpoints here.
+          How common UI pieces look with your current appearance setting.
         </Typography>
-        {__DEV__ && (
-          <Typography variant="caption" muted style={{ marginTop: theme.space.sm }}>
-            {responsive.breakpoint.toUpperCase()}
-            {responsive.isTablet ? ' · tablet' : ''}
-            {responsive.isLandscape ? ' · landscape' : ' · portrait'} ·{' '}
-            {Math.round(responsive.width)}×{Math.round(responsive.height)}
-          </Typography>
-        )}
       </View>
 
       <Typography variant="label">Appearance</Typography>
@@ -77,7 +67,7 @@ export function DesignKitPanel(): ReactElement {
         })}
       </View>
 
-      <Typography variant="label">Status badges</Typography>
+      <Typography variant="label">Application status</Typography>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: theme.space.sm }}>
         {APPLICATION_STATUSES.map((s) => (
           <View key={s} style={{ marginRight: theme.space.sm }}>
@@ -86,13 +76,13 @@ export function DesignKitPanel(): ReactElement {
         ))}
       </ScrollView>
 
-      <Typography variant="label">Feedback states</Typography>
+      <Typography variant="label">Loading & empty</Typography>
       <Card style={{ gap: theme.space.md }}>
-        <LoadingState message="Fetching dashboard summary…" />
-        <EmptyState title="Nothing here yet" description="Swap this block for TanStack Query empty helpers." />
+        <LoadingState message="Updating…" />
+        <EmptyState title="Nothing to show yet" description="Pull to refresh or add something new." />
       </Card>
 
-      <Typography variant="label">Typography scale</Typography>
+      <Typography variant="label">Titles & body copy</Typography>
       <Card style={{ gap: theme.space.md }}>
         <Typography variant="title">Senior Product Engineer — Acme</Typography>
         <Typography variant="body">Interview tomorrow · Fully remote · $180–205k</Typography>
@@ -101,7 +91,7 @@ export function DesignKitPanel(): ReactElement {
         </Typography>
       </Card>
 
-      <Typography variant="label">Actions</Typography>
+      <Typography variant="label">Buttons</Typography>
       <View
         style={{
           flexDirection: 'row',
