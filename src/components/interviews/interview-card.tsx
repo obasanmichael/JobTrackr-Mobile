@@ -1,13 +1,13 @@
 import type { ReactElement } from 'react';
 import { Pressable, View } from 'react-native';
 import { CalendarDays } from 'lucide-react-native';
-import type { InterviewFormat, MockInterview } from '../../fixtures/mock-interviews';
+import type { InterviewFormat, InterviewListItem } from '../../domain/interview-display';
 import { Card } from '../ui/Card';
 import { Typography } from '../ui/Typography';
 import { useAppTheme } from '../../theme';
 
 type Props = {
-  interview: MockInterview;
+  interview: InterviewListItem;
   onPress?: () => void;
 };
 

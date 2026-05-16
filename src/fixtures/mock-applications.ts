@@ -1,23 +1,9 @@
-import type { ApplicationStatus } from '../constants/application-status';
-import type { WorkMode } from '../constants/work-mode';
-
-export type MockApplication = {
-  id: string;
-  jobTitle: string;
-  companyName: string;
-  status: ApplicationStatus;
-  workMode: WorkMode;
-  location?: string;
-  salaryRange?: string;
-  appliedLabel?: string;
-  deadlineLabel?: string;
-  notesPreview?: string;
-};
+import type { ApplicationListItem } from '../domain/application-display';
 
 /** Stable primary row for navigation scaffolding */
 export const PRIMARY_UI_APPLICATION_ID = 'jobtrackr-ui-shell-application-id';
 
-export const MOCK_APPLICATIONS: MockApplication[] = [
+export const MOCK_APPLICATIONS: ApplicationListItem[] = [
   {
     id: PRIMARY_UI_APPLICATION_ID,
     jobTitle: 'Staff Product Engineer',
@@ -65,6 +51,6 @@ export const MOCK_APPLICATIONS: MockApplication[] = [
   },
 ];
 
-export function getMockApplicationById(id: string): MockApplication | undefined {
+export function getMockApplicationById(id: string): ApplicationListItem | undefined {
   return MOCK_APPLICATIONS.find((a) => a.id === id);
 }

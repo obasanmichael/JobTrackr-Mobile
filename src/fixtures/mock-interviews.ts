@@ -1,16 +1,6 @@
-export type InterviewFormat = 'REMOTE' | 'HYBRID' | 'ONSITE';
+import type { InterviewListItem } from '../domain/interview-display';
 
-export type MockInterview = {
-  id: string;
-  roleTitle: string;
-  companyName: string;
-  startLabel: string;
-  durationLabel: string;
-  format: InterviewFormat;
-  linkedApplicationId?: string;
-};
-
-export const MOCK_INTERVIEWS: MockInterview[] = [
+export const MOCK_INTERVIEWS: InterviewListItem[] = [
   {
     id: 'mock-int-1',
     roleTitle: 'Staff Product Engineer',

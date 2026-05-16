@@ -1,13 +1,13 @@
 import type { ReactElement } from 'react';
 import { Pressable, View } from 'react-native';
 import { CalendarClock } from 'lucide-react-native';
-import type { MockReminder } from '../../fixtures/mock-reminders';
+import type { ReminderListItem } from '../../domain/reminder-display';
 import { Card } from '../ui/Card';
 import { Typography } from '../ui/Typography';
 import { useAppTheme } from '../../theme';
 
 type Props = {
-  reminder: MockReminder;
+  reminder: ReminderListItem;
   onPress?: () => void;
   onToggleCompletePress?: () => void;
 };

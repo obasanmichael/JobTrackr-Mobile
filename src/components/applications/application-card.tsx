@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react';
 import { Pressable, View } from 'react-native';
-import type { MockApplication } from '../../fixtures/mock-applications';
+import type { ApplicationListItem } from '../../domain/application-display';
 import { StatusBadge } from './status-badge';
 import { Card } from '../ui/Card';
 import { Typography } from '../ui/Typography';
@@ -8,7 +8,7 @@ import { WORK_MODE_LABELS } from '../../constants/work-mode';
 import { useAppTheme } from '../../theme';
 
 type Props = {
-  application: MockApplication;
+  application: ApplicationListItem;
   onPress?: () => void;
 };
 

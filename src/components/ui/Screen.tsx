@@ -1,5 +1,5 @@
-import type { PropsWithChildren } from 'react';
-import { ScrollView, View, type ViewStyle } from 'react-native';
+import type { ComponentProps, PropsWithChildren, ReactElement } from 'react';
+import { RefreshControl, ScrollView, View, type ViewStyle } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useResponsive } from '../../layout';
 import type { Theme } from '../../theme/types';
@@ -13,6 +13,8 @@ type Props = PropsWithChildren<{
   style?: ViewStyle;
   /** Set false for deliberate full-width layouts (charts, banners). Defaults true — still only clamps on tablets. */
   constrainContentColumn?: boolean;
+  /** Only applies when scroll is enabled. */
+  refreshControl?: ReactElement<ComponentProps<typeof RefreshControl>>;
 }>;
 
 export function Screen({
@@ -22,6 +24,7 @@ export function Screen({
   edges = ['top', 'left', 'right'],
   style,
   constrainContentColumn = true,
+  refreshControl,
 }: Props) {
   const { theme } = useAppTheme();
   const responsive = useResponsive();
@@ -57,6 +60,7 @@ export function Screen({
   const body = scroll ? (
     <ScrollView
       showsVerticalScrollIndicator={false}
+      refreshControl={refreshControl}
       contentContainerStyle={{
         flexGrow: 1,
         paddingHorizontal: horizontalPad,

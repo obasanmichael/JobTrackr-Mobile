@@ -33,7 +33,7 @@ export function ProfileOverviewScreen({ navigation }: Props): ReactElement {
         </Card>
       ) : UI_SCAFFOLD_BYPASS_AUTHENTICATION ? (
         <Typography variant="bodySmall" muted style={{ marginTop: theme.space.lg }}>
-          Scaffold mode (`EXPO_PUBLIC_UI_SCAFFOLD_AUTH_SKIP=1`) · no JWT; profile reflects live user after Phase 5 data wiring.
+          Scaffold mode skips JWT flows; authenticated sessions hydrate profile from /auth/me.
         </Typography>
       ) : null}
 

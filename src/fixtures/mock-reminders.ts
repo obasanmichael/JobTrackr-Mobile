@@ -1,13 +1,6 @@
-export type MockReminder = {
-  id: string;
-  title: string;
-  dueLabel: string;
-  linkedApplicationSummary?: string;
-  linkedApplicationId?: string;
-  completed?: boolean;
-};
+import type { ReminderListItem } from '../domain/reminder-display';
 
-export const MOCK_REMINDERS: MockReminder[] = [
+export const MOCK_REMINDERS: ReminderListItem[] = [
   {
     id: 'mock-rem-1',
     title: 'Follow up with Jordan (Acme)',
