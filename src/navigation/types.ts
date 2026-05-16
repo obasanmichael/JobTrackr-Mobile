@@ -20,6 +20,7 @@ export type HomeStackParamList = {
 export type ApplicationsStackParamList = {
   ApplicationList: undefined;
   ApplicationDetail: { applicationId: string };
+  EditApplication: { applicationId: string };
   UpdateApplicationStatus: { applicationId: string };
   AddTimelineNote: { applicationId: string; headline?: string };
 };

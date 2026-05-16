@@ -279,8 +279,16 @@ export function ApplicationDetailScreen({ navigation, route }: Props): ReactElem
 
       <View style={{ marginTop: theme.space.xl, gap: theme.space.sm }}>
         <Button
-          label="Update status"
+          label="Edit application"
           variant="primary"
+          block
+          onPress={() =>
+            navigation.navigate('EditApplication', { applicationId })
+          }
+        />
+        <Button
+          label="Update status"
+          variant="secondary"
           block
           onPress={() =>
             navigation.navigate('UpdateApplicationStatus', { applicationId })
@@ -288,7 +296,7 @@ export function ApplicationDetailScreen({ navigation, route }: Props): ReactElem
         />
         <Button
           label="Add timeline note"
-          variant="secondary"
+          variant="outline"
           block
           onPress={() =>
             navigation.navigate('AddTimelineNote', {

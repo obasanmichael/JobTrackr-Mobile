@@ -16,7 +16,7 @@ const tabOptionsFactory =
     ({
       Home: { tabBarLabel: 'Home', title: 'Home' },
       Applications: { tabBarLabel: 'Applications', title: 'Applications' },
-      QuickAdd: { tabBarLabel: 'Add', title: 'Add application', tabBarAccessibilityLabel: 'Add application' },
+      QuickAdd: { tabBarLabel: 'Add', title: 'Quick add', tabBarAccessibilityLabel: 'Quick add' },
       Reminders: { tabBarLabel: 'Reminders', title: 'Reminders' },
       Profile: { tabBarLabel: 'Profile', title: 'Profile' },
     }) as const;

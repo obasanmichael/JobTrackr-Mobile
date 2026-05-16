@@ -3,12 +3,19 @@ import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { ReactElement } from 'react';
 import { useState } from 'react';
-import { Alert } from 'react-native';
+import { Alert, Pressable, ScrollView, View } from 'react-native';
 import { Button, Card, Screen, TextField, Typography } from '../../components/ui';
+import { APPLICATION_STATUSES, STATUS_LABELS, type ApplicationStatus } from '../../constants/application-status';
+import { APPLICATION_CURRENCIES } from '../../constants/currency';
+import { JOB_SOURCE_LABELS, JOB_SOURCES, type JobSource } from '../../constants/job-source';
+import { WORK_MODE_LABELS, type WorkMode } from '../../constants/work-mode';
+import { buildApplicationWritePayload } from '../../domain/application-write-helpers';
 import { parseAxiosApiError } from '../../services/api';
 import { useCreateApplicationMutation } from '../../query/jt-queries';
 import type { QuickAddStackParamList, BottomTabParamList } from '../../navigation/types';
 import { useAppTheme } from '../../theme';
+
+const WORK_SEQUENCE: WorkMode[] = ['UNSPECIFIED', 'REMOTE', 'HYBRID', 'ONSITE'];
 
 type Props = CompositeScreenProps<
   NativeStackScreenProps<QuickAddStackParamList, 'QuickAddApplication'>,
@@ -23,45 +30,82 @@ export function QuickAddApplicationScreen(props: Props): ReactElement {
   const [role, setRole] = useState('');
   const [company, setCompany] = useState('');
   const [jobUrl, setJobUrl] = useState('');
+  const [moreOpen, setMoreOpen] = useState(false);
 
-  const trimmedRole = role.trim();
-  const trimmedCompany = company.trim();
-  const trimmedUrl = jobUrl.trim();
+  const [status, setStatus] = useState<ApplicationStatus>('APPLIED');
+  const [location, setLocation] = useState('');
+  const [workMode, setWorkMode] = useState<WorkMode>('UNSPECIFIED');
+  const [salaryMin, setSalaryMin] = useState('');
+  const [salaryMax, setSalaryMax] = useState('');
+  const [currency, setCurrency] = useState<typeof APPLICATION_CURRENCIES[number]>('USD');
+  const [source, setSource] = useState<JobSource>('LINKEDIN');
+  const [deadlineDate, setDeadlineDate] = useState('');
+  const [notes, setNotes] = useState('');
+
+  const pill = (label: string, active: boolean, onPress: () => void): ReactElement => (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityState={{ selected: active }}
+      onPress={onPress}
+      style={{
+        paddingHorizontal: theme.space.md,
+        paddingVertical: theme.space.sm,
+        borderRadius: theme.radii.pill,
+        borderWidth: active ? 2 : 1,
+        borderColor: active ? theme.colors.accent : theme.colors.borderMuted,
+        backgroundColor: active ? theme.colors.accentMuted : theme.colors.surfaceElevated,
+        marginRight: theme.space.sm,
+      }}
+    >
+      <Typography variant="caption" style={{ fontWeight: '600', color: theme.colors.textPrimary }}>
+        {label}
+      </Typography>
+    </Pressable>
+  );
 
   const save = (): void => {
-    if (!trimmedRole || !trimmedCompany) {
-      Alert.alert('Missing fields', 'Add a role title and company name before saving.');
+    const built = buildApplicationWritePayload({
+      jobTitle: role,
+      companyName: company,
+      jobUrl,
+      status,
+      location,
+      workMode,
+      salaryMinStr: salaryMin,
+      salaryMaxStr: salaryMax,
+      currency,
+      source,
+      deadlineDateStr: deadlineDate,
+      notes,
+      includeExtras: moreOpen,
+    });
+    if (!built.ok) {
+      Alert.alert(built.alert.title, built.alert.message);
       return;
     }
-    create.mutate(
-      {
-        jobTitle: trimmedRole,
-        companyName: trimmedCompany,
-        jobUrl: trimmedUrl || undefined,
+
+    create.mutate(built.payload, {
+      onSuccess: (created) => {
+        navigation.navigate('Applications', {
+          screen: 'ApplicationDetail',
+          params: { applicationId: created.id },
+        });
       },
-      {
-        onSuccess: (created) => {
-          navigation.navigate('Applications', {
-            screen: 'ApplicationDetail',
-            params: { applicationId: created.id },
-          });
-        },
-        onError: (error) => {
-          const normalized = parseAxiosApiError(error);
-          Alert.alert(
-            'Could not save application',
-            normalized?.message ?? 'Something went wrong. Please try again.',
-          );
-        },
+      onError: (error) => {
+        const normalized = parseAxiosApiError(error);
+        Alert.alert(
+          'Could not save application',
+          normalized?.message ?? 'Something went wrong. Please try again.',
+        );
       },
-    );
+    });
   };
 
   return (
     <Screen scroll>
-      <Typography variant="hero">Add application</Typography>
+      <Typography variant="hero">Quick add</Typography>
       <Typography variant="subtitle" muted style={{ marginTop: theme.space.sm }}>
-        Capture the essentials on the go. Open JobTrackr on the web anytime to edit status, salary, location, and the rest.
+        Add the basics now. Expand more details anytime to mirror the desktop form.
       </Typography>
 
       <Card style={{ marginTop: theme.space.xl, gap: theme.space.lg }}>
@@ -78,6 +122,87 @@ export function QuickAddApplicationScreen(props: Props): ReactElement {
       </Card>
 
       <Button
+        label={moreOpen ? 'Hide more details' : 'More details (status, salary, deadline…)'}
+        variant="outline"
+        block
+        style={{ marginTop: theme.space.lg }}
+        onPress={() => setMoreOpen((v) => !v)}
+      />
+
+      {moreOpen ? (
+        <Card style={{ marginTop: theme.space.lg, gap: theme.space.md }}>
+          <Typography variant="label">Status</Typography>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingVertical: 4 }}>
+            {APPLICATION_STATUSES.map((s) => (
+              <View key={s}>{pill(STATUS_LABELS[s], status === s, () => setStatus(s))}</View>
+            ))}
+          </ScrollView>
+
+          <TextField label="Location (optional)" placeholder="City, province, …" value={location} onChangeText={setLocation} />
+
+          <Typography variant="label">Work arrangement</Typography>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingVertical: 4 }}>
+            {WORK_SEQUENCE.map((w) => (
+              <View key={w}>{pill(WORK_MODE_LABELS[w], workMode === w, () => setWorkMode(w))}</View>
+            ))}
+          </ScrollView>
+
+          <View style={{ flexDirection: 'row', gap: theme.space.md }}>
+            <View style={{ flex: 1 }}>
+              <TextField
+                label="Salary min"
+                placeholder="120000"
+                value={salaryMin}
+                onChangeText={setSalaryMin}
+                keyboardType="numeric"
+              />
+            </View>
+            <View style={{ flex: 1 }}>
+              <TextField
+                label="Salary max"
+                placeholder="180000"
+                value={salaryMax}
+                onChangeText={setSalaryMax}
+                keyboardType="numeric"
+              />
+            </View>
+          </View>
+
+          <Typography variant="label">Currency</Typography>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingVertical: 4 }}>
+            {APPLICATION_CURRENCIES.map((c) => (
+              <View key={c}>{pill(c, currency === c, () => setCurrency(c))}</View>
+            ))}
+          </ScrollView>
+
+          <Typography variant="label">Source</Typography>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingVertical: 4 }}>
+            {JOB_SOURCES.map((s) => (
+              <View key={s}>{pill(JOB_SOURCE_LABELS[s], source === s, () => setSource(s))}</View>
+            ))}
+          </ScrollView>
+
+          <TextField
+            label="Application deadline"
+            placeholder="YYYY-MM-DD"
+            value={deadlineDate}
+            onChangeText={setDeadlineDate}
+            autoCapitalize="none"
+          />
+
+          <TextField
+            label="Notes (optional)"
+            placeholder="Talking points, comp expectations…"
+            value={notes}
+            onChangeText={setNotes}
+            multiline
+            numberOfLines={4}
+            textAlignVertical="top"
+          />
+        </Card>
+      ) : null}
+
+      <Button
         label={create.isPending ? 'Saving…' : 'Save application'}
         variant="primary"
         block
@@ -85,7 +210,6 @@ export function QuickAddApplicationScreen(props: Props): ReactElement {
         style={{ marginTop: theme.space.xl }}
         onPress={() => save()}
       />
-
     </Screen>
   );
 }

@@ -1,19 +1,77 @@
-import { TextInput, View, type TextInputProps } from 'react-native';
+import { Eye, EyeOff } from 'lucide-react-native';
+import { useState } from 'react';
+import { Pressable, TextInput, View, type TextInputProps } from 'react-native';
 import { Typography } from './Typography';
 import { useAppTheme } from '../../theme';
 
-type Props = Omit<TextInputProps, 'placeholderTextColor'> & {
+type Props = Omit<TextInputProps, 'placeholderTextColor' | 'secureTextEntry'> & {
   label?: string;
+  /** Use with passwords: eye control toggles masking (same pattern as web). */
+  passwordToggle?: boolean;
+  secureTextEntry?: boolean;
 };
 
-export function TextField({ label, style, ...rest }: Props) {
+export function TextField({ label, style, passwordToggle, secureTextEntry, ...rest }: Props) {
   const { theme } = useAppTheme();
+  const [obscured, setObscured] = useState(true);
+
+  if (passwordToggle) {
+    return (
+      <View style={{ gap: theme.space.xs }}>
+        {label ? <Typography variant="caption">{label}</Typography> : null}
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            backgroundColor: theme.colors.surfaceElevated,
+            borderWidth: 1,
+            borderColor: theme.colors.border,
+            borderRadius: theme.radii.md,
+            minHeight: 48,
+            paddingRight: theme.space.sm,
+          }}
+        >
+          <TextInput
+            placeholderTextColor={theme.colors.textMuted}
+            {...rest}
+            secureTextEntry={obscured}
+            style={[
+              {
+                flex: 1,
+                ...theme.typography.variants.body,
+                color: theme.colors.textPrimary,
+                paddingVertical: theme.space.md,
+                paddingLeft: theme.space.lg,
+                paddingRight: theme.space.sm,
+                minHeight: 48,
+              },
+              style,
+            ]}
+          />
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={obscured ? 'Show password' : 'Hide password'}
+            onPress={() => setObscured((o) => !o)}
+            hitSlop={10}
+            style={{ padding: theme.space.sm }}
+          >
+            {obscured ? (
+              <Eye size={20} color={theme.colors.textMuted} strokeWidth={2} />
+            ) : (
+              <EyeOff size={20} color={theme.colors.textMuted} strokeWidth={2} />
+            )}
+          </Pressable>
+        </View>
+      </View>
+    );
+  }
 
   return (
     <View style={{ gap: theme.space.xs }}>
       {label ? <Typography variant="caption">{label}</Typography> : null}
       <TextInput
         placeholderTextColor={theme.colors.textMuted}
+        secureTextEntry={secureTextEntry}
         {...rest}
         style={[
           {

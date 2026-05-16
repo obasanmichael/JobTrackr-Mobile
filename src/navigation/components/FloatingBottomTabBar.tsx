@@ -73,12 +73,16 @@ export function FloatingBottomTabBar(props: BottomTabBarProps): ReactElement {
                   ? options.title
                   : route.name;
 
-            const accessibilityLabel =
-              typeof options.tabBarAccessibilityLabel === 'string'
-                ? options.tabBarAccessibilityLabel
-                : typeof label === 'string'
-                  ? label
-                  : route.name;
+            const accessibilityLabel = ((): string => {
+              const opts = options as Record<string, unknown>;
+              try {
+                const raw = opts['tabBarAccessibilityLabel'];
+                if (typeof raw === 'string' && raw.trim().length > 0) return raw.trim();
+              } catch {
+                /* Android / descriptor oddities when reading optional navigator options */
+              }
+              return typeof label === 'string' && label.trim().length > 0 ? label : String(route.name);
+            })();
 
             const isFocused = state.index === index;
             const Icon = TAB_ICONS[route.name] ?? HomeIcon;

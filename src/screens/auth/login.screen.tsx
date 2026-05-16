@@ -3,7 +3,8 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { ReactElement } from 'react';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { View } from 'react-native';
+import { Pressable, View } from 'react-native';
+import { AuthBrandHeader } from '../../components/auth/auth-brand-header';
 import { Button, Screen, TextField, Typography } from '../../components/ui';
 import type { AuthStackParamList } from '../../navigation/types';
 import { loginSchema, type LoginFormValues } from '../../schemas/auth.schemas';
@@ -42,12 +43,14 @@ export function LoginScreen({ navigation }: Props): ReactElement {
   });
 
   return (
-    <Screen scroll edges={['top', 'bottom', 'left', 'right']}>
+    <Screen scroll verticallyCenterScrollContent edges={['top', 'bottom', 'left', 'right']}>
+      <AuthBrandHeader />
+
       <Typography variant="hero" style={{ marginBottom: theme.space.sm }}>
         Welcome back
       </Typography>
       <Typography variant="subtitle" muted>
-        Sign in with the same account as the web app.
+        Sign in to your JobTrackr account
       </Typography>
 
       <View style={{ marginTop: theme.space.xl, gap: theme.space.lg }}>
@@ -57,7 +60,7 @@ export function LoginScreen({ navigation }: Props): ReactElement {
           render={({ field: { onChange, onBlur, value } }) => (
             <TextField
               label="Email"
-              placeholder="you@company.com"
+              placeholder="you@example.com"
               keyboardType="email-address"
               autoCapitalize="none"
               autoCorrect={false}
@@ -80,7 +83,7 @@ export function LoginScreen({ navigation }: Props): ReactElement {
             <TextField
               label="Password"
               placeholder="••••••••"
-              secureTextEntry
+              passwordToggle
               value={value}
               onBlur={onBlur}
               onChangeText={onChange}
@@ -100,7 +103,26 @@ export function LoginScreen({ navigation }: Props): ReactElement {
         ) : null}
 
         <Button label="Sign in" variant="primary" block loading={submitting} onPress={() => void onSubmit()} />
-        <Button label="Create an account" variant="secondary" block onPress={() => navigation.navigate('Register')} />
+
+        <View
+          style={{
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: theme.space.sm,
+            gap: 4,
+          }}
+        >
+          <Typography variant="bodySmall" muted>
+            Don&apos;t have an account?
+          </Typography>
+          <Pressable onPress={() => navigation.navigate('Register')} hitSlop={8} accessibilityRole="link">
+            <Typography variant="bodySmall" style={{ fontWeight: '600', color: theme.colors.textPrimary }}>
+              Create one
+            </Typography>
+          </Pressable>
+        </View>
       </View>
     </Screen>
   );

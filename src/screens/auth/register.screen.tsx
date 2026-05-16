@@ -3,7 +3,8 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { ReactElement } from 'react';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { View } from 'react-native';
+import { Pressable, View } from 'react-native';
+import { AuthBrandHeader } from '../../components/auth/auth-brand-header';
 import { Button, Screen, TextField, Typography } from '../../components/ui';
 import type { AuthStackParamList } from '../../navigation/types';
 import { registerSchema, type RegisterFormValues } from '../../schemas/auth.schemas';
@@ -42,12 +43,14 @@ export function RegisterScreen({ navigation }: Props): ReactElement {
   });
 
   return (
-    <Screen scroll edges={['top', 'bottom', 'left', 'right']}>
+    <Screen scroll verticallyCenterScrollContent edges={['top', 'bottom', 'left', 'right']}>
+      <AuthBrandHeader />
+
       <Typography variant="hero" style={{ marginBottom: theme.space.sm }}>
         Create account
       </Typography>
       <Typography variant="subtitle" muted>
-        Use a real email — you’ll use it to sign in on web and mobile.
+        Use the same credentials on web and mobile.
       </Typography>
 
       <View style={{ marginTop: theme.space.xl, gap: theme.space.lg }}>
@@ -70,7 +73,7 @@ export function RegisterScreen({ navigation }: Props): ReactElement {
           render={({ field: { onChange, onBlur, value } }) => (
             <TextField
               label="Email"
-              placeholder="you@company.com"
+              placeholder="you@example.com"
               keyboardType="email-address"
               autoCapitalize="none"
               autoCorrect={false}
@@ -93,7 +96,7 @@ export function RegisterScreen({ navigation }: Props): ReactElement {
             <TextField
               label="Password"
               placeholder="At least 8 characters"
-              secureTextEntry
+              passwordToggle
               value={value}
               onBlur={onBlur}
               onChangeText={onChange}
@@ -113,7 +116,26 @@ export function RegisterScreen({ navigation }: Props): ReactElement {
         ) : null}
 
         <Button label="Register" variant="primary" block loading={submitting} onPress={() => void onSubmit()} />
-        <Button label="Already have an account?" variant="ghost" block onPress={() => navigation.navigate('Login')} />
+
+        <View
+          style={{
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: theme.space.sm,
+            gap: 4,
+          }}
+        >
+          <Typography variant="bodySmall" muted>
+            Already have an account?
+          </Typography>
+          <Pressable onPress={() => navigation.navigate('Login')} hitSlop={8} accessibilityRole="link">
+            <Typography variant="bodySmall" style={{ fontWeight: '600', color: theme.colors.textPrimary }}>
+              Sign in
+            </Typography>
+          </Pressable>
+        </View>
       </View>
     </Screen>
   );

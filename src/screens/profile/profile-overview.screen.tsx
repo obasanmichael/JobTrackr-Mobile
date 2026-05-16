@@ -1,6 +1,7 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { ReactElement } from 'react';
 import { View } from 'react-native';
+import { AppearancePreferenceControl } from '../../components/settings/appearance-preference-control';
 import { Button, Card, Screen, Typography } from '../../components/ui';
 import { UI_SCAFFOLD_BYPASS_AUTHENTICATION } from '../../config/ui-scaffold';
 import type { ProfileStackParamList } from '../../navigation/types';
@@ -18,20 +19,23 @@ export function ProfileOverviewScreen({ navigation }: Props): ReactElement {
     <Screen scroll>
       <Typography variant="hero">Profile</Typography>
       <Typography variant="subtitle" muted style={{ marginTop: theme.space.sm }}>
-        Signed-in profile for this device.
+        Account settings and appearance.
       </Typography>
 
+      <Card style={{ marginTop: theme.space.xl, gap: theme.space.md }}>
+        <Typography variant="label">Appearance</Typography>
+        <Typography variant="caption" muted style={{ marginTop: -theme.space.sm }}>
+          Light, dark, or follow your phone’s setting.
+        </Typography>
+        <AppearancePreferenceControl />
+      </Card>
+
       {user ? (
-        <Card style={{ marginTop: theme.space.xl, gap: theme.space.sm }}>
+        <Card style={{ marginTop: theme.space.lg, gap: theme.space.sm }}>
           <Typography variant="title">{user.name}</Typography>
           <Typography variant="bodySmall" muted>
             {user.email}
           </Typography>
-          {__DEV__ ? (
-            <Typography variant="caption" muted>
-              Internal id · {user.id}
-            </Typography>
-          ) : null}
         </Card>
       ) : UI_SCAFFOLD_BYPASS_AUTHENTICATION ? (
         <Typography variant="bodySmall" muted style={{ marginTop: theme.space.lg }}>
@@ -43,16 +47,20 @@ export function ProfileOverviewScreen({ navigation }: Props): ReactElement {
         <Button label="Log out" variant="outline" block onPress={() => void logout()} />
       </View>
 
-      {__DEV__ && (
-        <View style={{ marginTop: theme.space.xl }}>
+      {__DEV__ ? (
+        <View style={{ marginTop: theme.space.xxl, gap: theme.space.sm }}>
+          <Typography variant="caption" muted>
+            Developers use the component gallery to QA buttons and feedback states—it isn’t meant for signing out or
+            day-to-day use.
+          </Typography>
           <Button
-            label="UI components preview"
+            label="Open developer component gallery"
             variant="secondary"
             block
             onPress={() => navigation.navigate('DesignReference')}
           />
         </View>
-      )}
+      ) : null}
     </Screen>
   );
 }

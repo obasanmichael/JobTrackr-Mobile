@@ -15,6 +15,11 @@ type Props = PropsWithChildren<{
   constrainContentColumn?: boolean;
   /** Only applies when scroll is enabled. */
   refreshControl?: ReactElement<ComponentProps<typeof RefreshControl>>;
+  /**
+   * When scroll is enabled: vertically center children if they’re shorter than the viewport
+   * (comfortable auth / empty states); scroll still works when the keyboard opens or content grows.
+   */
+  verticallyCenterScrollContent?: boolean;
 }>;
 
 export function Screen({
@@ -25,6 +30,7 @@ export function Screen({
   style,
   constrainContentColumn = true,
   refreshControl,
+  verticallyCenterScrollContent,
 }: Props) {
   const { theme } = useAppTheme();
   const responsive = useResponsive();
@@ -60,9 +66,11 @@ export function Screen({
   const body = scroll ? (
     <ScrollView
       showsVerticalScrollIndicator={false}
+      keyboardShouldPersistTaps="handled"
       refreshControl={refreshControl}
       contentContainerStyle={{
         flexGrow: 1,
+        justifyContent: verticallyCenterScrollContent ? 'center' : 'flex-start',
         paddingHorizontal: horizontalPad,
         paddingTop: verticalPad,
         paddingBottom: verticalPad + bottomExtra,

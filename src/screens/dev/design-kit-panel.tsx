@@ -1,23 +1,17 @@
 import type { ReactElement } from 'react';
-import { View, Pressable, ScrollView } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import { StatusBadge } from '../../components/applications/status-badge';
+import { AppearancePreferenceControl } from '../../components/settings/appearance-preference-control';
 import { Button, Card, EmptyState, LoadingState, TextField, Typography } from '../../components/ui';
 import { APPLICATION_STATUSES } from '../../constants/application-status';
 import { useAppTheme } from '../../theme';
-import type { ThemePreference } from '../../theme';
-
-const preferenceOptions: { key: ThemePreference; label: string }[] = [
-  { key: 'system', label: 'Auto' },
-  { key: 'light', label: 'Light' },
-  { key: 'dark', label: 'Dark' },
-];
 
 /**
  * Typography + primitives gallery for visual QA — mounted from Profile → Design reference.
  * Kept intentionally free of routing concerns so navigators remain thin orchestration layers.
  */
 export function DesignKitPanel(): ReactElement {
-  const { theme, preference, setPreference } = useAppTheme();
+  const { theme } = useAppTheme();
 
   return (
     <View style={{ gap: theme.space.lg }}>
@@ -32,40 +26,7 @@ export function DesignKitPanel(): ReactElement {
       </View>
 
       <Typography variant="label">Appearance</Typography>
-      <View
-        style={{
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-          backgroundColor: theme.colors.surface,
-          padding: theme.space.xs,
-          borderRadius: theme.radii.pill,
-          borderWidth: 1,
-          borderColor: theme.colors.borderMuted,
-          alignSelf: 'flex-start',
-        }}
-      >
-        {preferenceOptions.map(({ key, label }) => {
-          const active = preference === key;
-          return (
-            <Pressable
-              key={key}
-              accessibilityRole="button"
-              accessibilityState={{ selected: active }}
-              onPress={() => setPreference(key)}
-              style={{
-                paddingVertical: theme.space.sm,
-                paddingHorizontal: theme.space.lg,
-                borderRadius: theme.radii.pill,
-                backgroundColor: active ? theme.colors.accentMuted : 'transparent',
-              }}
-            >
-              <Typography variant="caption" color={active ? theme.colors.accent : theme.colors.textSecondary}>
-                {label}
-              </Typography>
-            </Pressable>
-          );
-        })}
-      </View>
+      <AppearancePreferenceControl />
 
       <Typography variant="label">Application status</Typography>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: theme.space.sm }}>

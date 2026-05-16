@@ -377,12 +377,7 @@ export function HomeOverviewScreen({ navigation }: Props): ReactElement {
             {subtitle}
           </Typography>
         </View>
-        <Button
-          label="Add application"
-          variant="primary"
-          onPress={navQuickAdd}
-          style={{ alignSelf: 'flex-start', minHeight: 40, paddingHorizontal: theme.space.md }}
-        />
+        <Button label="Quick add" variant="primary" onPress={navQuickAdd} style={{ alignSelf: 'flex-start', minHeight: 40, paddingHorizontal: theme.space.md }} />
       </View>
 
       {apiOn && (dash.isError || appsAll.isError) ? (
@@ -410,7 +405,7 @@ export function HomeOverviewScreen({ navigation }: Props): ReactElement {
           <Typography variant="bodySmall" muted style={{ textAlign: 'center', maxWidth: 280 }}>
             Add your first application and this dashboard fills with totals, timelines, and insights.
           </Typography>
-          <Button label="Add first application" variant="primary" onPress={navQuickAdd} />
+          <Button label="Quick add first application" variant="primary" onPress={navQuickAdd} />
         </Card>
       ) : (
         <>

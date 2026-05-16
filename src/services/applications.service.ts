@@ -6,9 +6,15 @@ import { getApi } from './api';
 export type CreateApplicationPayload = {
   jobTitle: string;
   companyName: string;
+  status: ApplicationStatus;
   jobUrl?: string;
+  location?: string;
   workMode?: WorkMode;
-  status?: ApplicationStatus;
+  salaryMin?: number;
+  salaryMax?: number;
+  currency?: string;
+  source?: string;
+  deadline?: string;
   notes?: string;
 };
 
