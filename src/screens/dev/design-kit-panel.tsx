@@ -1,6 +1,8 @@
 import type { ReactElement } from 'react';
-import { View, Pressable } from 'react-native';
-import { Button, Card, TextField, Typography } from '../../components/ui';
+import { View, Pressable, ScrollView } from 'react-native';
+import { StatusBadge } from '../../components/applications/status-badge';
+import { Button, Card, EmptyState, LoadingState, TextField, Typography } from '../../components/ui';
+import { APPLICATION_STATUSES } from '../../constants/application-status';
 import { useResponsive } from '../../layout';
 import { useAppTheme } from '../../theme';
 import type { ThemePreference } from '../../theme';
@@ -75,6 +77,21 @@ export function DesignKitPanel(): ReactElement {
         })}
       </View>
 
+      <Typography variant="label">Status badges</Typography>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: theme.space.sm }}>
+        {APPLICATION_STATUSES.map((s) => (
+          <View key={s} style={{ marginRight: theme.space.sm }}>
+            <StatusBadge status={s} />
+          </View>
+        ))}
+      </ScrollView>
+
+      <Typography variant="label">Feedback states</Typography>
+      <Card style={{ gap: theme.space.md }}>
+        <LoadingState message="Fetching dashboard summary…" />
+        <EmptyState title="Nothing here yet" description="Swap this block for TanStack Query empty helpers." />
+      </Card>
+
       <Typography variant="label">Typography scale</Typography>
       <Card style={{ gap: theme.space.md }}>
         <Typography variant="title">Senior Product Engineer — Acme</Typography>
@@ -94,6 +111,8 @@ export function DesignKitPanel(): ReactElement {
       >
         <Button label="Primary" variant="primary" onPress={() => undefined} />
         <Button label="Secondary" variant="secondary" onPress={() => undefined} />
+        <Button label="Outline" variant="outline" onPress={() => undefined} />
+        <Button label="Danger" variant="danger" onPress={() => undefined} />
         <Button label="Ghost" variant="ghost" onPress={() => undefined} />
         <Button label="Loading…" variant="primary" loading onPress={() => undefined} />
       </View>

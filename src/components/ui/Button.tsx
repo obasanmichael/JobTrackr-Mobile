@@ -2,7 +2,7 @@ import { ActivityIndicator, Pressable, View, type ViewStyle } from 'react-native
 import { Typography } from './Typography';
 import { useAppTheme } from '../../theme';
 
-export type ButtonVariant = 'primary' | 'secondary' | 'ghost';
+export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'danger' | 'ghost';
 
 type Props = {
   label: string;
@@ -42,11 +42,31 @@ export function Button({
       borderWidth: 1,
       borderColor: theme.colors.border,
     },
+    outline: {
+      backgroundColor: 'transparent',
+      borderWidth: 1,
+      borderColor: theme.colors.accent,
+    },
+    danger: {
+      backgroundColor: theme.colors.danger,
+      borderWidth: 0,
+    },
     ghost: { backgroundColor: 'transparent' },
   };
 
   const textColor =
-    variant === 'primary' ? theme.colors.onAccent : variant === 'secondary' ? theme.colors.textPrimary : theme.colors.accent;
+    variant === 'primary'
+      ? theme.colors.onAccent
+      : variant === 'secondary'
+        ? theme.colors.textPrimary
+        : variant === 'danger'
+          ? '#FFFFFF'
+          : variant === 'outline'
+            ? theme.colors.accent
+            : theme.colors.accent;
+
+  const spinnerColor =
+    variant === 'primary' || variant === 'danger' ? '#FFFFFF' : theme.colors.accent;
 
   return (
     <Pressable
@@ -56,12 +76,13 @@ export function Button({
       style={({ pressed }) => [
         base,
         surfaces[variant],
-        pressed && variant !== 'ghost' && { transform: [{ scale: 0.985 }] },
+        pressed && variant !== 'ghost' && variant !== 'outline' && { transform: [{ scale: 0.985 }] },
+        pressed && variant === 'outline' && { opacity: 0.92 },
         style,
       ]}
     >
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.space.sm }}>
-        {loading && <ActivityIndicator color={variant === 'primary' ? theme.colors.onAccent : theme.colors.accent} />}
+        {loading && <ActivityIndicator color={spinnerColor} />}
         <Typography variant="bodySmall" style={{ fontWeight: '600', color: textColor }}>
           {label}
         </Typography>

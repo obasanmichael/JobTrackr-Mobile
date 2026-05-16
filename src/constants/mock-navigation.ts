@@ -1,2 +1,2 @@
-/** Placeholder identifiers for UI-only routing until API-backed entities exist */
-export const MOCK_APPLICATION_ENTITY_ID = 'jobtrackr-ui-shell-application-id';
+/** Re-export stable scaffold ID — fixtures own canonical rows */
+export { PRIMARY_UI_APPLICATION_ID as MOCK_APPLICATION_ENTITY_ID } from '../fixtures/mock-applications';
