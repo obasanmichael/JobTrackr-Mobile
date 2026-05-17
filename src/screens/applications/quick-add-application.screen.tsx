@@ -4,7 +4,7 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { ReactElement } from 'react';
 import { useState } from 'react';
 import { Alert, Pressable, ScrollView, View } from 'react-native';
-import { Button, Card, Screen, TextField, Typography } from '../../components/ui';
+import { Button, Card, DatePickerField, Screen, TextField, Typography } from '../../components/ui';
 import { APPLICATION_STATUSES, STATUS_LABELS, type ApplicationStatus } from '../../constants/application-status';
 import { APPLICATION_CURRENCIES } from '../../constants/currency';
 import { JOB_SOURCE_LABELS, JOB_SOURCES, type JobSource } from '../../constants/job-source';
@@ -182,13 +182,12 @@ export function QuickAddApplicationScreen(props: Props): ReactElement {
             ))}
           </ScrollView>
 
-          <TextField
-            label="Application deadline"
-            placeholder="YYYY-MM-DD"
-            value={deadlineDate}
-            onChangeText={setDeadlineDate}
-            autoCapitalize="none"
-          />
+          <View style={{ gap: theme.space.xs }}>
+            <DatePickerField label="Application deadline" value={deadlineDate} onChangeYmd={setDeadlineDate} />
+            <Typography variant="caption" muted>
+              Date-only, same as the website field.
+            </Typography>
+          </View>
 
           <TextField
             label="Notes (optional)"
