@@ -84,6 +84,17 @@ export function FloatingBottomTabBar(props: BottomTabBarProps): ReactElement {
               return typeof label === 'string' && label.trim().length > 0 ? label : String(route.name);
             })();
 
+            const accessibilityHint = ((): string | undefined => {
+              const opts = options as Record<string, unknown>;
+              try {
+                const raw = opts['tabBarAccessibilityHint'];
+                if (typeof raw === 'string' && raw.trim().length > 0) return raw.trim();
+              } catch {
+                /* Same defensive read pattern as tabBarAccessibilityLabel */
+              }
+              return undefined;
+            })();
+
             const isFocused = state.index === index;
             const Icon = TAB_ICONS[route.name] ?? HomeIcon;
             const isCenterFab = route.name === 'QuickAdd';
@@ -106,6 +117,7 @@ export function FloatingBottomTabBar(props: BottomTabBarProps): ReactElement {
                 accessibilityRole="button"
                 accessibilityState={{ selected: isFocused }}
                 accessibilityLabel={accessibilityLabel}
+                accessibilityHint={accessibilityHint}
                 key={route.key}
                 hitSlop={8}
                 onPress={onPress}

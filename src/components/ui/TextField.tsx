@@ -11,14 +11,34 @@ type Props = Omit<TextInputProps, 'placeholderTextColor' | 'secureTextEntry'> & 
   secureTextEntry?: boolean;
 };
 
-export function TextField({ label, style, passwordToggle, secureTextEntry, ...rest }: Props) {
+export function TextField({
+  label,
+  style,
+  passwordToggle,
+  secureTextEntry,
+  accessibilityLabel: accessibilityLabelProp,
+  placeholder,
+  ...rest
+}: Props) {
   const { theme } = useAppTheme();
   const [obscured, setObscured] = useState(true);
+
+  const mergedA11yLabel =
+    accessibilityLabelProp ??
+    (label
+      ? `${label}${placeholder ? `. ${placeholder}` : ''}`
+      : placeholder !== undefined && placeholder !== ''
+        ? String(placeholder)
+        : undefined);
 
   if (passwordToggle) {
     return (
       <View style={{ gap: theme.space.xs }}>
-        {label ? <Typography variant="caption">{label}</Typography> : null}
+        {label ? (
+          <Typography variant="caption" importantForAccessibility="no">
+            {label}
+          </Typography>
+        ) : null}
         <View
           style={{
             flexDirection: 'row',
@@ -34,6 +54,8 @@ export function TextField({ label, style, passwordToggle, secureTextEntry, ...re
           <TextInput
             placeholderTextColor={theme.colors.textMuted}
             {...rest}
+            placeholder={placeholder}
+            accessibilityLabel={mergedA11yLabel}
             secureTextEntry={obscured}
             style={[
               {
@@ -68,11 +90,17 @@ export function TextField({ label, style, passwordToggle, secureTextEntry, ...re
 
   return (
     <View style={{ gap: theme.space.xs }}>
-      {label ? <Typography variant="caption">{label}</Typography> : null}
+      {label ? (
+        <Typography variant="caption" importantForAccessibility="no">
+          {label}
+        </Typography>
+      ) : null}
       <TextInput
         placeholderTextColor={theme.colors.textMuted}
         secureTextEntry={secureTextEntry}
         {...rest}
+        placeholder={placeholder}
+        accessibilityLabel={mergedA11yLabel}
         style={[
           {
             ...theme.typography.variants.body,

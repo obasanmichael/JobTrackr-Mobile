@@ -187,7 +187,13 @@ function DashboardStatTile({
 
   if (onPress) {
     return (
-      <Pressable style={{ flex: 1 }} onPress={onPress} accessibilityRole="button">
+      <Pressable
+        style={{ flex: 1 }}
+        onPress={onPress}
+        accessibilityRole="button"
+        accessibilityLabel={`${label}, ${value}`}
+        accessibilityHint={sub ? `${sub}` : undefined}
+      >
         {body}
       </Pressable>
     );

@@ -37,6 +37,8 @@ export type RemindersStackParamList = {
 /** More hub (Discover/account entry) · settings · placeholders — replaces old Profile-only stack. */
 export type MoreStackParamList = {
   MoreHub: undefined;
+  /** Privacy policy, terms, support contact, account deletion — release checklist surface */
+  LegalInformation: undefined;
   Settings: undefined;
   /** Typography/tokens QA surface — guarded in-screen when not in DEV */
   DesignReference: undefined;

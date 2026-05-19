@@ -1,5 +1,13 @@
 import type { ComponentProps, PropsWithChildren, ReactElement } from 'react';
-import { RefreshControl, ScrollView, View, type ViewStyle } from 'react-native';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  RefreshControl,
+  ScrollView,
+  View,
+  type ScrollViewProps,
+  type ViewStyle,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useResponsive } from '../../layout';
 import type { Theme } from '../../theme/types';
@@ -20,6 +28,12 @@ type Props = PropsWithChildren<{
    * (comfortable auth / empty states); scroll still works when the keyboard opens or content grows.
    */
   verticallyCenterScrollContent?: boolean;
+  /** Wraps the safe area in `KeyboardAvoidingView` (pairs well with scroll + forms). */
+  keyboardAvoiding?: boolean;
+  /** Offset when a translucent header overlaps the keyboard inset (native-stack pushes). */
+  keyboardVerticalOffset?: number;
+  /** Vertical scroll only — dismisses the keyboard while scrolling (defaults by platform). */
+  keyboardDismissMode?: ScrollViewProps['keyboardDismissMode'];
 }>;
 
 export function Screen({
@@ -31,6 +45,9 @@ export function Screen({
   constrainContentColumn = true,
   refreshControl,
   verticallyCenterScrollContent,
+  keyboardAvoiding,
+  keyboardVerticalOffset = 0,
+  keyboardDismissMode,
 }: Props) {
   const { theme } = useAppTheme();
   const responsive = useResponsive();
@@ -63,10 +80,14 @@ export function Screen({
     children
   );
 
+  const dismissMode: ScrollViewProps['keyboardDismissMode'] =
+    keyboardDismissMode ?? (Platform.OS === 'ios' ? 'interactive' : 'on-drag');
+
   const body = scroll ? (
     <ScrollView
       showsVerticalScrollIndicator={false}
       keyboardShouldPersistTaps="handled"
+      keyboardDismissMode={dismissMode}
       refreshControl={refreshControl}
       contentContainerStyle={{
         flexGrow: 1,
@@ -91,12 +112,24 @@ export function Screen({
     </View>
   );
 
-  return (
+  const shell = (
     <SafeAreaView
       edges={edges}
       style={[{ flex: 1, backgroundColor: theme.colors.background }, style]}
     >
       {body}
     </SafeAreaView>
+  );
+
+  if (!keyboardAvoiding) return shell;
+
+  return (
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      keyboardVerticalOffset={keyboardVerticalOffset}
+    >
+      {shell}
+    </KeyboardAvoidingView>
   );
 }

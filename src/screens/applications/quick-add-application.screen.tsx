@@ -45,6 +45,7 @@ export function QuickAddApplicationScreen(props: Props): ReactElement {
   const pill = (label: string, active: boolean, onPress: () => void): ReactElement => (
     <Pressable
       accessibilityRole="button"
+      accessibilityLabel={label}
       accessibilityState={{ selected: active }}
       onPress={onPress}
       style={{
@@ -57,7 +58,7 @@ export function QuickAddApplicationScreen(props: Props): ReactElement {
         marginRight: theme.space.sm,
       }}
     >
-      <Typography variant="caption" style={{ fontWeight: '600', color: theme.colors.textPrimary }}>
+      <Typography variant="caption" importantForAccessibility="no" style={{ fontWeight: '600', color: theme.colors.textPrimary }}>
         {label}
       </Typography>
     </Pressable>
@@ -102,8 +103,10 @@ export function QuickAddApplicationScreen(props: Props): ReactElement {
   };
 
   return (
-    <Screen scroll edges={['top', 'left', 'right', 'bottom']}>
-      <Typography variant="hero">Quick add</Typography>
+    <Screen scroll keyboardAvoiding edges={['top', 'left', 'right', 'bottom']}>
+      <Typography variant="hero" accessibilityRole="header">
+        Quick add
+      </Typography>
       <Typography variant="subtitle" muted style={{ marginTop: theme.space.sm }}>
         Add the basics now. Expand more details anytime to mirror the desktop form.
       </Typography>
@@ -126,6 +129,7 @@ export function QuickAddApplicationScreen(props: Props): ReactElement {
         variant="outline"
         block
         style={{ marginTop: theme.space.lg }}
+        hapticOnPress
         onPress={() => setMoreOpen((v) => !v)}
       />
 
@@ -207,6 +211,7 @@ export function QuickAddApplicationScreen(props: Props): ReactElement {
         block
         disabled={create.isPending}
         style={{ marginTop: theme.space.xl }}
+        hapticOnPress
         onPress={() => save()}
       />
     </Screen>

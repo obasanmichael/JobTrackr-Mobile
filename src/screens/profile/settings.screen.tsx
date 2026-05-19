@@ -1,9 +1,9 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { ReactElement } from 'react';
 import { View } from 'react-native';
-import { LogOut, Palette, UserRound } from 'lucide-react-native';
+import { LogOut, Palette, Shield, UserRound } from 'lucide-react-native';
 import { AppearancePreferenceControl } from '../../components/settings/appearance-preference-control';
-import { Button, Card, Screen, Typography } from '../../components/ui';
+import { Button, Card, HubNavRow, Screen, Typography } from '../../components/ui';
 import { UI_SCAFFOLD_BYPASS_AUTHENTICATION } from '../../config/ui-scaffold';
 import type { MoreStackParamList } from '../../navigation/types';
 import { useAuthStore } from '../../store/auth.store';
@@ -19,7 +19,9 @@ export function SettingsScreen({ navigation }: Props): ReactElement {
 
   return (
     <Screen scroll edges={['left', 'right', 'bottom']}>
-      <Typography variant="title">Account preferences</Typography>
+      <Typography variant="title" accessibilityRole="header">
+        Account preferences
+      </Typography>
       <Typography variant="bodySmall" muted style={{ marginTop: theme.space.sm }}>
         Manage how JobTrackr looks and how you stay signed in on this device.
       </Typography>
@@ -71,6 +73,19 @@ export function SettingsScreen({ navigation }: Props): ReactElement {
           Choose how JobTrackr looks on this phone.
         </Typography>
         <AppearancePreferenceControl />
+      </Card>
+
+      <Card style={{ marginTop: theme.space.lg }}>
+        <Typography variant="label" style={{ letterSpacing: 1, marginBottom: theme.space.sm }}>
+          Privacy & legal
+        </Typography>
+        <HubNavRow
+          title="Privacy, terms & support"
+          subtitle="Privacy policy, terms of service, contact support, and account deletion."
+          icon={Shield}
+          accessibilityHint="Opens policies, support links, and account deletion information."
+          onPress={() => navigation.navigate('LegalInformation')}
+        />
       </Card>
 
       <Card style={{ marginTop: theme.space.lg, gap: theme.space.md }}>

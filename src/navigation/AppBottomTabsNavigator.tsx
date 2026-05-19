@@ -11,15 +11,41 @@ import { RemindersStackNavigator } from './stacks/RemindersStackNavigator';
 
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 
+type BottomTabScreenOpts = BottomTabNavigationOptions & {
+  tabBarAccessibilityHint?: string;
+};
+
 const tabOptionsFactory =
-  (): Record<keyof BottomTabParamList, BottomTabNavigationOptions> =>
+  (): Record<keyof BottomTabParamList, BottomTabScreenOpts> =>
     ({
-      Home: { tabBarLabel: 'Home', title: 'Home' },
-      Applications: { tabBarLabel: 'Applications', title: 'Applications' },
-      QuickAdd: { tabBarLabel: 'Add', title: 'Quick add', tabBarAccessibilityLabel: 'Quick add' },
-      Reminders: { tabBarLabel: 'Reminders', title: 'Reminders' },
-      More: { tabBarLabel: 'More', title: 'More', tabBarAccessibilityLabel: 'More' },
-    }) as const;
+      Home: {
+        tabBarLabel: 'Home',
+        title: 'Home',
+        tabBarAccessibilityHint: 'Opens the Home dashboard tab.',
+      },
+      Applications: {
+        tabBarLabel: 'Applications',
+        title: 'Applications',
+        tabBarAccessibilityHint: 'Opens your applications list.',
+      },
+      QuickAdd: {
+        tabBarLabel: 'Add',
+        title: 'Quick add',
+        tabBarAccessibilityLabel: 'Quick add',
+        tabBarAccessibilityHint: 'Opens quick add for a new application.',
+      },
+      Reminders: {
+        tabBarLabel: 'Reminders',
+        title: 'Reminders',
+        tabBarAccessibilityHint: 'Opens reminders.',
+      },
+      More: {
+        tabBarLabel: 'More',
+        title: 'More',
+        tabBarAccessibilityLabel: 'More',
+        tabBarAccessibilityHint: 'Opens Discover settings and workspaces.',
+      },
+    });
 
 export function AppBottomTabsNavigator(): ReactElement {
   const tabOptions = tabOptionsFactory();

@@ -43,10 +43,10 @@ export function RegisterScreen({ navigation }: Props): ReactElement {
   });
 
   return (
-    <Screen scroll verticallyCenterScrollContent edges={['top', 'bottom', 'left', 'right']}>
+    <Screen scroll verticallyCenterScrollContent keyboardAvoiding edges={['top', 'bottom', 'left', 'right']}>
       <AuthBrandHeader />
 
-      <Typography variant="hero" style={{ marginBottom: theme.space.sm }}>
+      <Typography variant="hero" accessibilityRole="header" style={{ marginBottom: theme.space.sm }}>
         Create account
       </Typography>
       <Typography variant="subtitle" muted>
@@ -115,7 +115,7 @@ export function RegisterScreen({ navigation }: Props): ReactElement {
           </Typography>
         ) : null}
 
-        <Button label="Register" variant="primary" block loading={submitting} onPress={() => void onSubmit()} />
+        <Button label="Register" variant="primary" block loading={submitting} hapticOnPress onPress={() => void onSubmit()} />
 
         <View
           style={{
@@ -130,7 +130,13 @@ export function RegisterScreen({ navigation }: Props): ReactElement {
           <Typography variant="bodySmall" muted>
             Already have an account?
           </Typography>
-          <Pressable onPress={() => navigation.navigate('Login')} hitSlop={8} accessibilityRole="link">
+          <Pressable
+            onPress={() => navigation.navigate('Login')}
+            hitSlop={8}
+            accessibilityRole="link"
+            accessibilityLabel="Sign in"
+            accessibilityHint="Opens sign in."
+          >
             <Typography variant="bodySmall" style={{ fontWeight: '600', color: theme.colors.textPrimary }}>
               Sign in
             </Typography>

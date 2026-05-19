@@ -1,5 +1,6 @@
 import { ActivityIndicator, Pressable, View, type ViewStyle } from 'react-native';
 import { Typography } from './Typography';
+import { hapticLightImpact } from '../../lib/haptics';
 import { useAppTheme } from '../../theme';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'danger' | 'ghost';
@@ -11,6 +12,8 @@ type Props = {
   disabled?: boolean;
   style?: ViewStyle;
   block?: boolean;
+  /** Light impact feedback when the button is pressed (forms / confirmations). */
+  hapticOnPress?: boolean;
   onPress: () => void;
 };
 
@@ -21,6 +24,7 @@ export function Button({
   disabled,
   style,
   block,
+  hapticOnPress,
   onPress,
 }: Props) {
   const { theme } = useAppTheme();
@@ -68,11 +72,18 @@ export function Button({
   const spinnerColor =
     variant === 'primary' || variant === 'danger' ? '#FFFFFF' : theme.colors.accent;
 
+  const triggerPress = (): void => {
+    if (hapticOnPress) void hapticLightImpact();
+    onPress();
+  };
+
   return (
     <Pressable
       accessibilityRole="button"
+      accessibilityLabel={label}
+      accessibilityState={{ disabled: Boolean(disabled || loading), busy: Boolean(loading) }}
       disabled={disabled || loading}
-      onPress={onPress}
+      onPress={triggerPress}
       style={({ pressed }) => [
         base,
         surfaces[variant],

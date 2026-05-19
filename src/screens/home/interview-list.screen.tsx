@@ -72,7 +72,7 @@ export function InterviewListScreen({ route }: Props): ReactElement {
 
   return (
     <Screen scroll refreshControl={refresh} edges={['left', 'right', 'bottom']}>
-      <Typography variant="hero" style={{ marginBottom: theme.space.sm }}>
+      <Typography variant="hero" accessibilityRole="header" style={{ marginBottom: theme.space.sm }}>
         Interviews
       </Typography>
       <Typography variant="subtitle" muted>

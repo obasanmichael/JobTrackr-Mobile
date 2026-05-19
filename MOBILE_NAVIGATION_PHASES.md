@@ -46,7 +46,27 @@ Tab bar fifth item: **`More`** (icon: menu), **not** “Settings” alone—redu
 | **Offline cue** | `ConnectivityBanner` uses `@react-native-community/netinfo` (absolute banner under status bar). |
 | **Render errors** | `AppErrorBoundary` wraps `RootNavigator` inside `NavigationContainer`. |
 
-Further store-readiness (privacy URL, account deletion link, ATS labels) remains **future work**.
+Further store-readiness (privacy URL, account deletion link, ATS labels) is covered in **`docs/MOBILE_STORE_SUBMISSION.md`** and the **Privacy legal** flow under **More → Settings**.
+
+## Phase 4 — Accessibility & polish
+
+| Area | Implementation |
+|------|----------------|
+| **Dynamic Type** | `Typography` caps scaling via `TEXT_MAX_FONT_SCALE_MULTIPLIER` (`src/theme/accessibility.ts`). |
+| **Contrast / headings** | Theme tokens documented in **`docs/MOBILE_ACCESSIBILITY_POLISH.md`**; tab-root heroes use `accessibilityRole="header"` where updated. |
+| **VoiceOver / TalkBack** | Tab **`tabBarAccessibilityHint`** (`FloatingBottomTabBar`); **`ApplicationCard`** summaries; shared **`HubNavRow`** for hub/settings/legal lists. |
+| **Keyboard / haptics** | **`Screen`** `keyboardAvoiding` + scroll **`keyboardDismissMode`**; **`Button`** `hapticOnPress` + **`expo-haptics`** on auth / jobs search / quick add. |
+
+Localization guidance (future multi-locale) lives in **`docs/MOBILE_LOCALIZATION_STRATEGY.md`** — UI strings remain English inline for now.
+
+## Phase 5 — Store submission package
+
+| Area | Implementation |
+|------|----------------|
+| **Privacy / terms / support / deletion** | Env-driven URLs (`src/constants/legal-env.ts`) + **`LegalInformation`** screen (+ Settings entry). |
+| **Nutrition labels / Data safety** | Checklist aligned to actual SDK usage in **`docs/MOBILE_STORE_SUBMISSION.md`**. |
+| **Display name** | **`app.json`** `expo.name` → **JobTrackr** (slug unchanged). |
+| **Versioning / screenshots** | EAS **`remote`** version source + **`assets/store/README.md`** workflow notes. |
 
 ## Conventions checklist (for future PRs)
 

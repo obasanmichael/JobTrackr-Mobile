@@ -23,3 +23,9 @@ jest.mock('@react-native-community/netinfo', () => ({
     addEventListener: jest.fn((_cb: unknown) => () => {}),
   },
 }));
+
+jest.mock('expo-haptics', () => ({
+  impactAsync: jest.fn(async () => {}),
+  notificationAsync: jest.fn(async () => {}),
+  selectionAsync: jest.fn(async () => {}),
+}));

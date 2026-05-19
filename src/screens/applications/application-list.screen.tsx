@@ -71,7 +71,9 @@ export function ApplicationListScreen({ navigation }: Props): ReactElement {
 
   return (
     <Screen scroll refreshControl={refresh} edges={['top', 'left', 'right', 'bottom']}>
-      <Typography variant="hero">Applications</Typography>
+      <Typography variant="hero" accessibilityRole="header">
+        Applications
+      </Typography>
       <Typography variant="subtitle" muted style={{ marginTop: theme.space.xs }}>
         {subtitle}
       </Typography>

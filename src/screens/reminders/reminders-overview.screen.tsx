@@ -88,7 +88,9 @@ export function RemindersOverviewScreen(_props: Props): ReactElement {
 
   return (
     <Screen scroll refreshControl={refresh} edges={['top', 'left', 'right', 'bottom']}>
-      <Typography variant="hero">Reminders</Typography>
+      <Typography variant="hero" accessibilityRole="header">
+        Reminders
+      </Typography>
       <Typography variant="subtitle" muted style={{ marginTop: theme.space.sm }}>
         {subtitle}
       </Typography>

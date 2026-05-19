@@ -5,4 +5,5 @@ export { Card } from './Card';
 export { TextField } from './TextField';
 export { DatePickerField } from './DatePickerField';
 export { ResponsiveContentColumn } from './ResponsiveContentColumn';
+export { HubNavRow } from './hub-nav-row';
 export { EmptyState, LoadingState, ErrorState } from './empty-loading-error';

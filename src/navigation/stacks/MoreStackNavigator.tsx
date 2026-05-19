@@ -2,6 +2,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import type { ReactElement } from 'react';
 
 import { BillingPlaceholderScreen } from '../../screens/profile/billing-placeholder.screen';
+import { LegalInformationScreen } from '../../screens/profile/legal-information.screen';
 import { CalendarPlaceholderScreen } from '../../screens/profile/calendar-placeholder.screen';
 import { DesignReferenceScreen } from '../../screens/profile/design-reference.screen';
 import { MatchedJobsPlaceholderScreen } from '../../screens/profile/matched-jobs-placeholder.screen';
@@ -25,6 +26,7 @@ export function MoreStackNavigator(): ReactElement {
         {/* Tab root: hero + sections — avoid stacking with native “More” title */}
         <Stack.Screen name="MoreHub" component={MoreHubScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Settings" component={SettingsScreen} options={{ title: 'Settings' }} />
+        <Stack.Screen name="LegalInformation" component={LegalInformationScreen} options={{ title: 'Privacy legal' }} />
         <Stack.Screen name="DesignReference" component={DesignReferenceScreen} options={{ title: 'Gallery' }} />
         <Stack.Screen name="ResumeOverview" component={ResumeOverviewScreen} options={{ title: 'Resume' }} />
         <Stack.Screen name="ResumeDetail" component={ResumeDetailScreen} options={{ title: 'Resume details' }} />

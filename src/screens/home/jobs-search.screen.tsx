@@ -156,8 +156,10 @@ export function JobSearchScreen(): ReactElement {
     jobsQuery.error instanceof Error ? jobsQuery.error.message : errParse?.message ?? 'Request failed';
 
   return (
-    <Screen scroll edges={['left', 'right', 'bottom']}>
-      <Typography variant="hero">Jobs</Typography>
+    <Screen scroll keyboardAvoiding edges={['left', 'right', 'bottom']}>
+      <Typography variant="hero" accessibilityRole="header">
+        Jobs
+      </Typography>
       <Typography variant="subtitle" muted style={{ marginTop: theme.space.sm }}>
         Search aggregated listings from linked job sources—the same backend filters as the web app.
       </Typography>
@@ -202,6 +204,7 @@ export function JobSearchScreen(): ReactElement {
         <Button
           label="Search jobs"
           variant="primary"
+          hapticOnPress
           onPress={() => void runSearch()}
           style={{ marginTop: theme.space.sm }}
         />

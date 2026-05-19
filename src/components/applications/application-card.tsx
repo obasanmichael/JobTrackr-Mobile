@@ -1,5 +1,6 @@
 import type { ReactElement } from 'react';
 import { Pressable, View } from 'react-native';
+import { STATUS_LABELS } from '../../constants/application-status';
 import type { ApplicationListItem } from '../../domain/application-display';
 import { StatusBadge } from './status-badge';
 import { Card } from '../ui/Card';
@@ -15,6 +16,8 @@ type Props = {
 export function ApplicationCard({ application, onPress }: Props): ReactElement {
   const { theme } = useAppTheme();
   const meta = [WORK_MODE_LABELS[application.workMode], application.location].filter(Boolean).join(' · ');
+  const statusLabel = STATUS_LABELS[application.status];
+  const accessibilitySummary = `${application.jobTitle}, ${application.companyName}. Status ${statusLabel}.${meta ? ` ${meta}` : ''}`;
 
   const inner = (
     <Card style={{ gap: theme.space.sm }}>
@@ -56,8 +59,15 @@ export function ApplicationCard({ application, onPress }: Props): ReactElement {
 
   if (onPress) {
     return (
-      <Pressable accessibilityRole="button" onPress={onPress}>
-        {inner}
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={accessibilitySummary}
+        accessibilityHint="Opens application details."
+        onPress={onPress}
+      >
+        <View accessible={false} importantForAccessibility="no-hide-descendants">
+          {inner}
+        </View>
       </Pressable>
     );
   }

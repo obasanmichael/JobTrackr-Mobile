@@ -43,10 +43,10 @@ export function LoginScreen({ navigation }: Props): ReactElement {
   });
 
   return (
-    <Screen scroll verticallyCenterScrollContent edges={['top', 'bottom', 'left', 'right']}>
+    <Screen scroll verticallyCenterScrollContent keyboardAvoiding edges={['top', 'bottom', 'left', 'right']}>
       <AuthBrandHeader />
 
-      <Typography variant="hero" style={{ marginBottom: theme.space.sm }}>
+      <Typography variant="hero" accessibilityRole="header" style={{ marginBottom: theme.space.sm }}>
         Welcome back
       </Typography>
       <Typography variant="subtitle" muted>
@@ -102,7 +102,7 @@ export function LoginScreen({ navigation }: Props): ReactElement {
           </Typography>
         ) : null}
 
-        <Button label="Sign in" variant="primary" block loading={submitting} onPress={() => void onSubmit()} />
+        <Button label="Sign in" variant="primary" block loading={submitting} hapticOnPress onPress={() => void onSubmit()} />
 
         <View
           style={{
@@ -117,7 +117,13 @@ export function LoginScreen({ navigation }: Props): ReactElement {
           <Typography variant="bodySmall" muted>
             Don&apos;t have an account?
           </Typography>
-          <Pressable onPress={() => navigation.navigate('Register')} hitSlop={8} accessibilityRole="link">
+          <Pressable
+            onPress={() => navigation.navigate('Register')}
+            hitSlop={8}
+            accessibilityRole="link"
+            accessibilityLabel="Create account"
+            accessibilityHint="Opens registration."
+          >
             <Typography variant="bodySmall" style={{ fontWeight: '600', color: theme.colors.textPrimary }}>
               Create one
             </Typography>
