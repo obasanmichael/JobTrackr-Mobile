@@ -14,6 +14,7 @@ import {
   GitCommitHorizontal,
   MessageSquare,
   Phone,
+  Search,
   Trophy,
   TrendingUp,
   XCircle,
@@ -332,6 +333,8 @@ export function HomeOverviewScreen({ navigation }: Props): ReactElement {
   const navQuickAdd = (): void => navigation.navigate('QuickAdd', { screen: 'QuickAddApplication' });
   const navInterviewsFull = (): void => navigation.navigate('InterviewList', {});
   const navRemindersFull = (): void => navigation.navigate('Reminders', { screen: 'RemindersOverview' });
+  const navJobsBoard = (): void => navigation.navigate('JobSearch');
+  const navResumeWorkspace = (): void => navigation.navigate('Profile', { screen: 'ResumeOverview' });
 
   const subtitle = scaffold
     ? 'Showing sample data for layout preview.'
@@ -449,6 +452,63 @@ export function HomeOverviewScreen({ navigation }: Props): ReactElement {
               />
             </View>
           </View>
+
+          <Card style={{ marginTop: theme.space.lg }}>
+            <Typography variant="label" style={{ marginBottom: theme.space.md }}>
+              Discover & refine
+            </Typography>
+            <Pressable
+              accessibilityRole="button"
+              onPress={navJobsBoard}
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                paddingVertical: theme.space.sm,
+              }}
+            >
+              <View
+                style={{ flexDirection: 'row', alignItems: 'center', gap: theme.space.sm, flex: 1, paddingRight: theme.space.md }}
+              >
+                <Search size={18} color={theme.colors.textMuted} strokeWidth={2} />
+                <View style={{ flex: 1, minWidth: 0 }}>
+                  <Typography variant="bodySmall" style={{ fontWeight: '600' }}>
+                    Browse job listings
+                  </Typography>
+                  <Typography variant="caption" muted numberOfLines={2} style={{ marginTop: 4 }}>
+                    Search aggregated roles synced with Desktop → Discover.
+                  </Typography>
+                </View>
+              </View>
+              <ArrowRight size={16} color={theme.colors.textMuted} strokeWidth={2} />
+            </Pressable>
+            <View style={{ height: 1, backgroundColor: theme.colors.borderMuted, marginVertical: theme.space.xs }} />
+            <Pressable
+              accessibilityRole="button"
+              onPress={navResumeWorkspace}
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                paddingVertical: theme.space.sm,
+              }}
+            >
+              <View
+                style={{ flexDirection: 'row', alignItems: 'center', gap: theme.space.sm, flex: 1, paddingRight: theme.space.md }}
+              >
+                <FileText size={18} color={theme.colors.textMuted} strokeWidth={2} />
+                <View style={{ flex: 1, minWidth: 0 }}>
+                  <Typography variant="bodySmall" style={{ fontWeight: '600' }}>
+                    Manage resumes
+                  </Typography>
+                  <Typography variant="caption" muted numberOfLines={2} style={{ marginTop: 4 }}>
+                    Mirrors Desktop → Improve → Resume once uploads are wired to your workspace.
+                  </Typography>
+                </View>
+              </View>
+              <ArrowRight size={16} color={theme.colors.textMuted} strokeWidth={2} />
+            </Pressable>
+          </Card>
 
           <Card style={{ marginTop: theme.space.lg }}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: theme.space.md }}>

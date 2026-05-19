@@ -14,6 +14,7 @@ export type AuthStackParamList = {
 export type HomeStackParamList = {
   HomeOverview: undefined;
   InterviewList: { linkedApplicationId?: string };
+  JobSearch: undefined;
 };
 
 /** Applications hub + drilling screens */
@@ -37,6 +38,11 @@ export type ProfileStackParamList = {
   ProfileOverview: undefined;
   /** Typography/tokens QA surface — guarded in-screen when not in DEV */
   DesignReference: undefined;
+  ResumeOverview: undefined;
+  ResumeDetail: { resumeId: string };
+  CalendarPlaceholder: undefined;
+  BillingPlaceholder: undefined;
+  MatchedJobsPlaceholder: undefined;
 };
 
 export type BottomTabParamList = {

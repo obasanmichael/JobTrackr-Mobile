@@ -1,6 +1,6 @@
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import type { ReactElement } from 'react';
-import { Bell, Briefcase, Home as HomeIcon, Plus, UserRound } from 'lucide-react-native';
+import { Bell, Briefcase, Home as HomeIcon, Plus, Settings } from 'lucide-react-native';
 import { Pressable, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
@@ -15,7 +15,7 @@ const TAB_ICONS: Record<string, typeof HomeIcon> = {
   Applications: Briefcase,
   QuickAdd: Plus,
   Reminders: Bell,
-  Profile: UserRound,
+  Profile: Settings,
 };
 
 export function FloatingBottomTabBar(props: BottomTabBarProps): ReactElement {

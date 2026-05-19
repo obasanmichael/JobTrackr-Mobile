@@ -23,7 +23,17 @@ import {
 import { fetchDashboardSummary } from '../services/dashboard.service';
 import { fetchInterviews } from '../services/interviews.service';
 import { fetchReminders, patchReminder } from '../services/reminders.service';
-import { jtKeys } from './query-keys';
+import { searchJobsRequest } from '../services/jobs.service';
+import type { JobSearchRequestParams, JobSearchResult } from '../types/job-board.dto';
+import type { ResumeDto } from '../types/resume.dto';
+import {
+  fetchCandidateProfile,
+  fetchResumeById,
+  fetchResumes,
+  postResumeSetActive,
+  uploadResumeFile,
+} from '../services/resumes.service';
+import { jobSearchStoreKey, jtKeys } from './query-keys';
 
 async function invalidateBuckets(qc: QueryClient): Promise<void> {
   await Promise.all([
@@ -132,5 +142,59 @@ export function useToggleReminderMutation() {
         qc.invalidateQueries({ queryKey: jtKeys.reminders() }),
         qc.invalidateQueries({ queryKey: jtKeys.dashboard() }),
       ]),
+  });
+}
+
+export function useJobSearchQuery(enabled: boolean, filters: JobSearchRequestParams) {
+  const normalized = jobSearchStoreKey(filters);
+  return useQuery<JobSearchResult>({
+    queryKey: jtKeys.jobsSearch(normalized),
+    enabled,
+    queryFn: () => searchJobsRequest(normalized),
+  });
+}
+
+export function useResumesQuery(enabled: boolean) {
+  return useQuery<ResumeDto[]>({
+    queryKey: jtKeys.resumes(),
+    enabled,
+    queryFn: fetchResumes,
+  });
+}
+
+export function useResumeDetailQuery(enabled: boolean, resumeId: string) {
+  return useQuery({
+    queryKey: jtKeys.resume(resumeId),
+    enabled: enabled && resumeId.length > 0,
+    queryFn: () => fetchResumeById(resumeId),
+  });
+}
+
+export function useCandidateProfileQuery(enabled: boolean, resumeId: string) {
+  return useQuery({
+    queryKey: jtKeys.candidateProfile(resumeId),
+    enabled: enabled && resumeId.length > 0,
+    queryFn: () => fetchCandidateProfile(resumeId),
+  });
+}
+
+export function useUploadResumeMutation() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: uploadResumeFile,
+    onSuccess: async () => {
+      await qc.invalidateQueries({ queryKey: jtKeys.resumes() });
+    },
+  });
+}
+
+export function useSetActiveResumeMutation() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: postResumeSetActive,
+    onSuccess: async (_, resumeId) => {
+      await qc.invalidateQueries({ queryKey: jtKeys.resumes() });
+      await qc.invalidateQueries({ queryKey: jtKeys.resume(resumeId) });
+    },
   });
 }

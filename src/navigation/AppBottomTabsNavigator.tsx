@@ -18,7 +18,7 @@ const tabOptionsFactory =
       Applications: { tabBarLabel: 'Applications', title: 'Applications' },
       QuickAdd: { tabBarLabel: 'Add', title: 'Quick add', tabBarAccessibilityLabel: 'Quick add' },
       Reminders: { tabBarLabel: 'Reminders', title: 'Reminders' },
-      Profile: { tabBarLabel: 'Profile', title: 'Profile' },
+      Profile: { tabBarLabel: 'Settings', title: 'Settings', tabBarAccessibilityLabel: 'Settings' },
     }) as const;
 
 export function AppBottomTabsNavigator(): ReactElement {
