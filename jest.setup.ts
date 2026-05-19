@@ -15,3 +15,11 @@ jest.mock('expo-secure-store', () => ({
 jest.mock('expo-document-picker', () => ({
   getDocumentAsync: jest.fn(async () => ({ canceled: true, assets: [] })),
 }));
+
+jest.mock('@react-native-community/netinfo', () => ({
+  __esModule: true,
+  default: {
+    fetch: jest.fn(async () => ({ isConnected: true })),
+    addEventListener: jest.fn((_cb: unknown) => () => {}),
+  },
+}));

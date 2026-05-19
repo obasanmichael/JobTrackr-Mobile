@@ -2,7 +2,7 @@ import type { CompositeScreenProps } from '@react-navigation/native';
 import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { ReactElement } from 'react';
-import { useMemo } from 'react';
+import { useLayoutEffect, useMemo } from 'react';
 import { Alert, RefreshControl, View } from 'react-native';
 import { InterviewCard } from '../../components/interviews/interview-card';
 import { ReminderCard } from '../../components/reminders/reminder-card';
@@ -63,6 +63,17 @@ export function ApplicationDetailScreen({ navigation, route }: Props): ReactElem
   const mockApp = scaffold ? getMockApplicationById(applicationId) : undefined;
   const remoteProjection = apiOn && detailQuery.data ? applicationDtoToListItem(detailQuery.data) : undefined;
   const application = scaffold ? mockApp ?? undefined : remoteProjection;
+
+  useLayoutEffect(() => {
+    if (!application) {
+      navigation.setOptions({ title: 'Application' });
+      return;
+    }
+    const company = application.companyName?.trim() ?? '';
+    const role = application.jobTitle?.trim() ?? '';
+    const title = role && company ? `${role} · ${company}` : role || company || 'Application';
+    navigation.setOptions({ title: title.length > 56 ? `${title.slice(0, 54)}…` : title });
+  }, [application, navigation]);
 
   const relatedReminders = useMemo(() => {
     if (scaffold || !apiOn) {
@@ -156,7 +167,7 @@ export function ApplicationDetailScreen({ navigation, route }: Props): ReactElem
 
   if (bootLoading) {
     return (
-      <Screen scroll refreshControl={refreshControl}>
+      <Screen scroll refreshControl={refreshControl} edges={['left', 'right', 'bottom']}>
         <LoadingState message="Loading application workspace…" />
       </Screen>
     );
@@ -164,7 +175,7 @@ export function ApplicationDetailScreen({ navigation, route }: Props): ReactElem
 
   if (!application) {
     return (
-      <Screen scroll refreshControl={refreshControl}>
+      <Screen scroll refreshControl={refreshControl} edges={['left', 'right', 'bottom']}>
         <ErrorState
           title="Application not found"
           message={
@@ -190,7 +201,7 @@ export function ApplicationDetailScreen({ navigation, route }: Props): ReactElem
   }
 
   return (
-    <Screen scroll refreshControl={refreshControl}>
+    <Screen scroll refreshControl={refreshControl} edges={['left', 'right', 'bottom']}>
       <Typography variant="subtitle" muted style={{ marginBottom: theme.space.xs }}>
         Application
       </Typography>

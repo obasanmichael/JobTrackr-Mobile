@@ -7,7 +7,7 @@ import { APPLICATION_STATUSES } from '../../constants/application-status';
 import { useAppTheme } from '../../theme';
 
 /**
- * Typography + primitives gallery for visual QA — mounted from Profile → Design reference.
+ * Typography + primitives gallery for visual QA — mounted from More → Gallery (dev only).
  * Kept intentionally free of routing concerns so navigators remain thin orchestration layers.
  */
 export function DesignKitPanel(): ReactElement {

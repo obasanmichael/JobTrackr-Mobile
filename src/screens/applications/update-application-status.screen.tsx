@@ -68,14 +68,14 @@ export function UpdateApplicationStatusScreen({ navigation, route }: Props): Rea
 
   if (boot) {
     return (
-      <Screen scroll>
+      <Screen scroll edges={['left', 'right', 'bottom']}>
         <LoadingState message="Fetching application..." />
       </Screen>
     );
   }
 
   return (
-    <Screen scroll>
+    <Screen scroll edges={['left', 'right', 'bottom']}>
       <Typography variant="hero">Update status</Typography>
       <Typography variant="bodySmall" muted style={{ marginTop: theme.space.sm }}>
         {subtitle}

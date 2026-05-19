@@ -64,14 +64,14 @@ export function InterviewListScreen({ route }: Props): ReactElement {
 
   if (boot) {
     return (
-      <Screen scroll refreshControl={refresh}>
+      <Screen scroll refreshControl={refresh} edges={['left', 'right', 'bottom']}>
         <LoadingState message="Loading interviews…" />
       </Screen>
     );
   }
 
   return (
-    <Screen scroll refreshControl={refresh}>
+    <Screen scroll refreshControl={refresh} edges={['left', 'right', 'bottom']}>
       <Typography variant="hero" style={{ marginBottom: theme.space.sm }}>
         Interviews
       </Typography>

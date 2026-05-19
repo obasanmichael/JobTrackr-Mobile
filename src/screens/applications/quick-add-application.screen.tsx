@@ -102,7 +102,7 @@ export function QuickAddApplicationScreen(props: Props): ReactElement {
   };
 
   return (
-    <Screen scroll>
+    <Screen scroll edges={['top', 'left', 'right', 'bottom']}>
       <Typography variant="hero">Quick add</Typography>
       <Typography variant="subtitle" muted style={{ marginTop: theme.space.sm }}>
         Add the basics now. Expand more details anytime to mirror the desktop form.

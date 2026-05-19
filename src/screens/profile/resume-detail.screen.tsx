@@ -1,15 +1,16 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { ReactElement } from 'react';
+import { useLayoutEffect } from 'react';
 import { View } from 'react-native';
 import type { ResumeParseStatus } from '../../types/resume.dto';
-import type { ProfileStackParamList } from '../../navigation/types';
+import type { MoreStackParamList } from '../../navigation/types';
 import { useDomainQueriesEnabled } from '../../hooks/use-domain-queries-enabled';
 import { useCandidateProfileQuery, useResumeDetailQuery } from '../../query/jt-queries';
 import { Card, EmptyState, LoadingState, Screen, Typography } from '../../components/ui';
 import { useAppTheme } from '../../theme';
 import { parseAxiosApiError } from '../../services/api';
 
-type Props = NativeStackScreenProps<ProfileStackParamList, 'ResumeDetail'>;
+type Props = NativeStackScreenProps<MoreStackParamList, 'ResumeDetail'>;
 
 function statusLabel(status: ResumeParseStatus): string {
   switch (status) {
@@ -28,12 +29,17 @@ function statusLabel(status: ResumeParseStatus): string {
   }
 }
 
-export function ResumeDetailScreen(props: Props): ReactElement {
-  const { resumeId } = props.route.params;
+export function ResumeDetailScreen({ navigation, route }: Props): ReactElement {
+  const { resumeId } = route.params;
   const { theme } = useAppTheme();
   const apiOn = useDomainQueriesEnabled();
 
   const resume = useResumeDetailQuery(apiOn, resumeId);
+
+  useLayoutEffect(() => {
+    const name = resume.data?.fileName?.trim();
+    navigation.setOptions({ title: name && name.length > 0 ? name : 'Resume details' });
+  }, [navigation, resume.data?.fileName]);
 
   const profile = useCandidateProfileQuery(Boolean(apiOn && resume.data?.status === 'PARSED'), resumeId);
   function errStr(err: unknown): string {
@@ -46,8 +52,10 @@ export function ResumeDetailScreen(props: Props): ReactElement {
   const bootResume = apiOn && resume.isPending;
 
   return (
-    <Screen scroll edges={['top', 'left', 'right', 'bottom']}>
-      <Typography variant="hero">Resume details</Typography>
+    <Screen scroll edges={['left', 'right', 'bottom']}>
+      <Typography variant="subtitle" muted style={{ marginBottom: theme.space.xs }}>
+        Parsed snapshot
+      </Typography>
       <Typography variant="bodySmall" muted style={{ marginTop: theme.space.sm }}>
         Mirrors the structured profile JobTrackr extracts on web—fine-grained edits stay quickest on desktop for now.
       </Typography>

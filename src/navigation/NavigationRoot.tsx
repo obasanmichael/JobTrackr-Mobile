@@ -2,6 +2,8 @@ import { StatusBar } from 'expo-status-bar';
 import type { ReactElement } from 'react';
 import { useMemo } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
+import { AppErrorBoundary } from '../components/AppErrorBoundary';
+import { ConnectivityBanner } from '../components/ConnectivityBanner';
 import { useAppTheme } from '../theme';
 import { createNavigationTheme } from './theme/create-navigation-theme';
 import { RootNavigator } from './RootNavigator';
@@ -16,8 +18,11 @@ export function NavigationRoot(): ReactElement {
 
   return (
     <NavigationContainer theme={navTheme}>
+      <ConnectivityBanner />
       <StatusBar style={resolvedMode === 'dark' ? 'light' : 'dark'} />
-      <RootNavigator />
+      <AppErrorBoundary>
+        <RootNavigator />
+      </AppErrorBoundary>
     </NavigationContainer>
   );
 }

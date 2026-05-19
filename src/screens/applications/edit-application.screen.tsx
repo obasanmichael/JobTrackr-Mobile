@@ -154,7 +154,7 @@ export function EditApplicationScreen({ navigation, route }: Props): ReactElemen
 
   if (bootLoading) {
     return (
-      <Screen scroll edges={['top', 'bottom', 'left', 'right']}>
+      <Screen scroll edges={['left', 'right', 'bottom']}>
         <LoadingState message="Loading application…" />
       </Screen>
     );
@@ -162,7 +162,7 @@ export function EditApplicationScreen({ navigation, route }: Props): ReactElemen
 
   if (loadError) {
     return (
-      <Screen scroll edges={['top', 'bottom', 'left', 'right']}>
+      <Screen scroll edges={['left', 'right', 'bottom']}>
         <Typography variant="hero">Edit application</Typography>
         <Typography variant="bodySmall" color={theme.colors.danger} style={{ marginTop: theme.space.lg }}>
           {(detailQuery.error as Error)?.message ?? 'Unable to load this application.'}
@@ -174,7 +174,7 @@ export function EditApplicationScreen({ navigation, route }: Props): ReactElemen
 
   if (scaffoldMissingMock) {
     return (
-      <Screen scroll edges={['top', 'bottom', 'left', 'right']}>
+      <Screen scroll edges={['left', 'right', 'bottom']}>
         <Typography variant="hero">Edit application</Typography>
         <Typography variant="bodySmall" muted style={{ marginTop: theme.space.lg }}>
           This application isn’t in the offline sample dataset.
@@ -185,7 +185,7 @@ export function EditApplicationScreen({ navigation, route }: Props): ReactElemen
   }
 
   return (
-    <Screen scroll edges={['top', 'bottom', 'left', 'right']}>
+    <Screen scroll edges={['left', 'right', 'bottom']}>
       <Typography variant="hero">Edit application</Typography>
       <Typography variant="subtitle" muted style={{ marginTop: theme.space.sm }}>
         {scaffold ? 'Offline preview · sign in to save changes.' : 'Updates sync with JobTrackr on web and mobile.'}

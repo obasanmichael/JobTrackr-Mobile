@@ -156,7 +156,7 @@ export function JobSearchScreen(): ReactElement {
     jobsQuery.error instanceof Error ? jobsQuery.error.message : errParse?.message ?? 'Request failed';
 
   return (
-    <Screen scroll edges={['top', 'left', 'right', 'bottom']}>
+    <Screen scroll edges={['left', 'right', 'bottom']}>
       <Typography variant="hero">Jobs</Typography>
       <Typography variant="subtitle" muted style={{ marginTop: theme.space.sm }}>
         Search aggregated listings from linked job sources—the same backend filters as the web app.

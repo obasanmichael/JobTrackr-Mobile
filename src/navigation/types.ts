@@ -34,8 +34,10 @@ export type RemindersStackParamList = {
   RemindersOverview: undefined;
 };
 
-export type ProfileStackParamList = {
-  ProfileOverview: undefined;
+/** More hub (Discover/account entry) · settings · placeholders — replaces old Profile-only stack. */
+export type MoreStackParamList = {
+  MoreHub: undefined;
+  Settings: undefined;
   /** Typography/tokens QA surface — guarded in-screen when not in DEV */
   DesignReference: undefined;
   ResumeOverview: undefined;
@@ -50,7 +52,7 @@ export type BottomTabParamList = {
   Applications: NavigatorScreenParams<ApplicationsStackParamList>;
   QuickAdd: NavigatorScreenParams<QuickAddStackParamList>;
   Reminders: NavigatorScreenParams<RemindersStackParamList>;
-  Profile: NavigatorScreenParams<ProfileStackParamList>;
+  More: NavigatorScreenParams<MoreStackParamList>;
 };
 
 export type RootStackParamList = {

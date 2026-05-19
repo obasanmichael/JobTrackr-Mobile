@@ -60,7 +60,7 @@ export function AddTimelineNoteScreen({ navigation, route }: Props): ReactElemen
   };
 
   return (
-    <Screen scroll>
+    <Screen scroll edges={['left', 'right', 'bottom']}>
       <Typography variant="hero">Add note</Typography>
       <Typography variant="subtitle" muted style={{ marginTop: theme.space.sm }}>
         Notes appear on this application&apos;s timeline. The first line is shown as the summary; anything after that stays as extra detail.

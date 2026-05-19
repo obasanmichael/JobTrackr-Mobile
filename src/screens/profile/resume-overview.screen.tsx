@@ -6,14 +6,14 @@ import { Pressable, View } from 'react-native';
 import { ChevronRight, FileText } from 'lucide-react-native';
 import { format, parseISO } from 'date-fns';
 import type { ResumeDto, ResumeParseStatus } from '../../types/resume.dto';
-import type { ProfileStackParamList } from '../../navigation/types';
+import type { MoreStackParamList } from '../../navigation/types';
 import { useDomainQueriesEnabled } from '../../hooks/use-domain-queries-enabled';
 import { useResumesQuery, useSetActiveResumeMutation, useUploadResumeMutation } from '../../query/jt-queries';
 import { Button, Card, EmptyState, LoadingState, Screen, Typography } from '../../components/ui';
 import { useAppTheme } from '../../theme';
 import { parseAxiosApiError } from '../../services/api';
 
-type Props = NativeStackScreenProps<ProfileStackParamList, 'ResumeOverview'>;
+type Props = NativeStackScreenProps<MoreStackParamList, 'ResumeOverview'>;
 
 function statusLabel(status: ResumeParseStatus): string {
   switch (status) {
@@ -76,7 +76,7 @@ export function ResumeOverviewScreen({ navigation }: Props): ReactElement {
   const mutationsBusy = upload.isPending || setActive.isPending;
 
   return (
-    <Screen scroll edges={['top', 'left', 'right', 'bottom']}>
+    <Screen scroll edges={['left', 'right', 'bottom']}>
       <Typography variant="hero">Resume</Typography>
       <Typography variant="bodySmall" muted style={{ marginTop: theme.space.sm }}>
         Manage uploads and activate the resume used for AI matching—the same workflows as JobTrackr on the web.

@@ -80,14 +80,14 @@ export function RemindersOverviewScreen(_props: Props): ReactElement {
 
   if (boot) {
     return (
-      <Screen scroll refreshControl={refresh}>
+      <Screen scroll refreshControl={refresh} edges={['top', 'left', 'right', 'bottom']}>
         <LoadingState message="Fetching reminders…" />
       </Screen>
     );
   }
 
   return (
-    <Screen scroll refreshControl={refresh}>
+    <Screen scroll refreshControl={refresh} edges={['top', 'left', 'right', 'bottom']}>
       <Typography variant="hero">Reminders</Typography>
       <Typography variant="subtitle" muted style={{ marginTop: theme.space.sm }}>
         {subtitle}

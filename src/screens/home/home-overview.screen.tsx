@@ -334,7 +334,7 @@ export function HomeOverviewScreen({ navigation }: Props): ReactElement {
   const navInterviewsFull = (): void => navigation.navigate('InterviewList', {});
   const navRemindersFull = (): void => navigation.navigate('Reminders', { screen: 'RemindersOverview' });
   const navJobsBoard = (): void => navigation.navigate('JobSearch');
-  const navResumeWorkspace = (): void => navigation.navigate('Profile', { screen: 'ResumeOverview' });
+  const navResumeWorkspace = (): void => navigation.navigate('More', { screen: 'ResumeOverview' });
 
   const subtitle = scaffold
     ? 'Showing sample data for layout preview.'
@@ -353,7 +353,7 @@ export function HomeOverviewScreen({ navigation }: Props): ReactElement {
 
   if (boot) {
     return (
-      <Screen scroll refreshControl={refresh}>
+      <Screen scroll refreshControl={refresh} edges={['top', 'left', 'right', 'bottom']}>
         <LoadingState message="Loading dashboard…" />
       </Screen>
     );
@@ -367,7 +367,7 @@ export function HomeOverviewScreen({ navigation }: Props): ReactElement {
   const isEmpty = !!(summary && summary.totalApplications === 0);
 
   return (
-    <Screen scroll refreshControl={refresh}>
+    <Screen scroll refreshControl={refresh} edges={['top', 'left', 'right', 'bottom']}>
       <View style={{ flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', gap: theme.space.md }}>
         <View style={{ flex: 1 }}>
           <Typography variant="subtitle" muted>

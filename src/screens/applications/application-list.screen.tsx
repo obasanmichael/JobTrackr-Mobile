@@ -63,14 +63,14 @@ export function ApplicationListScreen({ navigation }: Props): ReactElement {
 
   if (boot) {
     return (
-      <Screen scroll refreshControl={refresh}>
+      <Screen scroll refreshControl={refresh} edges={['top', 'left', 'right', 'bottom']}>
         <LoadingState message="Fetching applications…" />
       </Screen>
     );
   }
 
   return (
-    <Screen scroll refreshControl={refresh}>
+    <Screen scroll refreshControl={refresh} edges={['top', 'left', 'right', 'bottom']}>
       <Typography variant="hero">Applications</Typography>
       <Typography variant="subtitle" muted style={{ marginTop: theme.space.xs }}>
         {subtitle}
