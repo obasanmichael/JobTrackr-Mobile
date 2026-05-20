@@ -56,4 +56,6 @@ export const jtKeys = {
   candidateProfile: (resumeId: string) => [...jtKeys.resumes(), resumeId, 'candidateProfile'] as const,
 
   matchedJobs: () => [...jtKeys.root, 'matchedJobs'] as const,
+
+  savedJobsBookmarks: () => [...jtKeys.root, 'savedJobs', 'bookmarks', 'v1'] as const,
 };

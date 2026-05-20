@@ -1578,6 +1578,8 @@ JobFilters
 
 ## 16.4 Phase 3: Saved Jobs and Convert to Application
 
+**Backend phased rollout:** Tracks **`job-trackr-backend/V2D_SAVED_JOBS_IMPLEMENTATION_PLAN.md`** (`D.1`–`D.6`). Prefer backend **`D.2`** (save/list/delete) before **`D.3`/D.4** (convert + timeline).
+
 ### Goal
 
 Connect job discovery to the existing V1 application tracker.

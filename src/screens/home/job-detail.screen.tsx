@@ -1,21 +1,26 @@
+import type { CompositeScreenProps } from '@react-navigation/native';
+import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { ReactElement } from 'react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { Linking, View } from 'react-native';
 import { format, parseISO } from 'date-fns';
 import { Sparkles, Target } from 'lucide-react-native';
-import type { HomeStackParamList } from '../../navigation/types';
+import { useQueryClient } from '@tanstack/react-query';
+import type { BottomTabParamList, HomeStackParamList } from '../../navigation/types';
 import { jobDetailToCreateApplicationPayload } from '../../domain/job-to-application';
+import { findBookmarkForJobListingId, isBookmarkRowActive } from '../../domain/saved-jobs';
 import { useDomainQueriesEnabled } from '../../hooks/use-domain-queries-enabled';
 import {
+  useConvertSavedJobMutation,
   useCreateApplicationMutation,
   useJobDetailQuery,
   useJobMatchQuery,
+  useSavedJobsBookmarksQuery,
+  useToggleSavedJobBookmarkMutation,
 } from '../../query/jt-queries';
-import {
-  isJobSaved,
-  toggleSavedJobId,
-} from '../../services/saved-jobs-storage';
+import { jtKeys } from '../../query/query-keys';
+import { migrateLegacySavedJobIdsOnce } from '../../services/saved-jobs-migration';
 import {
   Button,
   Card,
@@ -28,7 +33,10 @@ import {
 import { useAppTheme } from '../../theme';
 import { parseAxiosApiError } from '../../services/api';
 
-type Props = NativeStackScreenProps<HomeStackParamList, 'JobDetail'>;
+type Props = CompositeScreenProps<
+  NativeStackScreenProps<HomeStackParamList, 'JobDetail'>,
+  BottomTabScreenProps<BottomTabParamList>
+>;
 
 function formatLabel(value: string | null | undefined): string | null {
   if (!value?.trim()) {
@@ -43,27 +51,60 @@ function formatLabel(value: string | null | undefined): string | null {
 export function JobDetailScreen({ navigation, route }: Props): ReactElement {
   const { theme } = useAppTheme();
   const apiOn = useDomainQueriesEnabled();
+  const queryClient = useQueryClient();
   const jobId = route.params.jobId;
-  const [saved, setSaved] = useState(false);
+  const migrationRan = useRef(false);
+
+  const bookmarksQuery = useSavedJobsBookmarksQuery(apiOn);
+  const bookmarkRow = useMemo(
+    () => findBookmarkForJobListingId(bookmarksQuery.data?.items ?? [], jobId),
+    [bookmarksQuery.data?.items, jobId],
+  );
+  const saved = isBookmarkRowActive(bookmarkRow);
 
   const jobQuery = useJobDetailQuery(apiOn, jobId);
   const matchQuery = useJobMatchQuery(apiOn && Boolean(jobQuery.data), jobId);
-  const trackMutation = useCreateApplicationMutation();
+  const trackCreateMutation = useCreateApplicationMutation();
+  const convertMutation = useConvertSavedJobMutation();
+  const toggleSaveMutation = useToggleSavedJobBookmarkMutation();
 
   useEffect(() => {
-    void isJobSaved(jobId).then(setSaved);
-  }, [jobId]);
+    if (!apiOn || migrationRan.current) {
+      return;
+    }
+    migrationRan.current = true;
+    void migrateLegacySavedJobIdsOnce().then(() =>
+      queryClient.invalidateQueries({ queryKey: jtKeys.savedJobsBookmarks() }),
+    );
+  }, [apiOn, queryClient]);
 
-  const onToggleSave = useCallback(async () => {
-    const next = await toggleSavedJobId(jobId);
-    setSaved(next);
-  }, [jobId]);
+  const onToggleSave = useCallback(() => {
+    toggleSaveMutation.mutate({ jobListingId: jobId, existingRow: bookmarkRow });
+  }, [bookmarkRow, jobId, toggleSaveMutation]);
 
   const onTrackApplication = useCallback(() => {
     if (!jobQuery.data) {
       return;
     }
-    trackMutation.mutate(jobDetailToCreateApplicationPayload(jobQuery.data), {
+    if (bookmarkRow?.status === 'CONVERTED_TO_APPLICATION' && bookmarkRow.convertedApplicationId) {
+      navigation.navigate('Applications', {
+        screen: 'ApplicationDetail',
+        params: { applicationId: bookmarkRow.convertedApplicationId },
+      });
+      return;
+    }
+    if (bookmarkRow?.status === 'SAVED') {
+      convertMutation.mutate(bookmarkRow.id, {
+        onSuccess: (res) => {
+          navigation.navigate('Applications', {
+            screen: 'ApplicationDetail',
+            params: { applicationId: res.application.id },
+          });
+        },
+      });
+      return;
+    }
+    trackCreateMutation.mutate(jobDetailToCreateApplicationPayload(jobQuery.data), {
       onSuccess: (application) => {
         navigation.navigate('Applications', {
           screen: 'ApplicationDetail',
@@ -71,7 +112,10 @@ export function JobDetailScreen({ navigation, route }: Props): ReactElement {
         });
       },
     });
-  }, [jobQuery.data, navigation, trackMutation]);
+  }, [bookmarkRow, convertMutation, jobQuery.data, navigation, trackCreateMutation]);
+
+  const trackPending =
+    trackCreateMutation.isPending || convertMutation.isPending;
 
   if (!apiOn) {
     return (
@@ -96,7 +140,7 @@ export function JobDetailScreen({ navigation, route }: Props): ReactElement {
     const errMessage =
       jobQuery.error instanceof Error
         ? jobQuery.error.message
-        : parseAxiosApiError(jobQuery.error).message;
+        : parseAxiosApiError(jobQuery.error)?.message ?? 'Request failed';
     return (
       <Screen edges={['left', 'right', 'bottom']}>
         <ErrorState message={errMessage} onRetry={() => void jobQuery.refetch()} retryLabel="Retry" />
@@ -115,6 +159,13 @@ export function JobDetailScreen({ navigation, route }: Props): ReactElement {
     ? format(parseISO(job.postedAt), 'MMM d, yyyy')
     : null;
 
+  const trackLabel =
+    bookmarkRow?.status === 'CONVERTED_TO_APPLICATION' && bookmarkRow.convertedApplicationId
+      ? 'View application'
+      : trackPending
+        ? 'Adding…'
+        : 'Track as application';
+
   return (
     <Screen scroll keyboardAvoiding edges={['left', 'right', 'bottom']}>
       <View style={{ gap: theme.space.lg }}>
@@ -129,7 +180,8 @@ export function JobDetailScreen({ navigation, route }: Props): ReactElement {
           <Button
             label={saved ? 'Saved' : 'Save job'}
             variant="outline"
-            onPress={() => void onToggleSave()}
+            onPress={onToggleSave}
+            disabled={toggleSaveMutation.isPending || bookmarksQuery.isPending}
             style={{ minHeight: 40 }}
           />
           {job.applyUrl ? (
@@ -255,10 +307,14 @@ export function JobDetailScreen({ navigation, route }: Props): ReactElement {
         ) : null}
 
         <Button
-          label={trackMutation.isPending ? 'Adding…' : 'Track as application'}
+          label={trackLabel}
           variant="primary"
           hapticOnPress
-          disabled={trackMutation.isPending}
+          disabled={
+            trackPending ||
+            (bookmarkRow?.status === 'CONVERTED_TO_APPLICATION' &&
+              !bookmarkRow.convertedApplicationId)
+          }
           onPress={onTrackApplication}
         />
       </View>

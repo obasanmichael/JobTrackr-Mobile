@@ -28,10 +28,16 @@ import {
   fetchMatchedJobsRequest,
   generateMatchedJobsRequest,
 } from '../services/matches.service';
+import {
+  convertSavedJobRequest,
+  deleteSavedJobRequest,
+  fetchSavedJobsBookmarksRequest,
+  saveJobRequest,
+} from '../services/saved-jobs.service';
 import { createJobSourceSubmissionRequest } from '../services/job-source-submissions.service';
 import type { JobBoardDetail, JobSearchRequestParams, JobSearchResult, JobSingleMatch } from '../types/job-board.dto';
 import type { MatchedJobsResult } from '../types/matched-jobs.dto';
-import type { JobSourceSubmissionDto } from '../types/job-source-submission.dto';
+import type { SavedJobDto } from '../types/saved-jobs.dto';
 import type { CreateJobSourceSubmissionPayload } from '../types/job-source-submission.dto';
 import type { ResumeDto } from '../types/resume.dto';
 import {
@@ -245,6 +251,50 @@ export function useSetActiveResumeMutation() {
     onSuccess: async (_, resumeId) => {
       await qc.invalidateQueries({ queryKey: jtKeys.resumes() });
       await qc.invalidateQueries({ queryKey: jtKeys.resume(resumeId) });
+    },
+  });
+}
+
+export function useSavedJobsBookmarksQuery(enabled: boolean) {
+  return useQuery({
+    queryKey: jtKeys.savedJobsBookmarks(),
+    enabled,
+    queryFn: fetchSavedJobsBookmarksRequest,
+    staleTime: 30_000,
+  });
+}
+
+export function useToggleSavedJobBookmarkMutation() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      jobListingId,
+      existingRow,
+    }: {
+      jobListingId: string;
+      existingRow: SavedJobDto | undefined;
+    }) => {
+      if (existingRow && existingRow.status !== 'DISMISSED') {
+        await deleteSavedJobRequest(existingRow.id);
+        return;
+      }
+      await saveJobRequest(jobListingId);
+    },
+    onSuccess: async () => {
+      await qc.invalidateQueries({ queryKey: jtKeys.savedJobsBookmarks() });
+    },
+  });
+}
+
+export function useConvertSavedJobMutation() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (savedJobId: string) => convertSavedJobRequest(savedJobId),
+    onSuccess: async () => {
+      await Promise.all([
+        qc.invalidateQueries({ queryKey: jtKeys.savedJobsBookmarks() }),
+        invalidateBuckets(qc),
+      ]);
     },
   });
 }
