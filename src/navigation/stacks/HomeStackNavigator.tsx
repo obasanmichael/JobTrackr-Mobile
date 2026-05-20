@@ -4,6 +4,7 @@ import type { ReactElement } from 'react';
 import { HomeOverviewScreen } from '../../screens/home/home-overview.screen';
 import { InterviewListScreen } from '../../screens/home/interview-list.screen';
 import { JobSearchScreen } from '../../screens/home/jobs-search.screen';
+import { JobDetailScreen } from '../../screens/home/job-detail.screen';
 import { TabSceneContainer } from '../components/tab-scene-container';
 import {
   nestedStackScreenOptions,
@@ -36,6 +37,11 @@ export function HomeStackNavigator(): ReactElement {
           name="JobSearch"
           component={JobSearchScreen}
           options={nestedStackScreenOptions('Jobs', homeBack)}
+        />
+        <Stack.Screen
+          name="JobDetail"
+          component={JobDetailScreen}
+          options={nestedStackScreenOptions('Job details', 'Jobs')}
         />
       </Stack.Navigator>
     </TabSceneContainer>

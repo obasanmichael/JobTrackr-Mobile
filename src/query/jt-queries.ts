@@ -23,13 +23,13 @@ import {
 import { fetchDashboardSummary } from '../services/dashboard.service';
 import { fetchInterviews } from '../services/interviews.service';
 import { fetchReminders, patchReminder } from '../services/reminders.service';
-import { searchJobsRequest } from '../services/jobs.service';
+import { fetchJobByIdRequest, fetchJobMatchRequest, searchJobsRequest } from '../services/jobs.service';
 import {
   fetchMatchedJobsRequest,
   generateMatchedJobsRequest,
 } from '../services/matches.service';
 import { createJobSourceSubmissionRequest } from '../services/job-source-submissions.service';
-import type { JobSearchRequestParams, JobSearchResult } from '../types/job-board.dto';
+import type { JobBoardDetail, JobSearchRequestParams, JobSearchResult, JobSingleMatch } from '../types/job-board.dto';
 import type { MatchedJobsResult } from '../types/matched-jobs.dto';
 import type { JobSourceSubmissionDto } from '../types/job-source-submission.dto';
 import type { CreateJobSourceSubmissionPayload } from '../types/job-source-submission.dto';
@@ -159,6 +159,23 @@ export function useJobSearchQuery(enabled: boolean, filters: JobSearchRequestPar
     queryKey: jtKeys.jobsSearch(normalized),
     enabled,
     queryFn: () => searchJobsRequest(normalized),
+  });
+}
+
+export function useJobDetailQuery(enabled: boolean, jobId: string) {
+  return useQuery<JobBoardDetail>({
+    queryKey: jtKeys.jobDetail(jobId),
+    enabled: enabled && jobId.length > 0,
+    queryFn: () => fetchJobByIdRequest(jobId),
+  });
+}
+
+export function useJobMatchQuery(enabled: boolean, jobId: string) {
+  return useQuery<JobSingleMatch>({
+    queryKey: jtKeys.jobMatch(jobId),
+    enabled: enabled && jobId.length > 0,
+    retry: false,
+    queryFn: () => fetchJobMatchRequest(jobId),
   });
 }
 

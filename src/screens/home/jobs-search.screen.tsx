@@ -1,9 +1,18 @@
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { ReactElement } from 'react';
 import { useMemo, useState } from 'react';
-import { Linking, Pressable, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { format, parseISO } from 'date-fns';
 import { MapPin, Search } from 'lucide-react-native';
-import { JOB_BOARD_WORK_MODE_API, type JobBoardWorkModeApi } from '../../constants/job-board';
+import {
+  JOB_BOARD_EXPERIENCE_LEVEL_API,
+  JOB_BOARD_POSTED_WITHIN_API,
+  JOB_BOARD_WORK_MODE_API,
+  type JobBoardExperienceLevelApi,
+  type JobBoardPostedWithinApi,
+  type JobBoardWorkModeApi,
+} from '../../constants/job-board';
+import type { HomeStackParamList } from '../../navigation/types';
 import type { JobBoardListing, JobSearchRequestParams } from '../../types/job-board.dto';
 import { useDomainQueriesEnabled } from '../../hooks/use-domain-queries-enabled';
 import { useJobSearchQuery } from '../../query/jt-queries';
@@ -20,6 +29,8 @@ import {
 import { useAppTheme } from '../../theme';
 import { parseAxiosApiError } from '../../services/api';
 
+type Props = NativeStackScreenProps<HomeStackParamList, 'JobSearch'>;
+
 function formatPosted(postedAt: string | null | undefined): string | null {
   if (!postedAt) return null;
   try {
@@ -31,7 +42,7 @@ function formatPosted(postedAt: string | null | undefined): string | null {
 
 function JobListingCard(props: {
   job: JobBoardListing;
-  onOpenPosting: () => void;
+  onOpenDetails: () => void;
 }): ReactElement {
   const { theme } = useAppTheme();
   const { job } = props;
@@ -41,19 +52,20 @@ function JobListingCard(props: {
     .filter(Boolean)
     .join(' – ');
   const salaryLabel = salaryParts ? `${salaryParts}${job.currency ? ` ${job.currency}` : ''}` : null;
-
   const postedLabel = formatPosted(job.postedAt);
 
   return (
     <Card style={{ gap: theme.space.md }}>
-      <View style={{ gap: theme.space.xs }}>
-        <Typography variant="bodySmall" style={{ fontWeight: '700' }}>
-          {job.title}
-        </Typography>
-        <Typography variant="caption" muted>
-          {job.companyName}
-        </Typography>
-      </View>
+      <Pressable accessibilityRole="button" onPress={props.onOpenDetails}>
+        <View style={{ gap: theme.space.xs }}>
+          <Typography variant="bodySmall" style={{ fontWeight: '700' }}>
+            {job.title}
+          </Typography>
+          <Typography variant="caption" muted>
+            {job.companyName}
+          </Typography>
+        </View>
+      </Pressable>
 
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: theme.space.sm }}>
         {job.location ? (
@@ -104,51 +116,55 @@ function JobListingCard(props: {
         </Typography>
       ) : null}
 
-      {job.applyUrl ? (
-        <Button label="View posting" variant="outline" onPress={props.onOpenPosting} style={{ alignSelf: 'flex-start', minHeight: 40 }} />
-      ) : null}
+      <Button
+        label="View details"
+        variant="outline"
+        onPress={props.onOpenDetails}
+        style={{ alignSelf: 'flex-start', minHeight: 40 }}
+      />
     </Card>
   );
 }
 
-export function JobSearchScreen(): ReactElement {
+export function JobSearchScreen({ navigation }: Props): ReactElement {
   const { theme } = useAppTheme();
   const apiOn = useDomainQueriesEnabled();
 
   const [q, setQ] = useState('');
   const [location, setLocation] = useState('');
+  const [source, setSource] = useState('');
+  const [salaryMin, setSalaryMin] = useState('');
   const [workMode, setWorkMode] = useState<JobBoardWorkModeApi>(JOB_BOARD_WORK_MODE_API[0].value);
+  const [experienceLevel, setExperienceLevel] = useState<JobBoardExperienceLevelApi>(
+    JOB_BOARD_EXPERIENCE_LEVEL_API[0].value,
+  );
+  const [postedWithin, setPostedWithin] = useState<JobBoardPostedWithinApi>(
+    JOB_BOARD_POSTED_WITHIN_API[0].value,
+  );
   const [searched, setSearched] = useState(false);
-  const [submittedFilters, setSubmittedFilters] = useState<{
-    q?: string;
-    location?: string;
-    workMode: JobBoardWorkModeApi;
-  }>({
-    q: '',
-    location: '',
-    workMode: JOB_BOARD_WORK_MODE_API[0].value,
+  const [submittedFilters, setSubmittedFilters] = useState<JobSearchRequestParams>({
+    page: 1,
+    limit: 20,
   });
 
-  const queryFilters: JobSearchRequestParams = useMemo(
-    () => ({
-      q: submittedFilters.q,
-      location: submittedFilters.location,
-      workMode: submittedFilters.workMode,
-      page: 1,
-      limit: 20,
-    }),
-    [submittedFilters],
-  );
+  const queryFilters = useMemo((): JobSearchRequestParams => submittedFilters, [submittedFilters]);
 
   const jobsQuery = useJobSearchQuery(apiOn && searched, queryFilters);
 
   function runSearch(): void {
+    const params: JobSearchRequestParams = { page: 1, limit: 20 };
+    if (q.trim()) params.q = q.trim();
+    if (location.trim()) params.location = location.trim();
+    if (source.trim()) params.source = source.trim();
+    if (workMode !== 'UNSPECIFIED') params.workMode = workMode;
+    if (experienceLevel !== 'UNSPECIFIED') params.experienceLevel = experienceLevel;
+    const parsedSalaryMin = Number(salaryMin);
+    if (Number.isFinite(parsedSalaryMin) && parsedSalaryMin > 0) {
+      params.salaryMin = parsedSalaryMin;
+    }
+    if (postedWithin) params.postedWithin = Number(postedWithin);
+    setSubmittedFilters(params);
     setSearched(true);
-    setSubmittedFilters({
-      q: q.trim(),
-      location: location.trim(),
-      workMode,
-    });
   }
 
   const errParse = jobsQuery.error ? parseAxiosApiError(jobsQuery.error) : null;
@@ -172,6 +188,20 @@ export function JobSearchScreen(): ReactElement {
       <Card style={{ marginTop: theme.space.lg, gap: theme.space.md }}>
         <TextField label="Keywords" placeholder="Role title or stack…" value={q} onChangeText={setQ} />
         <TextField label="Location" placeholder="City, country" value={location} onChangeText={setLocation} />
+        <TextField
+          label="Source name"
+          placeholder="e.g. Greenhouse board"
+          value={source}
+          onChangeText={setSource}
+        />
+        <TextField
+          label="Min salary"
+          placeholder="100000"
+          value={salaryMin}
+          onChangeText={setSalaryMin}
+          keyboardType="numeric"
+        />
+
         <Typography variant="caption">Work mode</Typography>
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: theme.space.sm }}>
           {JOB_BOARD_WORK_MODE_API.map((option) => {
@@ -191,13 +221,68 @@ export function JobSearchScreen(): ReactElement {
                   backgroundColor: picked ? `${theme.colors.accent}22` : theme.colors.surfaceElevated,
                 }}
               >
-                <Typography variant="caption" style={{ fontWeight: picked ? '700' : '500', color: theme.colors.textPrimary }}>
+                <Typography variant="caption" style={{ fontWeight: picked ? '700' : '500' }}>
                   {option.label}
                 </Typography>
               </Pressable>
             );
           })}
         </View>
+
+        <Typography variant="caption">Experience</Typography>
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: theme.space.sm }}>
+          {JOB_BOARD_EXPERIENCE_LEVEL_API.map((option) => {
+            const picked = option.value === experienceLevel;
+            return (
+              <Pressable
+                key={option.value}
+                accessibilityRole="button"
+                accessibilityState={{ selected: picked }}
+                onPress={() => setExperienceLevel(option.value)}
+                style={{
+                  paddingHorizontal: theme.space.md,
+                  paddingVertical: theme.space.sm,
+                  borderRadius: theme.radii.pill,
+                  borderWidth: 2,
+                  borderColor: picked ? theme.colors.accent : theme.colors.borderMuted,
+                  backgroundColor: picked ? `${theme.colors.accent}22` : theme.colors.surfaceElevated,
+                }}
+              >
+                <Typography variant="caption" style={{ fontWeight: picked ? '700' : '500' }}>
+                  {option.label}
+                </Typography>
+              </Pressable>
+            );
+          })}
+        </View>
+
+        <Typography variant="caption">Posted within</Typography>
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: theme.space.sm }}>
+          {JOB_BOARD_POSTED_WITHIN_API.map((option) => {
+            const picked = option.value === postedWithin;
+            return (
+              <Pressable
+                key={option.label}
+                accessibilityRole="button"
+                accessibilityState={{ selected: picked }}
+                onPress={() => setPostedWithin(option.value)}
+                style={{
+                  paddingHorizontal: theme.space.md,
+                  paddingVertical: theme.space.sm,
+                  borderRadius: theme.radii.pill,
+                  borderWidth: 2,
+                  borderColor: picked ? theme.colors.accent : theme.colors.borderMuted,
+                  backgroundColor: picked ? `${theme.colors.accent}22` : theme.colors.surfaceElevated,
+                }}
+              >
+                <Typography variant="caption" style={{ fontWeight: picked ? '700' : '500' }}>
+                  {option.label}
+                </Typography>
+              </Pressable>
+            );
+          })}
+        </View>
+
         <Button
           label="Search jobs"
           variant="primary"
@@ -245,11 +330,7 @@ export function JobSearchScreen(): ReactElement {
             <JobListingCard
               key={job.id}
               job={job}
-              onOpenPosting={
-                job.applyUrl
-                  ? () => void Linking.openURL(job.applyUrl as string).catch(() => undefined)
-                  : () => {}
-              }
+              onOpenDetails={() => navigation.navigate('JobDetail', { jobId: job.id })}
             />
           ))}
         </View>

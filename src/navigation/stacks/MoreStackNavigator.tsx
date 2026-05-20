@@ -6,6 +6,7 @@ import { LegalInformationScreen } from '../../screens/profile/legal-information.
 import { CalendarPlaceholderScreen } from '../../screens/profile/calendar-placeholder.screen';
 import { DesignReferenceScreen } from '../../screens/profile/design-reference.screen';
 import { MatchedJobsScreen } from '../../screens/profile/matched-jobs.screen';
+import { JobDetailScreen } from '../../screens/home/job-detail.screen';
 import { SubmitCareersPageScreen } from '../../screens/profile/submit-careers-page.screen';
 import { MoreHubScreen } from '../../screens/profile/more-hub.screen';
 import { ResumeDetailScreen } from '../../screens/profile/resume-detail.screen';
@@ -80,6 +81,11 @@ export function MoreStackNavigator(): ReactElement {
           name="SubmitCareersPage"
           component={SubmitCareersPageScreen}
           options={nestedStackScreenOptions('Submit careers page', moreBack)}
+        />
+        <Stack.Screen
+          name="JobDetail"
+          component={JobDetailScreen}
+          options={nestedStackScreenOptions('Job details', 'Matched jobs')}
         />
       </Stack.Navigator>
     </TabSceneContainer>

@@ -15,6 +15,7 @@ export type HomeStackParamList = {
   HomeOverview: undefined;
   InterviewList: { linkedApplicationId?: string };
   JobSearch: undefined;
+  JobDetail: { jobId: string };
 };
 
 /** Applications hub + drilling screens */
@@ -48,6 +49,7 @@ export type MoreStackParamList = {
   BillingPlaceholder: undefined;
   MatchedJobs: undefined;
   SubmitCareersPage: undefined;
+  JobDetail: { jobId: string };
 };
 
 export type BottomTabParamList = {

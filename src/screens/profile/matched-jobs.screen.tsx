@@ -25,6 +25,7 @@ type Props = NativeStackScreenProps<MoreStackParamList, 'MatchedJobs'>;
 
 function MatchedJobCard(props: {
   match: MatchedJobListing;
+  onViewDetails: () => void;
   onOpenPosting: () => void;
 }): ReactElement {
   const { theme } = useAppTheme();
@@ -69,18 +70,33 @@ function MatchedJobCard(props: {
       ) : null}
 
       {match.job.applyUrl ? (
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: theme.space.sm }}>
+          <Button
+            label="View details"
+            variant="secondary"
+            onPress={props.onViewDetails}
+            style={{ alignSelf: 'flex-start', minHeight: 40 }}
+          />
+          <Button
+            label="Apply on company site"
+            variant="outline"
+            onPress={props.onOpenPosting}
+            style={{ alignSelf: 'flex-start', minHeight: 40 }}
+          />
+        </View>
+      ) : (
         <Button
-          label="Apply on company site"
-          variant="outline"
-          onPress={props.onOpenPosting}
+          label="View details"
+          variant="secondary"
+          onPress={props.onViewDetails}
           style={{ alignSelf: 'flex-start', minHeight: 40 }}
         />
-      ) : null}
+      )}
     </Card>
   );
 }
 
-export function MatchedJobsScreen(_props: Props): ReactElement {
+export function MatchedJobsScreen({ navigation }: Props): ReactElement {
   const { theme } = useAppTheme();
   const apiOn = useDomainQueriesEnabled();
   const query = useMatchedJobsQuery(apiOn);
@@ -113,7 +129,7 @@ export function MatchedJobsScreen(_props: Props): ReactElement {
         />
       ) : null}
 
-      {apiOn && query.isLoading ? <LoadingState label="Loading matches…" /> : null}
+      {apiOn && query.isLoading ? <LoadingState message="Loading matches…" /> : null}
 
       {apiOn && query.isError ? (
         <ErrorState
@@ -143,6 +159,7 @@ export function MatchedJobsScreen(_props: Props): ReactElement {
             <MatchedJobCard
               key={match.job.id}
               match={match}
+              onViewDetails={() => navigation.navigate('JobDetail', { jobId: match.job.id })}
               onOpenPosting={() => {
                 if (match.job.applyUrl) {
                   void Linking.openURL(match.job.applyUrl);

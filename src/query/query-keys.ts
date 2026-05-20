@@ -7,6 +7,14 @@ export function jobSearchStoreKey(filters: JobSearchRequestParams): JobSearchReq
   if (filters.q?.trim()) out.q = filters.q.trim();
   if (filters.location?.trim()) out.location = filters.location.trim();
   if (filters.workMode && filters.workMode !== 'UNSPECIFIED') out.workMode = filters.workMode;
+  if (filters.experienceLevel && filters.experienceLevel !== 'UNSPECIFIED') {
+    out.experienceLevel = filters.experienceLevel;
+  }
+  if (filters.salaryMin != null && filters.salaryMin > 0) out.salaryMin = filters.salaryMin;
+  if (filters.source?.trim()) out.source = filters.source.trim();
+  if (filters.postedWithin != null && filters.postedWithin > 0) {
+    out.postedWithin = filters.postedWithin;
+  }
   out.page = filters.page ?? 1;
   out.limit = filters.limit ?? 20;
   return out;
@@ -39,6 +47,9 @@ export const jtKeys = {
 
   jobsSearch: (filters: JobSearchRequestParams) =>
     [...jtKeys.root, 'jobs', 'search', jobSearchStoreKey(filters)] as const,
+
+  jobDetail: (jobId: string) => [...jtKeys.root, 'jobs', 'detail', jobId] as const,
+  jobMatch: (jobId: string) => [...jtKeys.root, 'jobs', 'match', jobId] as const,
 
   resumes: () => [...jtKeys.root, 'resumes'] as const,
   resume: (id: string) => [...jtKeys.resumes(), 'detail', id] as const,
