@@ -101,7 +101,6 @@ export function MatchedJobsScreen(_props: Props): ReactElement {
       edges={['left', 'right', 'bottom']}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
     >
-      <Typography variant="hero">Matched jobs</Typography>
       <Typography variant="bodySmall" muted style={{ marginTop: theme.space.sm }}>
         Ranked against your candidate profile using skills, role fit, location, and recency.
       </Typography>

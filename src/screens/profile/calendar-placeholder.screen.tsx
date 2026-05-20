@@ -11,8 +11,7 @@ export function CalendarPlaceholderScreen(_props: Props): ReactElement {
   const { theme } = useAppTheme();
   return (
     <Screen scroll edges={['left', 'right', 'bottom']}>
-      <Typography variant="hero">Calendar</Typography>
-      <Typography variant="bodySmall" muted style={{ marginTop: theme.space.sm }}>
+      <Typography variant="bodySmall" muted>
         Google Calendar OAuth and selective sync ships in Phase V2E alongside interview exports—the same roadmap as web.
       </Typography>
       <EmptyState

@@ -39,6 +39,7 @@ import { MOCK_INTERVIEWS } from '../../fixtures/mock-interviews';
 import { MOCK_REMINDERS } from '../../fixtures/mock-reminders';
 import { buildJobSummaryLookup } from '../../domain/job-lookup';
 import { useDomainQueriesEnabled } from '../../hooks/use-domain-queries-enabled';
+import { openMoreScreen } from '../../navigation/navigation-helpers';
 import type { BottomTabParamList } from '../../navigation/types';
 import type { HomeStackParamList } from '../../navigation/types';
 import { useApplicationsListQuery, useDashboardSummaryQuery } from '../../query/jt-queries';
@@ -340,7 +341,7 @@ export function HomeOverviewScreen({ navigation }: Props): ReactElement {
   const navInterviewsFull = (): void => navigation.navigate('InterviewList', {});
   const navRemindersFull = (): void => navigation.navigate('Reminders', { screen: 'RemindersOverview' });
   const navJobsBoard = (): void => navigation.navigate('JobSearch');
-  const navResumeWorkspace = (): void => navigation.navigate('More', { screen: 'ResumeOverview' });
+  const navResumeWorkspace = (): void => openMoreScreen(navigation, 'ResumeOverview');
 
   const subtitle = scaffold
     ? 'Showing sample data for layout preview.'

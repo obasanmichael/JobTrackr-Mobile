@@ -19,14 +19,11 @@ export function SettingsScreen({ navigation }: Props): ReactElement {
 
   return (
     <Screen scroll edges={['left', 'right', 'bottom']}>
-      <Typography variant="title" accessibilityRole="header">
-        Account preferences
-      </Typography>
-      <Typography variant="bodySmall" muted style={{ marginTop: theme.space.sm }}>
+      <Typography variant="bodySmall" muted>
         Manage how JobTrackr looks and how you stay signed in on this device.
       </Typography>
 
-      <Card style={{ marginTop: theme.space.xl, gap: theme.space.md }}>
+      <Card style={{ marginTop: theme.space.lg, gap: theme.space.md }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.space.sm }}>
           <UserRound size={18} color={theme.colors.textMuted} strokeWidth={2} />
           <Typography variant="label">Profile</Typography>

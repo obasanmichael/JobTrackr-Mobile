@@ -795,6 +795,38 @@ Acceptance criteria:
 
 ---
 
+## 10.5.1 Submit Careers Page Screen
+
+Route:
+
+```txt
+More → Submit a careers page
+```
+
+Purpose:
+
+Let users suggest a company careers / ATS board for admin review (Phase I organic source growth).
+
+Form fields:
+
+- company name (required)
+- careers page URL (required)
+- submitter email (optional; prefilled when signed in)
+
+Success state:
+
+- confirmation card with detected ATS type/slug when available
+- option to submit another
+
+Acceptance criteria:
+
+- User can open form from More hub Discover section
+- Valid submissions POST to `/job-source-submissions`
+- 409 duplicate pending URL shows a clear error
+- Signed-in users link `submitterUserId` automatically via JWT
+
+---
+
 ## 10.6 Match Details Screen
 
 Purpose:
@@ -1688,6 +1720,41 @@ SkillGapList
 - Scores are not calculated locally
 - Missing skills are displayed clearly
 - User can save matched job into saved jobs
+
+---
+
+## 16.6.1 Phase 5b: Submit Careers Page (Phase I)
+
+### Goal
+
+Let mobile users suggest company job boards for ingestion without admin access.
+
+### Backend dependency
+
+```txt
+POST /job-source-submissions
+```
+
+### Screens/components
+
+```txt
+SubmitCareersPageScreen
+MoreHubScreen (Discover nav row)
+```
+
+### Tasks
+
+1. Add More stack route `SubmitCareersPage`.
+2. Build RHF + zod form (company, URL, optional email).
+3. Wire `POST /job-source-submissions` via TanStack mutation.
+4. Show success state with ATS detection feedback.
+5. Handle 409/429 via `parseAxiosApiError`.
+
+### Acceptance criteria
+
+- User can submit from More → Discover
+- Auth optional; signed-in users get linked submitter id
+- Duplicate pending URL surfaces server message
 
 ---
 

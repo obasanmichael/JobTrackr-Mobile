@@ -77,8 +77,7 @@ export function ResumeOverviewScreen({ navigation }: Props): ReactElement {
 
   return (
     <Screen scroll edges={['left', 'right', 'bottom']}>
-      <Typography variant="hero">Resume</Typography>
-      <Typography variant="bodySmall" muted style={{ marginTop: theme.space.sm }}>
+      <Typography variant="bodySmall" muted>
         Manage uploads and activate the resume used for AI matching—the same workflows as JobTrackr on the web.
       </Typography>
 

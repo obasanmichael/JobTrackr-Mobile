@@ -47,6 +47,7 @@ export type MoreStackParamList = {
   CalendarPlaceholder: undefined;
   BillingPlaceholder: undefined;
   MatchedJobs: undefined;
+  SubmitCareersPage: undefined;
 };
 
 export type BottomTabParamList = {

@@ -2,7 +2,7 @@ import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { ReactElement } from 'react';
 import { View } from 'react-native';
-import { Calendar, CreditCard, FileText, Search, Settings, Sparkles } from 'lucide-react-native';
+import { Calendar, CreditCard, FileText, Globe, Search, Settings, Sparkles } from 'lucide-react-native';
 import { Card, HubNavRow, Screen, Typography } from '../../components/ui';
 import type { BottomTabParamList, MoreStackParamList } from '../../navigation/types';
 import { useAppTheme } from '../../theme';
@@ -48,10 +48,18 @@ export function MoreHubScreen({ navigation }: Props): ReactElement {
         />
         <View style={{ height: 1, backgroundColor: theme.colors.borderMuted }} />
         <HubNavRow
+          title="Submit a careers page"
+          subtitle="Suggest a company job board for admin review and ingestion."
+          icon={Globe}
+          accessibilityHint="Opens the careers page submission form."
+          onPress={() => navigation.navigate('SubmitCareersPage')}
+        />
+        <View style={{ height: 1, backgroundColor: theme.colors.borderMuted }} />
+        <HubNavRow
           title="Matched jobs"
-          subtitle="Coming soon · preview placeholder aligned with Desktop → Matches."
+          subtitle="Ranked roles based on your candidate profile and skills."
           icon={Sparkles}
-          accessibilityHint="Opens matched jobs preview."
+          accessibilityHint="Opens matched jobs."
           onPress={() => navigation.navigate('MatchedJobs')}
         />
         <View style={{ height: 1, backgroundColor: theme.colors.borderMuted }} />

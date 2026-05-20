@@ -5,6 +5,11 @@ import { HomeOverviewScreen } from '../../screens/home/home-overview.screen';
 import { InterviewListScreen } from '../../screens/home/interview-list.screen';
 import { JobSearchScreen } from '../../screens/home/jobs-search.screen';
 import { TabSceneContainer } from '../components/tab-scene-container';
+import {
+  nestedStackScreenOptions,
+  tabRootScreenOptions,
+  TAB_ROOT_TITLES,
+} from '../stack-screen-options';
 import type { HomeStackParamList } from '../types';
 import { useTabStackScreenOptions } from '../useTabStackScreenOptions';
 
@@ -12,14 +17,26 @@ const Stack = createNativeStackNavigator<HomeStackParamList>();
 
 export function HomeStackNavigator(): ReactElement {
   const stackOptions = useTabStackScreenOptions();
+  const homeBack = TAB_ROOT_TITLES.Home;
 
   return (
     <TabSceneContainer>
       <Stack.Navigator screenOptions={stackOptions} initialRouteName="HomeOverview">
-        {/* Tab root: hide native header so we don’t duplicate the in-screen Dashboard title */}
-        <Stack.Screen name="HomeOverview" component={HomeOverviewScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="InterviewList" component={InterviewListScreen} options={{ title: 'Interviews' }} />
-        <Stack.Screen name="JobSearch" component={JobSearchScreen} options={{ title: 'Jobs' }} />
+        <Stack.Screen
+          name="HomeOverview"
+          component={HomeOverviewScreen}
+          options={tabRootScreenOptions(homeBack)}
+        />
+        <Stack.Screen
+          name="InterviewList"
+          component={InterviewListScreen}
+          options={nestedStackScreenOptions('Interviews', homeBack)}
+        />
+        <Stack.Screen
+          name="JobSearch"
+          component={JobSearchScreen}
+          options={nestedStackScreenOptions('Jobs', homeBack)}
+        />
       </Stack.Navigator>
     </TabSceneContainer>
   );

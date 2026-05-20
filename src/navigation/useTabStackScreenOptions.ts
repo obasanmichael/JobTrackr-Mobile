@@ -24,6 +24,7 @@ export function useTabStackScreenOptions(): NativeStackNavigationOptions {
         fontSize: 17,
       },
       headerBackTitleVisible: false,
+      headerBackTitle: 'Back',
       contentStyle: { backgroundColor: theme.colors.background },
     }),
     [theme.colors.accent, theme.colors.background, theme.colors.surfaceElevated, theme.colors.textPrimary],

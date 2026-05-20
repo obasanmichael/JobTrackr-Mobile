@@ -7,6 +7,8 @@ import {
   FLOATING_TAB_BAR_BOTTOM_MARGIN,
   FLOATING_TAB_BAR_INNER_HEIGHT,
 } from '../constants/floating-tab-bar-metrics';
+import { getTabNestedIndex, navigateToTabRoot } from '../navigation-helpers';
+import type { BottomTabParamList } from '../types';
 import { useResponsive } from '../../layout';
 import { useAppTheme } from '../../theme';
 
@@ -105,9 +107,19 @@ export function FloatingBottomTabBar(props: BottomTabBarProps): ReactElement {
                 target: route.key,
                 canPreventDefault: true,
               });
-              if (!isFocused && !event.defaultPrevented) {
-                navigation.navigate(route.name, route.params as never);
+              if (event.defaultPrevented) return;
+
+              const tabName = route.name as keyof BottomTabParamList;
+              const nestedIndex = getTabNestedIndex(route);
+
+              if (isFocused) {
+                if (nestedIndex > 0) {
+                  navigateToTabRoot(navigation, tabName);
+                }
+                return;
               }
+
+              navigation.navigate(tabName, route.params as never);
             };
 
             const color = isFocused ? theme.colors.accent : theme.colors.textMuted;

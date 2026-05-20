@@ -157,10 +157,7 @@ export function JobSearchScreen(): ReactElement {
 
   return (
     <Screen scroll keyboardAvoiding edges={['left', 'right', 'bottom']}>
-      <Typography variant="hero" accessibilityRole="header">
-        Jobs
-      </Typography>
-      <Typography variant="subtitle" muted style={{ marginTop: theme.space.sm }}>
+      <Typography variant="subtitle" muted>
         Search aggregated listings from linked job sources—the same backend filters as the web app.
       </Typography>
 

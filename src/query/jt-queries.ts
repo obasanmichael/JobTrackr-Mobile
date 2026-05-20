@@ -28,8 +28,11 @@ import {
   fetchMatchedJobsRequest,
   generateMatchedJobsRequest,
 } from '../services/matches.service';
+import { createJobSourceSubmissionRequest } from '../services/job-source-submissions.service';
 import type { JobSearchRequestParams, JobSearchResult } from '../types/job-board.dto';
 import type { MatchedJobsResult } from '../types/matched-jobs.dto';
+import type { JobSourceSubmissionDto } from '../types/job-source-submission.dto';
+import type { CreateJobSourceSubmissionPayload } from '../types/job-source-submission.dto';
 import type { ResumeDto } from '../types/resume.dto';
 import {
   fetchCandidateProfile,
@@ -174,6 +177,13 @@ export function useGenerateMatchedJobsMutation() {
     onSuccess: async (result) => {
       qc.setQueryData(jtKeys.matchedJobs(), result);
     },
+  });
+}
+
+export function useCreateJobSourceSubmissionMutation() {
+  return useMutation({
+    mutationFn: (payload: CreateJobSourceSubmissionPayload) =>
+      createJobSourceSubmissionRequest(payload),
   });
 }
 

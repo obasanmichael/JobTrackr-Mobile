@@ -71,5 +71,8 @@ Localization guidance (future multi-locale) lives in **`docs/MOBILE_LOCALIZATION
 ## Conventions checklist (for future PRs)
 
 1. **Tab roots:** `headerShown: false` + full `edges` incl. `top`. **Pushes:** declare `Stack.Screen` **title**, **omit top** inset on inner `Screen` so the native header owns the upper safe inset.
-2. **Cross-tab jumps:** prefer `navigation.getParent<BottomTabNavigationProp>().navigate(tab, { screen, params })` from nested stacks (see More hub jobs link).
-3. **No scaffold** in staging/production EAS profiles—omit `EXPO_PUBLIC_UI_SCAFFOLD_AUTH_SKIP` or leave unset outside local dev.
+2. **Cross-tab jumps:** use `openMoreScreen()` from `navigation-helpers.ts` when opening More-stack routes from other tabs so **MoreHub stays in the back stack** and back navigation works.
+3. **Tab re-tap:** `FloatingBottomTabBar` pops to each tab's root when the tab is already focused and the nested stack depth is &gt; 0 (standard iOS pattern).
+4. **Back labels:** tab roots set human `title` values (e.g. **More**, not `MoreHub`); pushed screens use `nestedStackScreenOptions()` for consistent back titles.
+5. **No duplicate heroes:** pushed screens rely on the native header; avoid a second large in-screen title on the same page.
+6. **No scaffold** in staging/production EAS profiles—omit `EXPO_PUBLIC_UI_SCAFFOLD_AUTH_SKIP` or leave unset outside local dev.

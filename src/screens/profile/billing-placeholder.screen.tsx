@@ -11,8 +11,7 @@ export function BillingPlaceholderScreen(_props: Props): ReactElement {
   const { theme } = useAppTheme();
   return (
     <Screen scroll edges={['left', 'right', 'bottom']}>
-      <Typography variant="hero">Billing</Typography>
-      <Typography variant="bodySmall" muted style={{ marginTop: theme.space.sm }}>
+      <Typography variant="bodySmall" muted>
         Plans, entitlements, and billing history appear here once the backend exposes live data—matching the beta web dashboard.
       </Typography>
       <EmptyState
