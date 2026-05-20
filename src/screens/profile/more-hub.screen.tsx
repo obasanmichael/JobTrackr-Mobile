@@ -52,7 +52,7 @@ export function MoreHubScreen({ navigation }: Props): ReactElement {
           subtitle="Coming soon · preview placeholder aligned with Desktop → Matches."
           icon={Sparkles}
           accessibilityHint="Opens matched jobs preview."
-          onPress={() => navigation.navigate('MatchedJobsPlaceholder')}
+          onPress={() => navigation.navigate('MatchedJobs')}
         />
         <View style={{ height: 1, backgroundColor: theme.colors.borderMuted }} />
         <HubNavRow

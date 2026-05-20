@@ -43,4 +43,6 @@ export const jtKeys = {
   resumes: () => [...jtKeys.root, 'resumes'] as const,
   resume: (id: string) => [...jtKeys.resumes(), 'detail', id] as const,
   candidateProfile: (resumeId: string) => [...jtKeys.resumes(), resumeId, 'candidateProfile'] as const,
+
+  matchedJobs: () => [...jtKeys.root, 'matchedJobs'] as const,
 };

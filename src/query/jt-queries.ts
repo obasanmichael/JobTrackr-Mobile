@@ -24,7 +24,12 @@ import { fetchDashboardSummary } from '../services/dashboard.service';
 import { fetchInterviews } from '../services/interviews.service';
 import { fetchReminders, patchReminder } from '../services/reminders.service';
 import { searchJobsRequest } from '../services/jobs.service';
+import {
+  fetchMatchedJobsRequest,
+  generateMatchedJobsRequest,
+} from '../services/matches.service';
 import type { JobSearchRequestParams, JobSearchResult } from '../types/job-board.dto';
+import type { MatchedJobsResult } from '../types/matched-jobs.dto';
 import type { ResumeDto } from '../types/resume.dto';
 import {
   fetchCandidateProfile,
@@ -151,6 +156,24 @@ export function useJobSearchQuery(enabled: boolean, filters: JobSearchRequestPar
     queryKey: jtKeys.jobsSearch(normalized),
     enabled,
     queryFn: () => searchJobsRequest(normalized),
+  });
+}
+
+export function useMatchedJobsQuery(enabled: boolean) {
+  return useQuery<MatchedJobsResult>({
+    queryKey: jtKeys.matchedJobs(),
+    enabled,
+    queryFn: fetchMatchedJobsRequest,
+  });
+}
+
+export function useGenerateMatchedJobsMutation() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: generateMatchedJobsRequest,
+    onSuccess: async (result) => {
+      qc.setQueryData(jtKeys.matchedJobs(), result);
+    },
   });
 }
 

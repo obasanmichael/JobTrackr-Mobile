@@ -46,7 +46,7 @@ export type MoreStackParamList = {
   ResumeDetail: { resumeId: string };
   CalendarPlaceholder: undefined;
   BillingPlaceholder: undefined;
-  MatchedJobsPlaceholder: undefined;
+  MatchedJobs: undefined;
 };
 
 export type BottomTabParamList = {

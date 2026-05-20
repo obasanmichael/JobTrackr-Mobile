@@ -5,7 +5,7 @@ import { BillingPlaceholderScreen } from '../../screens/profile/billing-placehol
 import { LegalInformationScreen } from '../../screens/profile/legal-information.screen';
 import { CalendarPlaceholderScreen } from '../../screens/profile/calendar-placeholder.screen';
 import { DesignReferenceScreen } from '../../screens/profile/design-reference.screen';
-import { MatchedJobsPlaceholderScreen } from '../../screens/profile/matched-jobs-placeholder.screen';
+import { MatchedJobsScreen } from '../../screens/profile/matched-jobs.screen';
 import { MoreHubScreen } from '../../screens/profile/more-hub.screen';
 import { ResumeDetailScreen } from '../../screens/profile/resume-detail.screen';
 import { ResumeOverviewScreen } from '../../screens/profile/resume-overview.screen';
@@ -32,7 +32,7 @@ export function MoreStackNavigator(): ReactElement {
         <Stack.Screen name="ResumeDetail" component={ResumeDetailScreen} options={{ title: 'Resume details' }} />
         <Stack.Screen name="CalendarPlaceholder" component={CalendarPlaceholderScreen} options={{ title: 'Calendar' }} />
         <Stack.Screen name="BillingPlaceholder" component={BillingPlaceholderScreen} options={{ title: 'Billing' }} />
-        <Stack.Screen name="MatchedJobsPlaceholder" component={MatchedJobsPlaceholderScreen} options={{ title: 'Matched jobs' }} />
+        <Stack.Screen name="MatchedJobs" component={MatchedJobsScreen} options={{ title: 'Matched jobs' }} />
       </Stack.Navigator>
     </TabSceneContainer>
   );
