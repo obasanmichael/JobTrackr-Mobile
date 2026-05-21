@@ -19,3 +19,22 @@ export async function getCurrentUserRequest(): Promise<UserProfile> {
   const { data } = await api.get<UserProfile>('/auth/me');
   return data;
 }
+
+export async function changePasswordRequest(body: {
+  currentPassword: string;
+  newPassword: string;
+}): Promise<{ message: string }> {
+  const api = await getApi();
+  const { data } = await api.post<{ message: string }>('/auth/change-password', body);
+  return data;
+}
+
+export async function forgotPasswordRequest(body: {
+  email: string;
+}): Promise<{ message: string }> {
+  const api = await getApi();
+  const { data } = await api.post<{ message: string }>('/auth/forgot-password', body, {
+    skipAuth: true,
+  });
+  return data;
+}

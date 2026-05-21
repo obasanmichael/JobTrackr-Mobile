@@ -96,6 +96,18 @@ export function LoginScreen({ navigation }: Props): ReactElement {
           </Typography>
         ) : null}
 
+        <Pressable
+          onPress={() => navigation.navigate('ForgotPassword')}
+          hitSlop={8}
+          accessibilityRole="link"
+          accessibilityLabel="Forgot password"
+          style={{ alignSelf: 'flex-start' }}
+        >
+          <Typography variant="caption" style={{ fontWeight: '600', color: theme.colors.textPrimary }}>
+            Forgot password?
+          </Typography>
+        </Pressable>
+
         {formError ? (
           <Typography variant="bodySmall" color={theme.colors.danger}>
             {formError}

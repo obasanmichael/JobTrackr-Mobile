@@ -2,6 +2,7 @@ import { UserRound } from 'lucide-react-native';
 import { useState, type ReactElement } from 'react';
 import { View } from 'react-native';
 import { ProfilePhotoActions } from './profile-photo-actions';
+import { SecuritySettingsCard } from './security-settings-card';
 import { Button, Card, TextField, Typography } from '../ui';
 import { updateUserProfileRequest } from '../../services/users.service';
 import { showErrorFeedback, showSuccessFeedback } from '../../lib/feedback';
@@ -61,11 +62,6 @@ export function ProfileSettingsCard(): ReactElement {
         placeholder="Your name"
         maxLength={120}
       />
-
-      <TextField label="Email" value={user?.email ?? ''} editable={false} />
-      <Typography variant="caption" muted>
-        Email changes are not available yet.
-      </Typography>
 
       <Button
         label={savingName ? 'Saving…' : 'Save changes'}

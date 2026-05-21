@@ -4,6 +4,7 @@ import { View } from 'react-native';
 import { LogOut, Palette, Shield } from 'lucide-react-native';
 import { AppearancePreferenceControl } from '../../components/settings/appearance-preference-control';
 import { ProfileSettingsCard } from '../../components/settings/profile-settings-card';
+import { SecuritySettingsCard } from '../../components/settings/security-settings-card';
 import { Button, Card, HubNavRow, Screen, Typography } from '../../components/ui';
 import type { MoreStackParamList } from '../../navigation/types';
 import { useAuthStore } from '../../store/auth.store';
@@ -24,6 +25,10 @@ export function SettingsScreen({ navigation }: Props): ReactElement {
 
       <View style={{ marginTop: theme.space.lg }}>
         <ProfileSettingsCard />
+      </View>
+
+      <View style={{ marginTop: theme.space.lg }}>
+        <SecuritySettingsCard />
       </View>
 
       <Card style={{ marginTop: theme.space.lg, gap: theme.space.md }}>
