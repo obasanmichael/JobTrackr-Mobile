@@ -73,9 +73,9 @@ export function MoreHubScreen({ navigation }: Props): ReactElement {
         <View style={{ height: 1, backgroundColor: theme.colors.borderMuted }} />
         <HubNavRow
           title="Billing"
-          subtitle="Coming soon · plan and entitlement surface from the Billing page roadmap."
+          subtitle="Current plan, entitlements, and upgrades via the web billing page."
           icon={CreditCard}
-          accessibilityHint="Opens billing preview."
+          accessibilityHint="Opens your plan and subscription details."
           onPress={() => navigation.navigate('BillingPlaceholder')}
         />
       </Card>

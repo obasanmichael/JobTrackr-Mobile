@@ -35,6 +35,8 @@ import {
   saveJobRequest,
 } from '../services/saved-jobs.service';
 import { createJobSourceSubmissionRequest } from '../services/job-source-submissions.service';
+import { fetchBillingMeRequest, fetchPlansRequest } from '../services/billing.service';
+import type { BillingMeApi, PlanSummaryApi } from '../types/billing.dto';
 import type { JobBoardDetail, JobSearchRequestParams, JobSearchResult, JobSingleMatch } from '../types/job-board.dto';
 import type { MatchedJobsResult } from '../types/matched-jobs.dto';
 import type { SavedJobDto } from '../types/saved-jobs.dto';
@@ -190,6 +192,22 @@ export function useMatchedJobsQuery(enabled: boolean) {
     queryKey: jtKeys.matchedJobs(),
     enabled,
     queryFn: fetchMatchedJobsRequest,
+  });
+}
+
+export function useBillingMeQuery(enabled: boolean) {
+  return useQuery<BillingMeApi>({
+    queryKey: jtKeys.billingMe(),
+    enabled,
+    queryFn: fetchBillingMeRequest,
+  });
+}
+
+export function usePlansQuery(enabled: boolean) {
+  return useQuery<PlanSummaryApi[]>({
+    queryKey: jtKeys.billingPlans(),
+    enabled,
+    queryFn: fetchPlansRequest,
   });
 }
 

@@ -58,4 +58,7 @@ export const jtKeys = {
   matchedJobs: () => [...jtKeys.root, 'matchedJobs'] as const,
 
   savedJobsBookmarks: () => [...jtKeys.root, 'savedJobs', 'bookmarks', 'v1'] as const,
+
+  billingMe: () => [...jtKeys.root, 'billing', 'me'] as const,
+  billingPlans: () => [...jtKeys.root, 'billing', 'plans'] as const,
 };

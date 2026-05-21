@@ -1,7 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import type { ReactElement } from 'react';
 
-import { BillingPlaceholderScreen } from '../../screens/profile/billing-placeholder.screen';
+import { BillingScreen } from '../../screens/profile/billing.screen';
 import { LegalInformationScreen } from '../../screens/profile/legal-information.screen';
 import { CalendarPlaceholderScreen } from '../../screens/profile/calendar-placeholder.screen';
 import { DesignReferenceScreen } from '../../screens/profile/design-reference.screen';
@@ -69,7 +69,7 @@ export function MoreStackNavigator(): ReactElement {
         />
         <Stack.Screen
           name="BillingPlaceholder"
-          component={BillingPlaceholderScreen}
+          component={BillingScreen}
           options={nestedStackScreenOptions('Billing', moreBack)}
         />
         <Stack.Screen
