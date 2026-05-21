@@ -2,7 +2,7 @@ import {
   CommonActions,
   type NavigationProp,
   type ParamListBase,
-  type PartialState,
+  type PartialRoute,
   type NavigationState,
 } from '@react-navigation/native';
 
@@ -10,6 +10,9 @@ import type { BottomTabParamList, MoreStackParamList } from './types';
 import { TAB_ROOT_TITLES } from './stack-screen-options';
 
 type TabName = keyof BottomTabParamList;
+
+/** Minimal navigation surface used by tab bar helpers (avoids requiring `setOptions`). */
+type TabNavigation = Pick<NavigationProp<ParamListBase>, 'navigate' | 'dispatch'>;
 
 type RouteWithOptionalState = {
   state?: NavigationState | PartialState<NavigationState>;
@@ -34,7 +37,7 @@ export function getTabNestedIndex(route: RouteWithOptionalState): number {
 export function buildMoreStackState(
   screen: keyof MoreStackParamList,
   params?: MoreStackParamList[keyof MoreStackParamList],
-): NavigationState['routes'] {
+): PartialRoute<NavigationState['routes'][number]>[] {
   if (screen === 'MoreHub') {
     return [{ name: 'MoreHub' }];
   }
@@ -50,7 +53,7 @@ export function buildMoreStackState(
  * including cross-tab jumps from Home.
  */
 export function openMoreScreen(
-  navigation: NavigationProp<ParamListBase>,
+  navigation: TabNavigation,
   screen: keyof MoreStackParamList,
   params?: MoreStackParamList[keyof MoreStackParamList],
 ): void {
@@ -74,7 +77,7 @@ export function openMoreScreen(
 
 /** Pop a tab's nested stack to its root screen (standard iOS re-tap behavior). */
 export function navigateToTabRoot(
-  navigation: NavigationProp<ParamListBase>,
+  navigation: TabNavigation,
   tabName: TabName,
 ): void {
   navigation.navigate(tabName, {

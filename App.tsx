@@ -4,6 +4,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { NavigationRoot } from './src/navigation';
+import { FeedbackToastHost } from './src/components/ui/feedback-toast-host';
 import { ThemeProvider } from './src/theme';
 import { useAuthStore } from './src/store/auth.store';
 
@@ -31,6 +32,7 @@ export default function App() {
         <SafeAreaProvider>
           <ThemeProvider>
             <NavigationRoot />
+            <FeedbackToastHost />
           </ThemeProvider>
         </SafeAreaProvider>
       </QueryClientProvider>

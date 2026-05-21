@@ -11,6 +11,7 @@ type AuthActions = {
   login: (credentials: LoginFormValues) => Promise<void>;
   register: (payload: RegisterFormValues) => Promise<void>;
   logout: () => Promise<void>;
+  refreshUser: () => Promise<void>;
 };
 
 type AuthSlice = AuthActions & {
@@ -59,6 +60,19 @@ export const useAuthStore = create<AuthSlice>((set) => ({
   logout: async () => {
     await deleteStoredAccessToken();
     set({ user: null });
+  },
+
+  refreshUser: async () => {
+    if (UI_SCAFFOLD_BYPASS_AUTHENTICATION) return;
+    const token = await getStoredAccessToken();
+    if (!token) return;
+    try {
+      const user = await authService.getCurrentUserRequest();
+      set({ user });
+    } catch {
+      await deleteStoredAccessToken();
+      set({ user: null });
+    }
   },
 }));
 

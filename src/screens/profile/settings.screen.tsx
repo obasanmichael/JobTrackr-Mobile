@@ -1,10 +1,10 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { ReactElement } from 'react';
 import { View } from 'react-native';
-import { LogOut, Palette, Shield, UserRound } from 'lucide-react-native';
+import { LogOut, Palette, Shield } from 'lucide-react-native';
 import { AppearancePreferenceControl } from '../../components/settings/appearance-preference-control';
+import { ProfileSettingsCard } from '../../components/settings/profile-settings-card';
 import { Button, Card, HubNavRow, Screen, Typography } from '../../components/ui';
-import { UI_SCAFFOLD_BYPASS_AUTHENTICATION } from '../../config/ui-scaffold';
 import type { MoreStackParamList } from '../../navigation/types';
 import { useAuthStore } from '../../store/auth.store';
 import { useAppTheme } from '../../theme';
@@ -14,7 +14,6 @@ type Props = NativeStackScreenProps<MoreStackParamList, 'Settings'>;
 /** Profile, appearance, and session — parity with Desktop → Settings (not Discover shortcuts). */
 export function SettingsScreen({ navigation }: Props): ReactElement {
   const { theme } = useAppTheme();
-  const user = useAuthStore((s) => s.user);
   const logout = useAuthStore((s) => s.logout);
 
   return (
@@ -23,43 +22,9 @@ export function SettingsScreen({ navigation }: Props): ReactElement {
         Manage how JobTrackr looks and how you stay signed in on this device.
       </Typography>
 
-      <Card style={{ marginTop: theme.space.lg, gap: theme.space.md }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.space.sm }}>
-          <UserRound size={18} color={theme.colors.textMuted} strokeWidth={2} />
-          <Typography variant="label">Profile</Typography>
-        </View>
-        <Typography variant="caption" muted style={{ marginTop: -theme.space.sm }}>
-          Your account information.
-        </Typography>
-        {user ? (
-          <>
-            <View style={{ gap: theme.space.xs }}>
-              <Typography variant="caption" muted>
-                Name
-              </Typography>
-              <Typography variant="bodySmall" style={{ fontWeight: '600' }}>
-                {user.name ?? '—'}
-              </Typography>
-            </View>
-            <View style={{ gap: theme.space.xs, marginTop: theme.space.sm }}>
-              <Typography variant="caption" muted>
-                Email
-              </Typography>
-              <Typography variant="bodySmall" style={{ fontWeight: '600' }}>
-                {user.email ?? '—'}
-              </Typography>
-            </View>
-          </>
-        ) : UI_SCAFFOLD_BYPASS_AUTHENTICATION ? (
-          <Typography variant="bodySmall" muted>
-            Preview mode isn’t syncing account fields. Sign in to mirror your production profile.
-          </Typography>
-        ) : (
-          <Typography variant="bodySmall" muted>
-            Profile details populate after authentication.
-          </Typography>
-        )}
-      </Card>
+      <View style={{ marginTop: theme.space.lg }}>
+        <ProfileSettingsCard />
+      </View>
 
       <Card style={{ marginTop: theme.space.lg, gap: theme.space.md }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.space.sm }}>

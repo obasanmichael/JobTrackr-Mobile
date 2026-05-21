@@ -5,6 +5,7 @@ export type UserProfile = {
   email: string;
   createdAt: string;
   updatedAt: string;
+  avatarUrl?: string | null;
 };
 
 /** Mirrors Nest `AuthResponseDto`. */
