@@ -6,6 +6,7 @@ export type UserProfile = {
   createdAt: string;
   updatedAt: string;
   avatarUrl?: string | null;
+  timezone?: string | null;
 };
 
 /** Mirrors Nest `AuthResponseDto`. */

@@ -3,8 +3,10 @@ import type { ReactElement } from 'react';
 import { View } from 'react-native';
 import { LogOut, Palette, Shield } from 'lucide-react-native';
 import { AppearancePreferenceControl } from '../../components/settings/appearance-preference-control';
+import { NotificationsSettingsCard } from '../../components/settings/notifications-settings-card';
 import { ProfileSettingsCard } from '../../components/settings/profile-settings-card';
 import { SecuritySettingsCard } from '../../components/settings/security-settings-card';
+import { TimezoneSettingsCard } from '../../components/settings/timezone-settings-card';
 import { Button, Card, HubNavRow, Screen, Typography } from '../../components/ui';
 import type { MoreStackParamList } from '../../navigation/types';
 import { useAuthStore } from '../../store/auth.store';
@@ -29,6 +31,14 @@ export function SettingsScreen({ navigation }: Props): ReactElement {
 
       <View style={{ marginTop: theme.space.lg }}>
         <SecuritySettingsCard />
+      </View>
+
+      <View style={{ marginTop: theme.space.lg }}>
+        <NotificationsSettingsCard />
+      </View>
+
+      <View style={{ marginTop: theme.space.lg }}>
+        <TimezoneSettingsCard />
       </View>
 
       <Card style={{ marginTop: theme.space.lg, gap: theme.space.md }}>

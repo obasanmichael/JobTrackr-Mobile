@@ -12,7 +12,8 @@ function normalizeUser(raw: UserProfile): UserProfile {
 }
 
 export async function updateUserProfileRequest(payload: {
-  name: string;
+  name?: string;
+  timezone?: string | null;
 }): Promise<UserProfile> {
   const api = await getApi();
   const { data } = await api.patch<UserProfile>('/users/me', payload);
