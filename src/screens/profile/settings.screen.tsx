@@ -1,8 +1,8 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { ReactElement } from 'react';
 import { View } from 'react-native';
-import { LogOut, Palette, Shield } from 'lucide-react-native';
-import { AppearancePreferenceControl } from '../../components/settings/appearance-preference-control';
+import { LogOut, Shield } from 'lucide-react-native';
+import { AppearanceSettingsCard } from '../../components/settings/appearance-settings-card';
 import { NotificationsSettingsCard } from '../../components/settings/notifications-settings-card';
 import { ProfileSettingsCard } from '../../components/settings/profile-settings-card';
 import { SecuritySettingsCard } from '../../components/settings/security-settings-card';
@@ -41,16 +41,9 @@ export function SettingsScreen({ navigation }: Props): ReactElement {
         <TimezoneSettingsCard />
       </View>
 
-      <Card style={{ marginTop: theme.space.lg, gap: theme.space.md }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.space.sm }}>
-          <Palette size={18} color={theme.colors.textMuted} strokeWidth={2} />
-          <Typography variant="label">Appearance</Typography>
-        </View>
-        <Typography variant="caption" muted style={{ marginTop: -theme.space.sm }}>
-          Choose how JobTrackr looks on this phone.
-        </Typography>
-        <AppearancePreferenceControl />
-      </Card>
+      <View style={{ marginTop: theme.space.lg }}>
+        <AppearanceSettingsCard />
+      </View>
 
       <Card style={{ marginTop: theme.space.lg }}>
         <Typography variant="label" style={{ letterSpacing: 1, marginBottom: theme.space.sm }}>

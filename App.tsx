@@ -5,6 +5,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { NavigationRoot } from './src/navigation';
 import { FeedbackToastHost } from './src/components/ui/feedback-toast-host';
+import { ThemeSync } from './src/components/settings/theme-sync';
 import { ThemeProvider } from './src/theme';
 import { useAuthStore } from './src/store/auth.store';
 
@@ -31,6 +32,7 @@ export default function App() {
       <QueryClientProvider client={queryClient}>
         <SafeAreaProvider>
           <ThemeProvider>
+            <ThemeSync />
             <NavigationRoot />
             <FeedbackToastHost />
           </ThemeProvider>

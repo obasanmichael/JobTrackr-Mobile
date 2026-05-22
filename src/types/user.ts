@@ -7,6 +7,7 @@ export type UserProfile = {
   updatedAt: string;
   avatarUrl?: string | null;
   timezone?: string | null;
+  themePreference?: 'system' | 'light' | 'dark' | null;
 };
 
 /** Mirrors Nest `AuthResponseDto`. */

@@ -9,11 +9,20 @@ const OPTIONS: { key: ThemePreference; label: string }[] = [
   { key: 'dark', label: 'Dark' },
 ];
 
+type Props = {
+  preference?: ThemePreference;
+  onPreferenceChange?: (preference: ThemePreference) => void;
+};
+
 /**
  * Matches system appearance or fixes light/dark mode.
  */
-export function AppearancePreferenceControl(): ReactElement {
-  const { theme, preference, setPreference } = useAppTheme();
+export function AppearancePreferenceControl(props: Props = {}): ReactElement {
+  const { preference: controlledPreference, onPreferenceChange } = props;
+  const { theme, preference: contextPreference, setPreference: setContextPreference } =
+    useAppTheme();
+  const preference = controlledPreference ?? contextPreference;
+  const setPreference = onPreferenceChange ?? setContextPreference;
 
   return (
     <View
