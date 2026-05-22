@@ -7,7 +7,7 @@ import { APPLICATION_STATUSES } from '../../constants/application-status';
 import { useAppTheme } from '../../theme';
 
 /**
- * Typography + primitives gallery for visual QA — mounted from More → Gallery (dev only).
+ * Typography + primitives gallery for visual QA, mounted from More → Gallery (dev only).
  * Kept intentionally free of routing concerns so navigators remain thin orchestration layers.
  */
 export function DesignKitPanel(): ReactElement {
@@ -45,7 +45,7 @@ export function DesignKitPanel(): ReactElement {
 
       <Typography variant="label">Titles & body copy</Typography>
       <Card style={{ gap: theme.space.md }}>
-        <Typography variant="title">Senior Product Engineer — Acme</Typography>
+        <Typography variant="title">Senior Product Engineer, Acme</Typography>
         <Typography variant="body">Interview tomorrow · Fully remote · $180–205k</Typography>
         <Typography variant="caption" muted>
           Updated 2 hours ago · Offer stage

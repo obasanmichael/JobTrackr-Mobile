@@ -249,7 +249,7 @@ export function BillingScreen(_props: Props): ReactElement {
               </Typography>
               <Typography variant="caption" muted>
                 JobTrackr is free while we&apos;re in beta. You have full access to current
-                features — no payment required.
+                features, no payment required.
               </Typography>
             </View>
           </View>

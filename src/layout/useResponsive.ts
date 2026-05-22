@@ -25,7 +25,7 @@ export type ResponsiveLayout = {
    * Phones omit this (`null`).
    */
   contentColumnMaxWidth: number | null;
-  /** Phone in landscape — slightly tighter vertical rhythm, wider horizontal comfort */
+  /** Phone in landscape, slightly tighter vertical rhythm, wider horizontal comfort */
   phoneLandscapeComfort: boolean;
 };
 

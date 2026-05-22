@@ -1,6 +1,6 @@
 import * as SecureStore from 'expo-secure-store';
 
-/** SecureStore key for JWT — aligns with backend Bearer auth (PRD §11). */
+/** SecureStore key for JWT, aligns with backend Bearer auth (PRD §11). */
 export const ACCESS_TOKEN_STORAGE_KEY = 'jobtrackr_access_token';
 
 export async function getStoredAccessToken(): Promise<string | null> {

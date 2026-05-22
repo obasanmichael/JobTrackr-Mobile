@@ -4,7 +4,7 @@ import type { NativeStackNavigationOptions } from '@react-navigation/native-stac
 import { useAppTheme } from '../theme';
 
 /**
- * Native stack chrome for screens inside bottom tabs — provides platform back buttons
+ * Native stack chrome for screens inside bottom tabs, provides platform back buttons
  * while keeping visuals aligned with JobTrackr tokens.
  */
 export function useTabStackScreenOptions(): NativeStackNavigationOptions {

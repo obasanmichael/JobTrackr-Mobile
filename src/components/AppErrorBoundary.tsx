@@ -6,7 +6,7 @@ type Props = { children: ReactNode };
 
 type State = { error: Error | null };
 
-/** Last-resort catch for unexpected render errors — keeps the store build from crashing to a blank screen. */
+/** Last-resort catch for unexpected render errors, keeps the store build from crashing to a blank screen. */
 export class AppErrorBoundary extends Component<Props, State> {
   public state: State = { error: null };
 

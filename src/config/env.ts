@@ -1,4 +1,4 @@
-/** Public env validated at startup — never put secrets here (PRD §8). */
+/** Public env validated at startup, never put secrets here (PRD §8). */
 export function getPublicApiBaseUrl(): string {
   const url = process.env.EXPO_PUBLIC_API_URL?.trim();
   if (!url) {

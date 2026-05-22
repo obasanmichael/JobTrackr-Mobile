@@ -18,16 +18,16 @@ RootNavigator [ header hidden ]
 - **Discover / Improve / Account parity** routes live under **`More`** (hub), except **Jobs** stays on **Home → Jobs** to match emphasis with the dashboard card.
 - **Settings** (`More → Settings`) holds **profile, appearance, session, developer gallery (__DEV__)** only.
 
-## Phase 1 — Stack chrome & safe area
+## Phase 1, Stack chrome & safe area
 
 - **Native stack headers** are enabled via `useTabStackScreenOptions()` (`src/navigation/useTabStackScreenOptions.ts`): themed background, tinted controls, **`headerBackTitleVisible: false`**, **`contentStyle`** background.
-- **Tab stack roots** (Home dashboard, Applications list, Quick add, Reminders overview, More hub): **`headerShown: false`** so we don’t stack a slim nav title above the screen’s own hero — use **`edges={['top','left','right','bottom']}`** on `Screen` so the notch/status area is still respected.
+- **Tab stack roots** (Home dashboard, Applications list, Quick add, Reminders overview, More hub): **`headerShown: false`** so we don’t stack a slim nav title above the screen’s own hero, use **`edges={['top','left','right','bottom']}`** on `Screen` so the notch/status area is still respected.
 - **Pushed routes** inside the same stacks keep **`headerShown: true`** (defaults from `screenOptions`): back affordance only where depth > 1. Their `Screen` children use **`edges={['left','right','bottom']}`** (no duplicate top inset under the native header).
 - **Auth** screens keep full-screen safe areas (`edges` including top/bottom).
 - **Dynamic titles:** `ApplicationDetail` sets header title from company/role (`useLayoutEffect`). `ResumeDetail` sets header from filename.
 - **Back navigation:** Provided by OS (iOS back chevron / Android toolbar back). Explicit `navigation.goBack()` remains for destructive flows (e.g. delete success).
 
-## Phase 2 — Information architecture (“More” vs “Settings”)
+## Phase 2, Information architecture (“More” vs “Settings”)
 
 | Area | Screen | Purpose |
 |------|--------|--------|
@@ -37,7 +37,7 @@ RootNavigator [ header hidden ]
 
 Tab bar fifth item: **`More`** (icon: menu), **not** “Settings” alone—reduces burying Discover under account.
 
-## Phase 3 — Production hardening
+## Phase 3, Production hardening
 
 | Item | Implementation |
 |------|-------------------|
@@ -48,7 +48,7 @@ Tab bar fifth item: **`More`** (icon: menu), **not** “Settings” alone—redu
 
 Further store-readiness (privacy URL, account deletion link, ATS labels) is covered in **`docs/MOBILE_STORE_SUBMISSION.md`** and the **Privacy legal** flow under **More → Settings**.
 
-## Phase 4 — Accessibility & polish
+## Phase 4, Accessibility & polish
 
 | Area | Implementation |
 |------|----------------|
@@ -57,9 +57,9 @@ Further store-readiness (privacy URL, account deletion link, ATS labels) is cove
 | **VoiceOver / TalkBack** | Tab **`tabBarAccessibilityHint`** (`FloatingBottomTabBar`); **`ApplicationCard`** summaries; shared **`HubNavRow`** for hub/settings/legal lists. |
 | **Keyboard / haptics** | **`Screen`** `keyboardAvoiding` + scroll **`keyboardDismissMode`**; **`Button`** `hapticOnPress` + **`expo-haptics`** on auth / jobs search / quick add. |
 
-Localization guidance (future multi-locale) lives in **`docs/MOBILE_LOCALIZATION_STRATEGY.md`** — UI strings remain English inline for now.
+Localization guidance (future multi-locale) lives in **`docs/MOBILE_LOCALIZATION_STRATEGY.md`**, UI strings remain English inline for now.
 
-## Phase 5 — Store submission package
+## Phase 5, Store submission package
 
 | Area | Implementation |
 |------|----------------|

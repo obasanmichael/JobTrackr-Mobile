@@ -11,7 +11,7 @@ Theme tokens live in **`src/theme/themes.ts`**.
 | Pair (light) | Notes |
 |----------------|-------|
 | `textPrimary` on `background` | High contrast body text |
-| `textSecondary` / `textMuted` on `background` | Secondary copy — verify promotional/legal screens still readable |
+| `textSecondary` / `textMuted` on `background` | Secondary copy, verify promotional/legal screens still readable |
 | `accent` / `onAccent` | Primary buttons |
 
 Validate **dark mode** with the same pairs (`darkColors`). Prefer WCAG AA where feasible for normal-sized text.

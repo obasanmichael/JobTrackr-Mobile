@@ -37,7 +37,7 @@ function SubmissionSuccessCard(props: {
         <CheckCircle2 size={22} color={theme.colors.success} />
         <View style={{ flex: 1, gap: theme.space.xs }}>
           <Typography variant="bodySmall" style={{ fontWeight: '700' }}>
-            Thanks — your submission is in review
+            Thanks, your submission is in review
           </Typography>
           <Typography variant="caption" muted>
             We received {props.submission.companyName} and will queue it for admin

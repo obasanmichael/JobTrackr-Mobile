@@ -19,7 +19,7 @@ type Props = PropsWithChildren<{
   contentPadding?: keyof Theme['space'];
   edges?: ('top' | 'right' | 'bottom' | 'left')[];
   style?: ViewStyle;
-  /** Set false for deliberate full-width layouts (charts, banners). Defaults true — still only clamps on tablets. */
+  /** Set false for deliberate full-width layouts (charts, banners). Defaults true, still only clamps on tablets. */
   constrainContentColumn?: boolean;
   /** Only applies when scroll is enabled. */
   refreshControl?: ReactElement<ComponentProps<typeof RefreshControl>>;
@@ -32,7 +32,7 @@ type Props = PropsWithChildren<{
   keyboardAvoiding?: boolean;
   /** Offset when a translucent header overlaps the keyboard inset (native-stack pushes). */
   keyboardVerticalOffset?: number;
-  /** Vertical scroll only — dismisses the keyboard while scrolling (defaults by platform). */
+  /** Vertical scroll only, dismisses the keyboard while scrolling (defaults by platform). */
   keyboardDismissMode?: ScrollViewProps['keyboardDismissMode'];
 }>;
 

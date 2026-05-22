@@ -49,7 +49,7 @@ async function readUploadFailureMessage(res: Response): Promise<string> {
   return text;
 }
 
-/** Multipart upload — uses `fetch` so React Native sets the multipart boundary correctly. */
+/** Multipart upload, uses `fetch` so React Native sets the multipart boundary correctly. */
 export async function uploadResumeFile(file: UploadablePick): Promise<ResumeDto> {
   const baseURL = getPublicApiBaseUrl();
   if (!baseURL) throw new Error('EXPO_PUBLIC_API_URL is required for uploads.');

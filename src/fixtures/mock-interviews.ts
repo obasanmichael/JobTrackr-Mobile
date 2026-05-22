@@ -12,7 +12,7 @@ export const MOCK_INTERVIEWS: InterviewListItem[] = [
   },
   {
     id: 'mock-int-2',
-    roleTitle: 'Senior UX Engineer — onsite loop',
+    roleTitle: 'Senior UX Engineer, onsite loop',
     companyName: 'Nova Design Co.',
     startLabel: 'Mar 6 · 2:00 PM',
     durationLabel: 'Half day',

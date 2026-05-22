@@ -9,7 +9,7 @@ import { useAppTheme } from '../../theme';
 
 type Props = NativeStackScreenProps<MoreStackParamList, 'MoreHub'>;
 
-/** Discover / Improve parity + account settings — surfaced from More instead of burying Discover under Settings. */
+/** Discover / Improve parity + account settings, surfaced from More instead of burying Discover under Settings. */
 export function MoreHubScreen({ navigation }: Props): ReactElement {
   const { theme } = useAppTheme();
 
@@ -33,7 +33,7 @@ export function MoreHubScreen({ navigation }: Props): ReactElement {
         </Typography>
         <HubNavRow
           title="Browse job listings"
-          subtitle="Aggregated roles — same discovery flow as the web dashboard Jobs page."
+          subtitle="Aggregated roles, same discovery flow as the web dashboard Jobs page."
           icon={Search}
           accessibilityHint="Opens job discovery on the Home tab."
           onPress={navJobsBoard}

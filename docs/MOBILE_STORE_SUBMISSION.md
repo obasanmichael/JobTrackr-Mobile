@@ -1,4 +1,4 @@
-# JobTrackr mobile — store submission checklist
+# JobTrackr mobile, store submission checklist
 
 Use this when preparing **App Store Connect**, **Google Play Console**, and **EAS Build / Submit**.
 
@@ -16,26 +16,26 @@ Configure these in `.env` / EAS secrets as **`EXPO_PUBLIC_*`** (see `.env.exampl
 
 ## App Privacy Nutrition Labels (iOS)
 
-Answer based on **actual behavior** of this codebase and dependencies. Treat this table as a starting point — verify each release after dependency changes.
+Answer based on **actual behavior** of this codebase and dependencies. Treat this table as a starting point, verify each release after dependency changes.
 
 **Likely categories (confirm before submitting)**
 
 | Data / usage | Detail |
 |--------------|--------|
 | **Contact info** | Email and name when user registers or signs in (sent to your backend via HTTPS). |
-| **User content** | Job applications, resumes (document picker uploads), notes, reminders — tied to account when API is enabled. |
+| **User content** | Job applications, resumes (document picker uploads), notes, reminders, tied to account when API is enabled. |
 | **Identifiers** | Auth/session tokens stored locally (`expo-secure-store`). |
 | **Diagnostics** | Optional: `@react-native-community/netinfo` exposes connectivity state on device only for UI (offline banner); no third-party analytics SDK is wired in this repo snapshot. |
 
 **SDKs / modules to disclose as linked frameworks where applicable**
 
 - **Expo runtime & configured plugins**: `expo`, `expo-secure-store`, `expo-document-picker`, `@react-native-community/datetimepicker`, `expo-haptics`, etc.
-- **Networking**: `axios` — requests to `EXPO_PUBLIC_API_URL`.
-- **Secure storage**: `expo-secure-store` — sensitive tokens.
+- **Networking**: `axios`, requests to `EXPO_PUBLIC_API_URL`.
+- **Secure storage**: `expo-secure-store`, sensitive tokens.
 
 Do **not** copy boilerplate “we collect everything” answers if you only persist auth tokens and user-entered job data.
 
-## Google Play — Data safety form
+## Google Play, Data safety form
 
 Mirror the same honesty as iOS:
 
@@ -47,7 +47,7 @@ Mirror the same honesty as iOS:
 ## Versioning & build numbers
 
 - **`app.json` `version`**: marketing version string (e.g. `1.0.0`).
-- **`eas.json`**: `"appVersionSource": "remote"` with **`production.autoIncrement`** — store-facing build numbers are managed remotely during EAS production builds.
+- **`eas.json`**: `"appVersionSource": "remote"` with **`production.autoIncrement`**, store-facing build numbers are managed remotely during EAS production builds.
 - Before each submission: bump **`expo.version`** when you ship user-visible release notes; rely on EAS for monotonic Android `versionCode` / iOS build increments unless you pin them explicitly.
 
 ## Screenshots & preview media

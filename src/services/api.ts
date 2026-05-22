@@ -10,7 +10,7 @@ export async function bootstrapApiRuntime(): Promise<AxiosInstance> {
   const baseURL = getPublicApiBaseUrl();
   if (!baseURL) {
     console.warn(
-      '[api] Running without API base URL — authenticated calls will fail until EXPO_PUBLIC_API_URL is set.',
+      '[api] Running without API base URL, authenticated calls will fail until EXPO_PUBLIC_API_URL is set.',
     );
   }
 

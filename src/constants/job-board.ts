@@ -1,4 +1,4 @@
-/** Work mode filter values for aggregated job search — matches web `JOB_BOARD_WORK_MODE_API` / API `WorkMode`. */
+/** Work mode filter values for aggregated job search, matches web `JOB_BOARD_WORK_MODE_API` / API `WorkMode`. */
 export const JOB_BOARD_WORK_MODE_API = [
   { value: 'UNSPECIFIED', label: 'Any' },
   { value: 'REMOTE', label: 'Remote' },

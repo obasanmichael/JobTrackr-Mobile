@@ -63,7 +63,7 @@ export function LegalInformationScreen(_props: Props): ReactElement {
   return (
     <Screen scroll edges={['left', 'right', 'bottom']}>
       <Typography variant="bodySmall" muted>
-        Policy links open in your browser. Configure URLs via EXPO_PUBLIC_* env vars — see docs/MOBILE_STORE_SUBMISSION.md.
+        Policy links open in your browser. Configure URLs via EXPO_PUBLIC_* env vars, see docs/MOBILE_STORE_SUBMISSION.md.
       </Typography>
 
       <Card style={{ marginTop: theme.space.xl }}>

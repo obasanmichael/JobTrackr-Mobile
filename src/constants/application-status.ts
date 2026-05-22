@@ -1,5 +1,5 @@
 /**
- * Mirrors backend enums — send these exact strings from mutations (PRD §12).
+ * Mirrors backend enums, send these exact strings from mutations (PRD §12).
  */
 export const APPLICATION_STATUSES = [
   'SAVED',

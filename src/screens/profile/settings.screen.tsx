@@ -12,7 +12,7 @@ import { useAppTheme } from '../../theme';
 
 type Props = NativeStackScreenProps<MoreStackParamList, 'Settings'>;
 
-/** Profile, appearance, and session — parity with Desktop → Settings (not Discover shortcuts). */
+/** Profile, appearance, and session, parity with Desktop → Settings (not Discover shortcuts). */
 export function SettingsScreen({ navigation }: Props): ReactElement {
   const { theme } = useAppTheme();
   const logout = useAuthStore((s) => s.logout);
@@ -69,7 +69,7 @@ export function SettingsScreen({ navigation }: Props): ReactElement {
       {__DEV__ ? (
         <View style={{ marginTop: theme.space.xxl, gap: theme.space.sm }}>
           <Typography variant="caption" muted>
-            Developers use the gallery below to QA components — it stays out of release-quality navigation for end users.
+            Developers use the gallery below to QA components, it stays out of release-quality navigation for end users.
           </Typography>
           <Button label="Open developer gallery" variant="secondary" block onPress={() => navigation.navigate('DesignReference')} />
         </View>

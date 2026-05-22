@@ -10,7 +10,7 @@ Place finalized assets here before uploading to App Store Connect / Play Console
 - 6.5" (1242 × 2688 or similar legacy)
 - 5.5" (1242 × 2208) if supporting legacy devices
 
-**iPad** — if `supportsTablet` remains enabled in `app.json`, prepare **13" / 12.9"** screenshots per Apple’s current matrix.
+**iPad**, if `supportsTablet` remains enabled in `app.json`, prepare **13" / 12.9"** screenshots per Apple’s current matrix.
 
 **Android**
 
@@ -31,4 +31,4 @@ Optional but recommended for conversion:
 - **Display name**: `expo.name` in **`app.json`** (shown under icon as **JobTrackr**).
 - **Slug / bundle IDs**: unchanged identifiers remain stable across releases (`slug`, `ios.bundleIdentifier`, Android package when configured).
 
-Commit screenshots as PNG/WebP exports from simulator capture or Maestro/screenshot tooling — binary assets may be gitignored locally; adjust `.gitignore` if you version them.
+Commit screenshots as PNG/WebP exports from simulator capture or Maestro/screenshot tooling, binary assets may be gitignored locally; adjust `.gitignore` if you version them.

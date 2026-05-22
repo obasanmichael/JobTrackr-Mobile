@@ -6,7 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Typography } from './ui/Typography';
 import { useAppTheme } from '../theme';
 
-/** Thin banner when the device loses network — aligns with Phase 3 “offline awareness” expectations. */
+/** Thin banner when the device loses network, aligns with Phase 3 “offline awareness” expectations. */
 export function ConnectivityBanner(): ReactElement | null {
   const { theme } = useAppTheme();
   const insets = useSafeAreaInsets();
@@ -37,7 +37,7 @@ export function ConnectivityBanner(): ReactElement | null {
       accessibilityRole="alert"
     >
       <Typography variant="caption" style={{ color: '#0f172a', fontWeight: '700', textAlign: 'center' }}>
-        Offline — reconnect to sync JobTrackr
+        Offline, reconnect to sync JobTrackr
       </Typography>
     </View>
   );

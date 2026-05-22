@@ -1,4 +1,4 @@
-/** Mirrors Nest `InterviewStage` / Prisma literal order — uppercase strings round-trip unchanged. */
+/** Mirrors Nest `InterviewStage` / Prisma literal order, uppercase strings round-trip unchanged. */
 
 export const INTERVIEW_STAGES = [
   'RECRUITER_SCREEN',
