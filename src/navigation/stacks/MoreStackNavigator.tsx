@@ -8,6 +8,7 @@ import { DesignReferenceScreen } from '../../screens/profile/design-reference.sc
 import { MatchedJobsScreen } from '../../screens/profile/matched-jobs.screen';
 import { JobDetailScreen } from '../../screens/home/job-detail.screen';
 import { SubmitCareersPageScreen } from '../../screens/profile/submit-careers-page.screen';
+import { NotificationsScreen } from '../../screens/profile/notifications.screen';
 import { MoreHubScreen } from '../../screens/profile/more-hub.screen';
 import { ResumeDetailScreen } from '../../screens/profile/resume-detail.screen';
 import { ResumeOverviewScreen } from '../../screens/profile/resume-overview.screen';
@@ -66,6 +67,11 @@ export function MoreStackNavigator(): ReactElement {
           name="Calendar"
           component={CalendarScreen}
           options={nestedStackScreenOptions('Calendar', moreBack)}
+        />
+        <Stack.Screen
+          name="Notifications"
+          component={NotificationsScreen}
+          options={nestedStackScreenOptions('Notifications', moreBack)}
         />
         <Stack.Screen
           name="BillingPlaceholder"

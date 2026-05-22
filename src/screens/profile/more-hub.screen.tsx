@@ -2,9 +2,11 @@ import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { ReactElement } from 'react';
 import { View } from 'react-native';
-import { Calendar, CreditCard, FileText, Globe, Search, Settings, Sparkles } from 'lucide-react-native';
+import { Calendar, CreditCard, FileText, Globe, Inbox, Search, Settings, Sparkles } from 'lucide-react-native';
+import { useQuery } from '@tanstack/react-query';
 import { Card, HubNavRow, Screen, Typography } from '../../components/ui';
 import type { BottomTabParamList, MoreStackParamList } from '../../navigation/types';
+import { getUnreadNotificationCountRequest } from '../../services/notifications.service';
 import { useAppTheme } from '../../theme';
 
 type Props = NativeStackScreenProps<MoreStackParamList, 'MoreHub'>;
@@ -12,6 +14,13 @@ type Props = NativeStackScreenProps<MoreStackParamList, 'MoreHub'>;
 /** Discover / Improve parity + account settings, surfaced from More instead of burying Discover under Settings. */
 export function MoreHubScreen({ navigation }: Props): ReactElement {
   const { theme } = useAppTheme();
+
+  const unreadQuery = useQuery({
+    queryKey: ['notifications', 'unread-count'],
+    queryFn: getUnreadNotificationCountRequest,
+    refetchInterval: 60_000,
+  });
+  const unreadCount = unreadQuery.data ?? 0;
 
   const navJobsBoard = (): void => {
     const tabNav = navigation.getParent<BottomTabNavigationProp<BottomTabParamList>>();
@@ -69,6 +78,18 @@ export function MoreHubScreen({ navigation }: Props): ReactElement {
           icon={Calendar}
           accessibilityHint="Opens your calendar and Google sync settings."
           onPress={() => navigation.navigate('Calendar')}
+        />
+        <View style={{ height: 1, backgroundColor: theme.colors.borderMuted }} />
+        <HubNavRow
+          title="Notifications"
+          subtitle={
+            unreadCount > 0
+              ? `${unreadCount} unread alert${unreadCount === 1 ? '' : 's'}`
+              : 'Reminders, interviews, and in-app alerts.'
+          }
+          icon={Inbox}
+          accessibilityHint="Opens your notification inbox."
+          onPress={() => navigation.navigate('Notifications')}
         />
         <View style={{ height: 1, backgroundColor: theme.colors.borderMuted }} />
         <HubNavRow

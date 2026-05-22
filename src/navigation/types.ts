@@ -47,6 +47,7 @@ export type MoreStackParamList = {
   ResumeOverview: undefined;
   ResumeDetail: { resumeId: string };
   Calendar: undefined;
+  Notifications: undefined;
   BillingPlaceholder: undefined;
   MatchedJobs: undefined;
   SubmitCareersPage: undefined;
