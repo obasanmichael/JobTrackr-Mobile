@@ -61,4 +61,7 @@ export const jtKeys = {
 
   billingMe: () => [...jtKeys.root, 'billing', 'me'] as const,
   billingPlans: () => [...jtKeys.root, 'billing', 'plans'] as const,
+
+  calendarStatus: () => [...jtKeys.root, 'calendar', 'status'] as const,
+  calendarScheduleFeed: () => [...jtKeys.root, 'calendar', 'schedule-feed'] as const,
 };

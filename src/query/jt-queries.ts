@@ -37,6 +37,16 @@ import {
 import { createJobSourceSubmissionRequest } from '../services/job-source-submissions.service';
 import { fetchBillingMeRequest, fetchPlansRequest } from '../services/billing.service';
 import type { BillingMeApi, PlanSummaryApi } from '../types/billing.dto';
+import { buildScheduleEvents } from '../domain/build-schedule-events';
+import type { ScheduleEvent } from '../domain/schedule-event.types';
+import {
+  disconnectCalendarRequest,
+  fetchCalendarConnectUrlRequest,
+  fetchCalendarStatusRequest,
+  patchCalendarSettingsRequest,
+  syncCalendarInterviewsRequest,
+} from '../services/calendar.service';
+import type { CalendarStatusApi, PatchCalendarSettingsInput } from '../types/calendar.dto';
 import type { JobBoardDetail, JobSearchRequestParams, JobSearchResult, JobSingleMatch } from '../types/job-board.dto';
 import type { MatchedJobsResult } from '../types/matched-jobs.dto';
 import type { SavedJobDto } from '../types/saved-jobs.dto';
@@ -209,6 +219,64 @@ export function usePlansQuery(enabled: boolean) {
     enabled,
     queryFn: fetchPlansRequest,
   });
+}
+
+export function useCalendarStatusQuery(enabled: boolean) {
+  return useQuery<CalendarStatusApi>({
+    queryKey: jtKeys.calendarStatus(),
+    enabled,
+    queryFn: fetchCalendarStatusRequest,
+  });
+}
+
+export function useScheduleFeedQuery(enabled: boolean) {
+  return useQuery<ScheduleEvent[]>({
+    queryKey: jtKeys.calendarScheduleFeed(),
+    enabled,
+    queryFn: async () => {
+      const [interviews, reminders, applications] = await Promise.all([
+        fetchInterviews(),
+        fetchReminders(),
+        fetchApplications({}),
+      ]);
+      return buildScheduleEvents({ interviews, reminders, applications });
+    },
+  });
+}
+
+export function useDisconnectCalendarMutation() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: disconnectCalendarRequest,
+    onSuccess: async (result) => {
+      qc.setQueryData(jtKeys.calendarStatus(), result);
+    },
+  });
+}
+
+export function usePatchCalendarSettingsMutation() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: PatchCalendarSettingsInput) => patchCalendarSettingsRequest(input),
+    onSuccess: async (result) => {
+      qc.setQueryData(jtKeys.calendarStatus(), result);
+    },
+  });
+}
+
+export function useSyncCalendarInterviewsMutation() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: syncCalendarInterviewsRequest,
+    onSuccess: async () => {
+      await qc.invalidateQueries({ queryKey: jtKeys.calendarStatus() });
+    },
+  });
+}
+
+export async function fetchCalendarConnectUrlForOAuth(): Promise<string> {
+  const result = await fetchCalendarConnectUrlRequest();
+  return result.authorizationUrl;
 }
 
 export function useGenerateMatchedJobsMutation() {

@@ -3,7 +3,7 @@ import type { ReactElement } from 'react';
 
 import { BillingScreen } from '../../screens/profile/billing.screen';
 import { LegalInformationScreen } from '../../screens/profile/legal-information.screen';
-import { CalendarPlaceholderScreen } from '../../screens/profile/calendar-placeholder.screen';
+import { CalendarScreen } from '../../screens/profile/calendar.screen';
 import { DesignReferenceScreen } from '../../screens/profile/design-reference.screen';
 import { MatchedJobsScreen } from '../../screens/profile/matched-jobs.screen';
 import { JobDetailScreen } from '../../screens/home/job-detail.screen';
@@ -63,8 +63,8 @@ export function MoreStackNavigator(): ReactElement {
           options={nestedStackScreenOptions('Resume details', 'Resume')}
         />
         <Stack.Screen
-          name="CalendarPlaceholder"
-          component={CalendarPlaceholderScreen}
+          name="Calendar"
+          component={CalendarScreen}
           options={nestedStackScreenOptions('Calendar', moreBack)}
         />
         <Stack.Screen

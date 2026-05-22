@@ -65,10 +65,10 @@ export function MoreHubScreen({ navigation }: Props): ReactElement {
         <View style={{ height: 1, backgroundColor: theme.colors.borderMuted }} />
         <HubNavRow
           title="Calendar"
-          subtitle="Coming soon · Google Calendar sync when OAuth ships."
+          subtitle="Schedule view plus Google Calendar sync for upcoming interviews."
           icon={Calendar}
-          accessibilityHint="Opens calendar preview."
-          onPress={() => navigation.navigate('CalendarPlaceholder')}
+          accessibilityHint="Opens your calendar and Google sync settings."
+          onPress={() => navigation.navigate('Calendar')}
         />
         <View style={{ height: 1, backgroundColor: theme.colors.borderMuted }} />
         <HubNavRow

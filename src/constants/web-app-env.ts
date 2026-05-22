@@ -10,3 +10,9 @@ export function getWebBillingUrl(): string | undefined {
   const base = getWebAppBaseUrl()?.replace(/\/$/, '');
   return base ? `${base}/dashboard/billing` : undefined;
 }
+
+/** OAuth return URL after Google Calendar connect (backend redirects here). */
+export function getWebCalendarOAuthRedirectUrl(): string | undefined {
+  const base = getWebAppBaseUrl()?.replace(/\/$/, '');
+  return base ? `${base}/dashboard/calendar` : undefined;
+}
