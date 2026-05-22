@@ -1,4 +1,3 @@
-import { zodResolver } from '@hookform/resolvers/zod';
 import { Palette } from 'lucide-react-native';
 import { useState, type ReactElement } from 'react';
 import { View } from 'react-native';
