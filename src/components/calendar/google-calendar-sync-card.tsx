@@ -1,7 +1,7 @@
 import type { ReactElement } from 'react';
 import { Alert, Linking, Switch, View } from 'react-native';
 import { format, parseISO } from 'date-fns';
-import { AlertCircle, Calendar, ExternalLink } from 'lucide-react-native';
+import { AlertCircle, Calendar, CheckCircle2, ExternalLink, Link2Off } from 'lucide-react-native';
 import { getWebBillingUrl } from '../../constants/web-app-env';
 import type { CalendarStatusApi } from '../../types/calendar.dto';
 import {
@@ -26,6 +26,43 @@ function formatWhen(value: string | null | undefined): string | null {
   } catch {
     return value;
   }
+}
+
+function ConnectionStatusPill(props: { connected: boolean }): ReactElement {
+  const { theme } = useAppTheme();
+  const connected = props.connected;
+
+  return (
+    <View
+      style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+        alignSelf: 'flex-start',
+        gap: 4,
+        borderRadius: 999,
+        paddingHorizontal: theme.space.sm,
+        paddingVertical: 4,
+        backgroundColor: connected ? 'rgba(16, 185, 129, 0.12)' : theme.colors.surfaceElevated,
+        borderWidth: 1,
+        borderColor: connected ? 'rgba(16, 185, 129, 0.35)' : theme.colors.borderMuted,
+      }}
+    >
+      {connected ? (
+        <CheckCircle2 size={12} color={theme.colors.success} />
+      ) : (
+        <Link2Off size={12} color={theme.colors.textMuted} />
+      )}
+      <Typography
+        variant="caption"
+        style={{
+          fontWeight: '700',
+          color: connected ? theme.colors.success : theme.colors.textMuted,
+        }}
+      >
+        {connected ? 'Connected' : 'Not connected'}
+      </Typography>
+    </View>
+  );
 }
 
 type Props = {
@@ -123,34 +160,39 @@ export function GoogleCalendarSyncCard(props: Props): ReactElement {
           <Typography variant="caption" muted>
             Upgrade or switch to a plan that includes calendar sync to connect Google Calendar.
           </Typography>
-          <Button label="View billing on web" variant="secondary" onPress={() => void openBillingOnWeb()} />
+          <Button
+            label="View billing on web"
+            variant="secondary"
+            block
+            onPress={() => void openBillingOnWeb()}
+          />
         </Card>
       ) : null}
 
-      <Card style={{ gap: theme.space.md }}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: theme.space.md }}>
-          <View style={{ flex: 1, gap: theme.space.xs }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.space.sm }}>
-              <Calendar size={18} color={theme.colors.textMuted} />
+      <Card style={{ gap: theme.space.lg }}>
+        <View style={{ flexDirection: 'row', gap: theme.space.md, alignItems: 'flex-start' }}>
+          <View
+            style={{
+              width: 40,
+              height: 40,
+              borderRadius: theme.radii.lg,
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: `${theme.colors.accent}18`,
+            }}
+          >
+            <Calendar size={20} color={theme.colors.accent} />
+          </View>
+          <View style={{ flex: 1, gap: theme.space.sm }}>
+            <View style={{ gap: theme.space.xs }}>
               <Typography variant="bodySmall" style={{ fontWeight: '700' }}>
                 Google Calendar
               </Typography>
+              <Typography variant="caption" muted>
+                Mirror upcoming interviews to your primary Google Calendar.
+              </Typography>
             </View>
-            <Typography variant="caption" muted>
-              Export upcoming interviews to your primary Google Calendar.
-            </Typography>
-          </View>
-          <View
-            style={{
-              borderRadius: 999,
-              paddingHorizontal: theme.space.sm,
-              paddingVertical: 4,
-              backgroundColor: props.status.connected ? 'rgba(16, 185, 129, 0.12)' : theme.colors.borderMuted,
-            }}
-          >
-            <Typography variant="caption" style={{ fontWeight: '700' }}>
-              {props.status.connected ? 'Connected' : 'Not connected'}
-            </Typography>
+            <ConnectionStatusPill connected={props.status.connected} />
           </View>
         </View>
 
@@ -162,6 +204,7 @@ export function GoogleCalendarSyncCard(props: Props): ReactElement {
               borderRadius: theme.radii.lg,
               padding: theme.space.md,
               gap: theme.space.xs,
+              backgroundColor: theme.colors.surfaceElevated,
             }}
           >
             <Typography variant="bodySmall" style={{ fontWeight: '600' }}>
@@ -172,9 +215,20 @@ export function GoogleCalendarSyncCard(props: Props): ReactElement {
             </Typography>
           </View>
         ) : (
-          <Typography variant="caption" muted>
-            Connect Google Calendar to mirror upcoming interviews on your phone or desktop calendar app.
-          </Typography>
+          <View
+            style={{
+              borderWidth: 1,
+              borderColor: theme.colors.borderMuted,
+              borderRadius: theme.radii.lg,
+              padding: theme.space.md,
+              backgroundColor: theme.colors.surfaceElevated,
+            }}
+          >
+            <Typography variant="caption" muted>
+              Connect once to keep interview times in sync with the calendar app on your phone or
+              desktop. Reminders stay in JobTrackr only.
+            </Typography>
+          </View>
         )}
 
         {props.status.lastError ? (
@@ -196,34 +250,35 @@ export function GoogleCalendarSyncCard(props: Props): ReactElement {
           </View>
         ) : null}
 
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: theme.space.sm }}>
-          {!props.status.connected ? (
+        {!props.status.connected ? (
+          <Button
+            label="Connect Google Calendar"
+            variant="primary"
+            block
+            disabled={!props.canUseCalendar || isBusy}
+            loading={isBusy}
+            onPress={() => void handleConnect()}
+          />
+        ) : (
+          <View style={{ flexDirection: 'row', gap: theme.space.sm }}>
             <Button
-              label="Connect Google Calendar"
-              variant="primary"
-              disabled={!props.canUseCalendar || isBusy}
-              loading={isBusy}
-              onPress={() => void handleConnect()}
+              label="Sync now"
+              variant="secondary"
+              disabled={isBusy}
+              loading={syncMutation.isPending}
+              onPress={() => void handleSync()}
+              style={{ flex: 1 }}
             />
-          ) : (
-            <>
-              <Button
-                label="Sync upcoming interviews"
-                variant="secondary"
-                disabled={isBusy}
-                loading={syncMutation.isPending}
-                onPress={() => void handleSync()}
-              />
-              <Button
-                label="Disconnect"
-                variant="outline"
-                disabled={isBusy}
-                loading={disconnectMutation.isPending}
-                onPress={() => void handleDisconnect()}
-              />
-            </>
-          )}
-        </View>
+            <Button
+              label="Disconnect"
+              variant="outline"
+              disabled={isBusy}
+              loading={disconnectMutation.isPending}
+              onPress={() => void handleDisconnect()}
+              style={{ flex: 1 }}
+            />
+          </View>
+        )}
       </Card>
 
       {props.status.connected ? (
@@ -236,13 +291,23 @@ export function GoogleCalendarSyncCard(props: Props): ReactElement {
               Control which JobTrackr records are pushed to Google Calendar.
             </Typography>
           </View>
-          <View style={{ flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', gap: theme.space.md }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'flex-start',
+              justifyContent: 'space-between',
+              gap: theme.space.md,
+              borderTopWidth: 1,
+              borderTopColor: theme.colors.borderMuted,
+              paddingTop: theme.space.md,
+            }}
+          >
             <View style={{ flex: 1, gap: theme.space.xs }}>
               <Typography variant="bodySmall" style={{ fontWeight: '600' }}>
-                Sync interviews
+                Auto-sync interviews
               </Typography>
               <Typography variant="caption" muted>
-                When enabled, new and updated upcoming interviews sync to Google Calendar automatically.
+                New and updated upcoming interviews sync automatically.
               </Typography>
             </View>
             <Switch
@@ -254,18 +319,18 @@ export function GoogleCalendarSyncCard(props: Props): ReactElement {
         </Card>
       ) : null}
 
-      <Card style={{ gap: theme.space.sm }}>
+      <Card style={{ gap: theme.space.sm, backgroundColor: theme.colors.surfaceElevated }}>
         <Typography variant="bodySmall" style={{ fontWeight: '700' }}>
           How Google sync works
         </Typography>
         <Typography variant="caption" muted>
-          Only upcoming interviews are exported. Reminders stay in the JobTrackr schedule above. After
-          connecting, use manual sync once or leave auto-sync on for new interviews.
+          Only upcoming interviews are exported. After connecting, run a manual sync once or leave
+          auto-sync enabled for new interviews.
         </Typography>
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.space.xs, marginTop: theme.space.xs }}>
-          <ExternalLink size={14} color={theme.colors.textMuted} />
-          <Typography variant="caption" muted>
-            OAuth completes in your browser and returns to the web calendar URL configured in your env.
+        <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: theme.space.xs, marginTop: theme.space.xs }}>
+          <ExternalLink size={14} color={theme.colors.textMuted} style={{ marginTop: 1 }} />
+          <Typography variant="caption" muted style={{ flex: 1 }}>
+            Sign-in opens in your browser and returns when connection completes.
           </Typography>
         </View>
       </Card>

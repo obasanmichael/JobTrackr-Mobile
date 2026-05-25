@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react';
 import { useMemo, useState } from 'react';
-import { Pressable, ScrollView, View } from 'react-native';
+import { Pressable, useWindowDimensions, View } from 'react-native';
 import {
   addMonths,
   addWeeks,
@@ -24,6 +24,15 @@ import { useAppTheme } from '../../theme';
 import { Button, Card, EmptyState, ErrorState, LoadingState, Typography } from '../ui';
 
 const WEEKDAY_LABELS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+const MONTH_GRID_GAP = 1;
+
+function chunkWeeks(days: Date[]): Date[][] {
+  const weeks: Date[][] = [];
+  for (let index = 0; index < days.length; index += 7) {
+    weeks.push(days.slice(index, index + 7));
+  }
+  return weeks;
+}
 
 function eventsForDay(events: ScheduleEvent[], day: Date): ScheduleEvent[] {
   return events.filter((event) => isSameDay(event.start, day));
@@ -44,11 +53,12 @@ function ViewModeToggle(props: {
     <View
       style={{
         flexDirection: 'row',
+        alignSelf: 'flex-start',
         borderWidth: 1,
         borderColor: theme.colors.borderMuted,
         borderRadius: theme.radii.lg,
-        padding: 4,
-        gap: 4,
+        padding: 3,
+        gap: 2,
       }}
     >
       {(['month', 'week'] as const).map((mode) => {
@@ -57,11 +67,15 @@ function ViewModeToggle(props: {
           <Pressable
             key={mode}
             accessibilityRole="button"
+            accessibilityState={{ selected: active }}
             onPress={() => props.onChange(mode)}
             style={{
               borderRadius: theme.radii.md,
-              paddingHorizontal: theme.space.md,
-              paddingVertical: theme.space.xs,
+              paddingHorizontal: theme.space.sm,
+              paddingVertical: 6,
+              minWidth: 52,
+              alignItems: 'center',
+              justifyContent: 'center',
               backgroundColor: active ? theme.colors.accent : 'transparent',
             }}
           >
@@ -176,6 +190,7 @@ function DayAgenda(props: {
 
 export function ScheduleCalendar(props: Props): ReactElement {
   const { theme } = useAppTheme();
+  const { width: windowWidth } = useWindowDimensions();
   const feedQuery = useScheduleFeedQuery(props.enabled);
   const [viewMode, setViewMode] = useState<ScheduleViewMode>('month');
   const [cursorDate, setCursorDate] = useState(() => new Date());
@@ -201,6 +216,12 @@ export function ScheduleCalendar(props: Props): ReactElement {
     () => eventsForDay(events, selectedDate),
     [events, selectedDate],
   );
+
+  const monthWeeks = useMemo(() => chunkWeeks(monthDays), [monthDays]);
+
+  /** Card padding + screen horizontal inset ≈ usable grid width on phone. */
+  const gridWidth = Math.max(windowWidth - theme.space.xl * 2 - theme.space.lg * 2, 280);
+  const monthCellSize = Math.floor((gridWidth - MONTH_GRID_GAP * 6) / 7);
 
   const headerLabel =
     viewMode === 'month'
@@ -241,7 +262,7 @@ export function ScheduleCalendar(props: Props): ReactElement {
   return (
     <View style={{ gap: theme.space.lg }}>
       <Card style={{ gap: theme.space.md }}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: theme.space.md }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', gap: theme.space.md }}>
           <View style={{ flex: 1, gap: theme.space.xs }}>
             <Typography variant="bodySmall" style={{ fontWeight: '700' }}>
               Your schedule
@@ -310,45 +331,53 @@ export function ScheduleCalendar(props: Props): ReactElement {
         </View>
 
         {viewMode === 'month' ? (
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <View style={{ minWidth: 560 }}>
-              <View style={{ flexDirection: 'row', marginBottom: theme.space.sm }}>
-                {WEEKDAY_LABELS.map((label) => (
-                  <View key={label} style={{ width: 80, alignItems: 'center' }}>
-                    <Typography variant="caption" muted style={{ fontWeight: '700' }}>
-                      {label}
-                    </Typography>
-                  </View>
-                ))}
-              </View>
-              <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                {monthDays.map((day) => {
+          <View style={{ gap: MONTH_GRID_GAP }}>
+            <View style={{ flexDirection: 'row', gap: MONTH_GRID_GAP }}>
+              {WEEKDAY_LABELS.map((label) => (
+                <View
+                  key={label}
+                  style={{ width: monthCellSize, alignItems: 'center', paddingVertical: theme.space.xs }}
+                >
+                  <Typography variant="caption" muted style={{ fontWeight: '700', fontSize: 11 }}>
+                    {label}
+                  </Typography>
+                </View>
+              ))}
+            </View>
+            {monthWeeks.map((week) => (
+              <View key={week[0]?.toISOString() ?? 'week'} style={{ flexDirection: 'row', gap: MONTH_GRID_GAP }}>
+                {week.map((day) => {
                   const dayEvents = eventsForDay(events, day);
                   const isSelected = isSameDay(day, selectedDate);
                   const inCurrentMonth = isSameMonth(day, cursorDate);
+                  const interviewCount = dayEvents.filter((event) => event.kind === 'interview').length;
+                  const reminderCount = dayEvents.filter((event) => event.kind === 'reminder').length;
 
                   return (
                     <Pressable
                       key={day.toISOString()}
                       accessibilityRole="button"
+                      accessibilityState={{ selected: isSelected }}
                       onPress={() => setSelectedDate(day)}
                       style={{
-                        width: 80,
-                        minHeight: 88,
-                        padding: theme.space.xs,
+                        width: monthCellSize,
+                        minHeight: monthCellSize + 8,
+                        padding: 4,
                         borderWidth: 1,
-                        borderColor: theme.colors.borderMuted,
-                        backgroundColor: isSelected ? `${theme.colors.accent}14` : undefined,
-                        opacity: inCurrentMonth ? 1 : 0.45,
+                        borderColor: isSelected ? theme.colors.accent : theme.colors.borderMuted,
+                        borderRadius: theme.radii.sm,
+                        backgroundColor: isSelected ? `${theme.colors.accent}14` : theme.colors.surfaceElevated,
+                        opacity: inCurrentMonth ? 1 : 0.5,
                       }}
                     >
                       <View
                         style={{
-                          width: 24,
-                          height: 24,
-                          borderRadius: 12,
+                          width: 22,
+                          height: 22,
+                          borderRadius: 11,
                           alignItems: 'center',
                           justifyContent: 'center',
+                          alignSelf: 'center',
                           backgroundColor: isToday(day) ? theme.colors.accent : undefined,
                         }}
                       >
@@ -356,105 +385,122 @@ export function ScheduleCalendar(props: Props): ReactElement {
                           variant="caption"
                           style={{
                             fontWeight: '700',
+                            fontSize: 11,
                             color: isToday(day) ? theme.colors.onAccent : undefined,
                           }}
                         >
                           {format(day, 'd')}
                         </Typography>
                       </View>
-                      <View style={{ marginTop: 4, gap: 2 }}>
-                        {dayEvents.slice(0, 2).map((event) => (
-                          <View key={event.id} style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                            <EventDot kind={event.kind} />
-                            <Typography variant="caption" numberOfLines={1} style={{ flex: 1, fontSize: 10 }}>
-                              {format(event.start, 'h:mm a')} {event.title}
+                      {(interviewCount > 0 || reminderCount > 0) && (
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            justifyContent: 'center',
+                            flexWrap: 'wrap',
+                            gap: 3,
+                            marginTop: 4,
+                          }}
+                        >
+                          {Array.from({ length: Math.min(interviewCount, 3) }).map((_, index) => (
+                            <View
+                              key={`i-${index}`}
+                              style={{ width: 5, height: 5, borderRadius: 2.5, backgroundColor: '#f59e0b' }}
+                            />
+                          ))}
+                          {Array.from({ length: Math.min(reminderCount, 3) }).map((_, index) => (
+                            <View
+                              key={`r-${index}`}
+                              style={{ width: 5, height: 5, borderRadius: 2.5, backgroundColor: '#8b5cf6' }}
+                            />
+                          ))}
+                          {dayEvents.length > 3 ? (
+                            <Typography variant="caption" muted style={{ fontSize: 8 }}>
+                              +
                             </Typography>
-                          </View>
-                        ))}
-                        {dayEvents.length > 2 ? (
-                          <Typography variant="caption" muted style={{ fontSize: 10 }}>
-                            +{dayEvents.length - 2} more
-                          </Typography>
-                        ) : null}
-                      </View>
+                          ) : null}
+                        </View>
+                      )}
                     </Pressable>
                   );
                 })}
               </View>
-            </View>
-          </ScrollView>
+            ))}
+          </View>
         ) : (
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <View style={{ flexDirection: 'row', gap: theme.space.sm }}>
-              {weekDays.map((day) => {
-                const dayEvents = eventsForDay(events, day);
-                const isSelected = isSameDay(day, selectedDate);
+          <View style={{ flexDirection: 'row', gap: MONTH_GRID_GAP }}>
+            {weekDays.map((day) => {
+              const dayEvents = eventsForDay(events, day);
+              const isSelected = isSameDay(day, selectedDate);
+              const weekCellWidth = Math.floor((gridWidth - MONTH_GRID_GAP * 6) / 7);
 
-                return (
-                  <Pressable
-                    key={day.toISOString()}
-                    accessibilityRole="button"
-                    onPress={() => setSelectedDate(day)}
-                    style={{
-                      width: 120,
-                      minHeight: 140,
-                      borderWidth: 1,
-                      borderColor: isSelected ? theme.colors.accent : theme.colors.borderMuted,
-                      borderRadius: theme.radii.lg,
-                      padding: theme.space.sm,
-                      backgroundColor: isSelected ? `${theme.colors.accent}10` : undefined,
-                    }}
-                  >
+              return (
+                <Pressable
+                  key={day.toISOString()}
+                  accessibilityRole="button"
+                  accessibilityState={{ selected: isSelected }}
+                  onPress={() => setSelectedDate(day)}
+                  style={{
+                    width: weekCellWidth,
+                    minHeight: 120,
+                    borderWidth: 1,
+                    borderColor: isSelected ? theme.colors.accent : theme.colors.borderMuted,
+                    borderRadius: theme.radii.md,
+                    padding: theme.space.xs,
+                    backgroundColor: isSelected ? `${theme.colors.accent}10` : theme.colors.surfaceElevated,
+                  }}
+                >
+                  <View style={{ alignItems: 'center', gap: 2, marginBottom: theme.space.xs }}>
+                    <Typography variant="caption" muted style={{ fontWeight: '700', fontSize: 10 }}>
+                      {format(day, 'EEE')}
+                    </Typography>
                     <View
                       style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
+                        width: 22,
+                        height: 22,
+                        borderRadius: 11,
                         alignItems: 'center',
-                        marginBottom: theme.space.sm,
+                        justifyContent: 'center',
+                        backgroundColor: isToday(day) ? theme.colors.accent : undefined,
                       }}
                     >
-                      <Typography variant="caption" muted style={{ fontWeight: '700' }}>
-                        {format(day, 'EEE')}
-                      </Typography>
-                      <View
+                      <Typography
+                        variant="caption"
                         style={{
-                          width: 24,
-                          height: 24,
-                          borderRadius: 12,
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          backgroundColor: isToday(day) ? theme.colors.accent : undefined,
+                          fontWeight: '700',
+                          fontSize: 11,
+                          color: isToday(day) ? theme.colors.onAccent : undefined,
                         }}
                       >
-                        <Typography
-                          variant="caption"
-                          style={{
-                            fontWeight: '700',
-                            color: isToday(day) ? theme.colors.onAccent : undefined,
-                          }}
-                        >
-                          {format(day, 'd')}
-                        </Typography>
-                      </View>
+                        {format(day, 'd')}
+                      </Typography>
                     </View>
-                    <View style={{ gap: 4 }}>
-                      {dayEvents.length === 0 ? (
-                        <Typography variant="caption" muted>
-                          —
-                        </Typography>
-                      ) : (
-                        dayEvents.map((event) => (
-                          <Typography key={event.id} variant="caption" numberOfLines={2}>
-                            {format(event.start, 'h:mm a')} {event.title}
+                  </View>
+                  <View style={{ gap: 3 }}>
+                    {dayEvents.length === 0 ? (
+                      <Typography variant="caption" muted style={{ fontSize: 10, textAlign: 'center' }}>
+                        —
+                      </Typography>
+                    ) : (
+                      dayEvents.slice(0, 2).map((event) => (
+                        <View key={event.id} style={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}>
+                          <EventDot kind={event.kind} />
+                          <Typography variant="caption" numberOfLines={1} style={{ flex: 1, fontSize: 9 }}>
+                            {format(event.start, 'h:mm a')}
                           </Typography>
-                        ))
-                      )}
-                    </View>
-                  </Pressable>
-                );
-              })}
-            </View>
-          </ScrollView>
+                        </View>
+                      ))
+                    )}
+                    {dayEvents.length > 2 ? (
+                      <Typography variant="caption" muted style={{ fontSize: 9, textAlign: 'center' }}>
+                        +{dayEvents.length - 2}
+                      </Typography>
+                    ) : null}
+                  </View>
+                </Pressable>
+              );
+            })}
+          </View>
         )}
 
         {events.length === 0 ? (

@@ -3,16 +3,16 @@ import { formatDistanceToNow } from 'date-fns';
 import { Bell } from 'lucide-react-native';
 import { useCallback, type ReactElement } from 'react';
 import { Pressable, RefreshControl, View } from 'react-native';
-import { Button, Card, LoadingState, Screen, Typography } from '../components/ui';
+import { Button, Card, LoadingState, Screen, Typography } from '../../components/ui';
 import {
   listNotificationsRequest,
   markAllNotificationsReadRequest,
   markNotificationReadRequest,
   type NotificationItem,
-} from '../services/notifications.service';
-import { parseAxiosApiError } from '../services/api';
-import { showErrorFeedback, showSuccessFeedback } from '../lib/feedback';
-import { useAppTheme } from '../theme';
+} from '../../services/notifications.service';
+import { parseAxiosApiError } from '../../services/api';
+import { showErrorFeedback, showSuccessFeedback } from '../../lib/feedback';
+import { useAppTheme } from '../../theme';
 
 function formatWhen(value: string): string {
   try {

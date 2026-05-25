@@ -4,7 +4,7 @@ import { Typography } from '../ui';
 import { useAppTheme, type ThemePreference } from '../../theme';
 
 const OPTIONS: { key: ThemePreference; label: string }[] = [
-  { key: 'system', label: 'Auto' },
+  { key: 'system', label: 'System' },
   { key: 'light', label: 'Light' },
   { key: 'dark', label: 'Dark' },
 ];
