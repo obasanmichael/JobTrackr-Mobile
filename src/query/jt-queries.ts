@@ -21,8 +21,22 @@ import {
   type UpdateApplicationPayload,
 } from '../services/applications.service';
 import { fetchDashboardSummary } from '../services/dashboard.service';
-import { fetchInterviews } from '../services/interviews.service';
-import { fetchReminders, patchReminder } from '../services/reminders.service';
+import {
+  createInterview,
+  deleteInterview,
+  fetchInterviews,
+  patchInterview,
+  type CreateInterviewPayload,
+  type PatchInterviewPayload,
+} from '../services/interviews.service';
+import {
+  createReminder,
+  deleteReminder,
+  fetchReminders,
+  patchReminder,
+  type CreateReminderPayload,
+  type PatchReminderPayload,
+} from '../services/reminders.service';
 import { fetchJobByIdRequest, fetchJobMatchRequest, searchJobsRequest } from '../services/jobs.service';
 import {
   fetchMatchedJobsRequest,
@@ -163,12 +177,74 @@ export function useToggleReminderMutation() {
   return useMutation({
     mutationFn: ({ id, isCompleted }: { id: string; isCompleted: boolean }) =>
       patchReminder(id, { isCompleted }),
-    onSuccess: () =>
-      Promise.all([
-        qc.invalidateQueries({ queryKey: jtKeys.reminders() }),
-        qc.invalidateQueries({ queryKey: jtKeys.dashboard() }),
-      ]),
+    onSuccess: () => invalidateReminderQueries(qc),
   });
+}
+
+export function useCreateReminderMutation() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: CreateReminderPayload) => createReminder(payload),
+    onSuccess: () => invalidateReminderQueries(qc),
+  });
+}
+
+export function useUpdateReminderMutation() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, payload }: { id: string; payload: PatchReminderPayload }) =>
+      patchReminder(id, payload),
+    onSuccess: () => invalidateReminderQueries(qc),
+  });
+}
+
+export function useDeleteReminderMutation() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => deleteReminder(id),
+    onSuccess: () => invalidateReminderQueries(qc),
+  });
+}
+
+export function useCreateInterviewMutation() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: CreateInterviewPayload) => createInterview(payload),
+    onSuccess: () => invalidateInterviewQueries(qc),
+  });
+}
+
+export function useUpdateInterviewMutation() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, payload }: { id: string; payload: PatchInterviewPayload }) =>
+      patchInterview(id, payload),
+    onSuccess: () => invalidateInterviewQueries(qc),
+  });
+}
+
+export function useDeleteInterviewMutation() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => deleteInterview(id),
+    onSuccess: () => invalidateInterviewQueries(qc),
+  });
+}
+
+async function invalidateReminderQueries(qc: QueryClient): Promise<void> {
+  await Promise.all([
+    qc.invalidateQueries({ queryKey: jtKeys.reminders() }),
+    qc.invalidateQueries({ queryKey: jtKeys.dashboard() }),
+    qc.invalidateQueries({ queryKey: jtKeys.calendarScheduleFeed() }),
+  ]);
+}
+
+async function invalidateInterviewQueries(qc: QueryClient): Promise<void> {
+  await Promise.all([
+    qc.invalidateQueries({ queryKey: jtKeys.interviews() }),
+    qc.invalidateQueries({ queryKey: jtKeys.dashboard() }),
+    qc.invalidateQueries({ queryKey: jtKeys.calendarScheduleFeed() }),
+  ]);
 }
 
 export function useJobSearchQuery(enabled: boolean, filters: JobSearchRequestParams) {

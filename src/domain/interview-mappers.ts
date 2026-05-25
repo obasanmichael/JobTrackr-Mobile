@@ -1,6 +1,4 @@
-import { format } from 'date-fns';
-
-import type { InterviewDto } from '../types/interview.dto';
+import { formatIsoForDisplay } from '../lib/datetime-form';
 import type { DashboardInterviewItemDto } from '../types/dashboard.dto';
 import {
   INTERVIEW_STAGE_LABELS,
@@ -18,9 +16,7 @@ function interviewTypeToFormat(t: InterviewTypeId): InterviewFormat {
 }
 
 function scheduledLabel(scheduledIso: string): string {
-  const d = new Date(scheduledIso);
-  if (Number.isNaN(+d)) return '';
-  return format(d, 'EEE · MMM d · h:mm a');
+  return formatIsoForDisplay(scheduledIso, 'EEE · MMM d · h:mm a') ?? '';
 }
 
 function durationFromStageTypes(stageRaw: string, typeRaw: string): string {

@@ -15,17 +15,34 @@ export type AuthStackParamList = {
 export type HomeStackParamList = {
   HomeOverview: undefined;
   InterviewList: { linkedApplicationId?: string };
+  InterviewForm: InterviewFormParams;
   JobSearch: undefined;
   JobDetail: { jobId: string };
 };
 
 /** Applications hub + drilling screens */
+export type ReminderFormParams = {
+  reminderId?: string;
+  applicationId?: string;
+  headline?: string;
+  recordTimeline?: boolean;
+};
+
+export type InterviewFormParams = {
+  interviewId?: string;
+  applicationId?: string;
+  headline?: string;
+  recordTimeline?: boolean;
+};
+
 export type ApplicationsStackParamList = {
   ApplicationList: undefined;
   ApplicationDetail: { applicationId: string };
   EditApplication: { applicationId: string };
   UpdateApplicationStatus: { applicationId: string };
   AddTimelineNote: { applicationId: string; headline?: string };
+  ReminderForm: ReminderFormParams;
+  InterviewForm: InterviewFormParams;
 };
 
 export type QuickAddStackParamList = {
@@ -34,6 +51,7 @@ export type QuickAddStackParamList = {
 
 export type RemindersStackParamList = {
   RemindersOverview: undefined;
+  ReminderForm: ReminderFormParams;
 };
 
 /** More hub (Discover/account entry) · settings · placeholders, replaces old Profile-only stack. */

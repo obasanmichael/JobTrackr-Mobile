@@ -3,6 +3,7 @@ import {
   type NavigationProp,
   type ParamListBase,
   type PartialRoute,
+  type PartialState,
   type NavigationState,
 } from '@react-navigation/native';
 

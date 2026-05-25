@@ -1,14 +1,10 @@
-import { format } from 'date-fns';
-
-import type { DashboardReminderItemDto } from '../types/dashboard.dto';
+import { formatIsoForDisplay } from '../lib/datetime-form';
 import type { ReminderDto } from '../types/reminder.dto';
 import type { ReminderListItem } from './reminder-display';
 import type { JobSummaryLookup } from './job-lookup';
 
 function formatDue(isoDate: string): string {
-  const d = new Date(isoDate);
-  if (Number.isNaN(+d)) return 'Due · —';
-  return format(d, 'EEE · MMM d · h:mm a');
+  return formatIsoForDisplay(isoDate, 'EEE · MMM d · h:mm a') ?? 'Due · —';
 }
 
 export function reminderDtoToListItem(dto: ReminderDto, appSummary?: string): ReminderListItem {

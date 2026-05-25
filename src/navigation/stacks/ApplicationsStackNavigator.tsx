@@ -6,6 +6,8 @@ import { ApplicationDetailScreen } from '../../screens/applications/application-
 import { ApplicationListScreen } from '../../screens/applications/application-list.screen';
 import { EditApplicationScreen } from '../../screens/applications/edit-application.screen';
 import { UpdateApplicationStatusScreen } from '../../screens/applications/update-application-status.screen';
+import { InterviewFormScreen } from '../../screens/interviews/interview-form.screen';
+import { ReminderFormScreen } from '../../screens/reminders/reminder-form.screen';
 import { TabSceneContainer } from '../components/tab-scene-container';
 import {
   nestedStackScreenOptions,
@@ -48,6 +50,20 @@ export function ApplicationsStackNavigator(): ReactElement {
           name="AddTimelineNote"
           component={AddTimelineNoteScreen}
           options={nestedStackScreenOptions('Add note', appsBack)}
+        />
+        <Stack.Screen
+          name="ReminderForm"
+          component={ReminderFormScreen}
+          options={({ route }) =>
+            nestedStackScreenOptions(route.params.reminderId ? 'Edit reminder' : 'New reminder', appsBack)
+          }
+        />
+        <Stack.Screen
+          name="InterviewForm"
+          component={InterviewFormScreen}
+          options={({ route }) =>
+            nestedStackScreenOptions(route.params.interviewId ? 'Edit interview' : 'Log interview', appsBack)
+          }
         />
       </Stack.Navigator>
     </TabSceneContainer>

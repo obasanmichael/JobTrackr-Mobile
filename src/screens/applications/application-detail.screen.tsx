@@ -272,19 +272,99 @@ export function ApplicationDetailScreen({ navigation, route }: Props): ReactElem
 
       {relatedReminders.length > 0 ? (
         <View style={{ marginTop: theme.space.lg, gap: theme.space.sm }}>
-          <Typography variant="label">Related reminders</Typography>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Typography variant="label">Related reminders</Typography>
+            {apiOn ? (
+              <Button
+                label="Add"
+                variant="ghost"
+                onPress={() =>
+                  navigation.navigate('ReminderForm', {
+                    applicationId,
+                    headline: `${application.companyName} · ${application.jobTitle}`,
+                    recordTimeline: true,
+                  })
+                }
+                style={{ minHeight: 36, paddingHorizontal: theme.space.sm }}
+              />
+            ) : null}
+          </View>
           {relatedReminders.map((r) => (
-            <ReminderCard key={r.id} reminder={r} />
+            <ReminderCard
+              key={r.id}
+              reminder={r}
+              onPress={
+                apiOn
+                  ? () => navigation.navigate('ReminderForm', { reminderId: r.id })
+                  : undefined
+              }
+            />
           ))}
+        </View>
+      ) : apiOn ? (
+        <View style={{ marginTop: theme.space.lg, gap: theme.space.sm }}>
+          <Typography variant="label">Related reminders</Typography>
+          <Button
+            label="Add reminder"
+            variant="outline"
+            block
+            onPress={() =>
+              navigation.navigate('ReminderForm', {
+                applicationId,
+                headline: `${application.companyName} · ${application.jobTitle}`,
+                recordTimeline: true,
+              })
+            }
+          />
         </View>
       ) : null}
 
       {relatedInterviews.length > 0 ? (
         <View style={{ marginTop: theme.space.lg, gap: theme.space.sm }}>
-          <Typography variant="label">Interviews</Typography>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Typography variant="label">Interviews</Typography>
+            {apiOn ? (
+              <Button
+                label="Add"
+                variant="ghost"
+                onPress={() =>
+                  navigation.navigate('InterviewForm', {
+                    applicationId,
+                    headline: `${application.companyName} · ${application.jobTitle}`,
+                    recordTimeline: true,
+                  })
+                }
+                style={{ minHeight: 36, paddingHorizontal: theme.space.sm }}
+              />
+            ) : null}
+          </View>
           {relatedInterviews.map((i) => (
-            <InterviewCard key={i.id} interview={i} />
+            <InterviewCard
+              key={i.id}
+              interview={i}
+              onPress={
+                apiOn
+                  ? () => navigation.navigate('InterviewForm', { interviewId: i.id })
+                  : undefined
+              }
+            />
           ))}
+        </View>
+      ) : apiOn ? (
+        <View style={{ marginTop: theme.space.lg, gap: theme.space.sm }}>
+          <Typography variant="label">Interviews</Typography>
+          <Button
+            label="Log interview"
+            variant="outline"
+            block
+            onPress={() =>
+              navigation.navigate('InterviewForm', {
+                applicationId,
+                headline: `${application.companyName} · ${application.jobTitle}`,
+                recordTimeline: true,
+              })
+            }
+          />
         </View>
       ) : null}
 
@@ -313,6 +393,30 @@ export function ApplicationDetailScreen({ navigation, route }: Props): ReactElem
             navigation.navigate('AddTimelineNote', {
               applicationId,
               headline: `${application.companyName} · ${application.jobTitle}`,
+            })
+          }
+        />
+        <Button
+          label="Add reminder"
+          variant="outline"
+          block
+          onPress={() =>
+            navigation.navigate('ReminderForm', {
+              applicationId,
+              headline: `${application.companyName} · ${application.jobTitle}`,
+              recordTimeline: true,
+            })
+          }
+        />
+        <Button
+          label="Log interview"
+          variant="outline"
+          block
+          onPress={() =>
+            navigation.navigate('InterviewForm', {
+              applicationId,
+              headline: `${application.companyName} · ${application.jobTitle}`,
+              recordTimeline: true,
             })
           }
         />

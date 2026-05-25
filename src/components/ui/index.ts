@@ -4,6 +4,8 @@ export { Button, type ButtonVariant } from './Button';
 export { Card } from './Card';
 export { TextField } from './TextField';
 export { DatePickerField } from './DatePickerField';
+export { DateTimePickerField } from './DateTimePickerField';
+export { OptionPickerField, type OptionPickerItem } from './OptionPickerField';
 export { ResponsiveContentColumn } from './ResponsiveContentColumn';
 export { HubNavRow } from './hub-nav-row';
 export { EmptyState, LoadingState, ErrorState } from './empty-loading-error';

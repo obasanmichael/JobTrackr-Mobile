@@ -3,6 +3,7 @@ import type { ReactElement } from 'react';
 
 import { HomeOverviewScreen } from '../../screens/home/home-overview.screen';
 import { InterviewListScreen } from '../../screens/home/interview-list.screen';
+import { InterviewFormScreen } from '../../screens/interviews/interview-form.screen';
 import { JobSearchScreen } from '../../screens/home/jobs-search.screen';
 import { JobDetailScreen } from '../../screens/home/job-detail.screen';
 import { TabSceneContainer } from '../components/tab-scene-container';
@@ -32,6 +33,13 @@ export function HomeStackNavigator(): ReactElement {
           name="InterviewList"
           component={InterviewListScreen}
           options={nestedStackScreenOptions('Interviews', homeBack)}
+        />
+        <Stack.Screen
+          name="InterviewForm"
+          component={InterviewFormScreen}
+          options={({ route }) =>
+            nestedStackScreenOptions(route.params.interviewId ? 'Edit interview' : 'Log interview', homeBack)
+          }
         />
         <Stack.Screen
           name="JobSearch"
