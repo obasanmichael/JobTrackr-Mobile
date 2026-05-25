@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
-import type { ThemePreference } from '../theme';
-import { useAuthStore } from '../store/auth.store';
-import { useAppTheme } from '../theme';
+import type { ThemePreference } from '../../theme';
+import { useAuthStore } from '../../store/auth.store';
+import { useAppTheme } from '../../theme';
 
 /** Applies server-stored theme preference when it changes (login, save, hydrate). */
 export function ThemeSync(): null {
